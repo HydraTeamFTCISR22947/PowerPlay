@@ -58,12 +58,31 @@ public class GamepadController
         this._mBR_power = Range.clip(y + leftX - rightX, -DRIVETRAIN_MOTOR_POWER, DRIVETRAIN_MOTOR_POWER);
     }
 
-    void activateMotors()
+    void activateDriveTrainMotors()
     {
         this._mFR.setPower(this._mFR_power);
         this._mFL.setPower(this._mFL_power);
         this._mBR.setPower(this._mBR_power);
         this._mBL.setPower(this._mBL_power);
     }
+
+    double get_mFR_power()
+    {
+        return this._mFR_power;
+    }
+
+    double get_mFL_power()
+    {
+        return this._mFL_power;
+    }
+    double get_mBR_power()
+    {
+        return this._mBR_power;
+    }
+    double get_mBL_power()
+    {
+        return this._mBL_power;
+    }
+
 
 }
