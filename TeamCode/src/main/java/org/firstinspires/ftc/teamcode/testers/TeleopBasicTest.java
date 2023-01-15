@@ -1,12 +1,10 @@
 package org.firstinspires.ftc.teamcode.testers;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.subsystems.GamepadController;
-import org.firstinspires.ftc.teamcode.util.gamepadHelper;
+import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
 @TeleOp(name="Drivetrain Test", group="Tests")
 public class TeleopBasicTest extends LinearOpMode {
@@ -14,7 +12,7 @@ public class TeleopBasicTest extends LinearOpMode {
     public void runOpMode()
     {
         GamepadController robotController = new GamepadController(hardwareMap,gamepad1);
-        gamepadHelper gamepadOneHelper = new gamepadHelper(gamepad1);
+        GamepadHelper gamepadOneHelper = new GamepadHelper(gamepad1);
 
         telemetry.addData("Status: ","Initialized!");
         telemetry.update();

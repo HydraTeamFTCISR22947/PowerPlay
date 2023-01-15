@@ -5,11 +5,11 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.subsystems.GamepadController;
 import org.firstinspires.ftc.teamcode.util.RobotCommand;
-import org.firstinspires.ftc.teamcode.util.gamepadHelper;
+import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
 public class DriveCommand implements RobotCommand {
     GamepadController robotController;
-    gamepadHelper gamepadOneHelper;
+    GamepadHelper gamepadOneHelper;
     @Override
     public void runCommand() {
         robotController.setMotorPowers();
@@ -23,6 +23,6 @@ public class DriveCommand implements RobotCommand {
     @Override
     public void initCommand(HardwareMap hardwareMap, Gamepad gamepad1) {
         robotController = new GamepadController(hardwareMap, gamepad1);
-        gamepadOneHelper = new gamepadHelper(gamepad1);
+        gamepadOneHelper = new GamepadHelper(gamepad1);
     }
 }
