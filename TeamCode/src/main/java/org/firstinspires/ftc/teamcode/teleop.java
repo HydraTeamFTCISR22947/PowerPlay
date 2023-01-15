@@ -2,8 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import org.firstinspires.ftc.teamcode.subsystems.GamepadController;
-import org.firstinspires.ftc.teamcode.subsystems.RobotCommands;
+
 import org.firstinspires.ftc.teamcode.util.gamepadHelper;
 
 @TeleOp(name="Drivetrain Test", group="Tests")
