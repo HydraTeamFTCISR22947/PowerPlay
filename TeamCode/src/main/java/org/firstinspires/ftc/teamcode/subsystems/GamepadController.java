@@ -116,22 +116,28 @@ public class GamepadController
         imu.initialize(parameters);
     }
 
-    double get_mFR_power()
+    public double get_mFR_power()
     {
         return this._mFR_power;
     }
-    double get_mFL_power()
+    public double get_mFL_power()
     {
         return this._mFL_power;
     }
-    double get_mBR_power()
+    public double get_mBR_power()
     {
         return this._mBR_power;
     }
-    double get_mBL_power()
+    public double get_mBL_power()
     {
         return this._mBL_power;
     }
 
+    public static void setFieldCentric(boolean fieldCentric) {
+        GamepadController.fieldCentric = fieldCentric;
+    }
 
+    public static boolean isFieldCentric() {
+        return fieldCentric;
+    }
 }

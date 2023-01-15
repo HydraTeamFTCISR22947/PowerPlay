@@ -1,26 +1,33 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.app.Activity;
-import android.graphics.Color;
-import android.view.View;
-
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
-import com.qualcomm.robotcore.hardware.SwitchableLight;
+import org.firstinspires.ftc.teamcode.subsystems.GamepadController;
+import org.firstinspires.ftc.teamcode.subsystems.RobotCommands;
+import org.firstinspires.ftc.teamcode.util.gamepadHelper;
 
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+@TeleOp(name="Drivetrain Test", group="Tests")
+public class teleop extends LinearOpMode {
 
-@TeleOp(name = "Teleop", group = "Sensor")
-public class teleop extends LinearOpMode
-{
+  RobotCommands robotCommands;
+  gamepadHelper gamepadOneHelper;
 
-  @Override public void runOpMode()
+  @Override
+  public void runOpMode()
   {
+    robotCommands = new RobotCommands(hardwareMap, gamepad1);
+
+    telemetry.addData("Status: ","Initialized!");
+    telemetry.update();
+
+    waitForStart();
+
+    while (opModeIsActive())
+    {
+      robotCommands.drivetrainUpdate();
+    }
 
   }
+
 
 }
