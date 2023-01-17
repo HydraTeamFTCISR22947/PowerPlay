@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 import org.firstinspires.ftc.teamcode.util.RobotCommand;
 
-public class CatchCommand implements RobotCommand {
+public class CatchAndReleaseCommand implements RobotCommand {
     TransferSystem transferSystem;
     RotationServo rotationServo;
     ClawServo clawServo;
@@ -51,13 +51,18 @@ public class CatchCommand implements RobotCommand {
     LiftTarget liftTarget = LiftTarget.HIGH;
     ElapsedTime timer;
 
+    public CatchAndReleaseCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2)
+    {
+        initCommand(hardwareMap, gamepad1, gamepad2);
+    }
+
     @Override
     public void runCommand() {
         switch (catchingState)
         {
             case RESET_CATCH:
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.ZERO);
-
+                elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
                 rotationServo.rotateClawForward();
 
                 clawServo.openClaw();
@@ -123,6 +128,13 @@ public class CatchCommand implements RobotCommand {
                 break;
             case LIFT_UP:
                 targetElevator();
+
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.ZERO);
+
+                rotationServo.rotateClawForward();
+
+                clawServo.openClaw();
+
                 break;
         }
 

@@ -10,6 +10,12 @@ import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 public class DriveCommand implements RobotCommand {
     GamepadController robotController;
     GamepadHelper gamepadOneHelper;
+
+    public DriveCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2)
+    {
+        initCommand(hardwareMap, gamepad1, gamepad2);
+    }
+
     @Override
     public void runCommand() {
         robotController.setMotorPowers();
@@ -25,4 +31,6 @@ public class DriveCommand implements RobotCommand {
         robotController = new GamepadController(hardwareMap, gamepad1);
         gamepadOneHelper = new GamepadHelper(gamepad1);
     }
+
+
 }
