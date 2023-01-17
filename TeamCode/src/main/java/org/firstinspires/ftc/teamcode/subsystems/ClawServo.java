@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Config
 public class ClawServo {
 
-    double openPos = 0; // starting angle of claws
-    double closePos = 0.5; // closed angle of claws
+    public static double openPos = 0; // starting angle of claws
+    public static double closePos = 0.5; // closed angle of claws
 
     private Servo _clawServo; // declaring claw servo
     private HardwareMap _hardwareMap; // declaring hardware map

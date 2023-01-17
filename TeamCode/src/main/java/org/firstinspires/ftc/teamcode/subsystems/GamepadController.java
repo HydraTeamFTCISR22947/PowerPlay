@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -7,11 +8,11 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
-
+@Config
 public class GamepadController
 {
-    private static final double STRAFE_CORRECTION = 1.1;
-    private static final double DRIVETRAIN_MOTOR_POWER = 0.6;
+    private static double STRAFE_CORRECTION = 1.1;
+    private static double DRIVETRAIN_MOTOR_POWER = 0.6;
 
     public static boolean fieldCentric = false;
 

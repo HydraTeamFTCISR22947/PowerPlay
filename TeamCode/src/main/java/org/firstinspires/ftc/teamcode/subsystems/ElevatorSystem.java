@@ -1,17 +1,19 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+@Config
 public class ElevatorSystem
 {
 
     DcMotor mE;
 
-    double BASE_HEIGHT = 0;
-    double LOW_HEIGHT = 10;
-    double MID_HEIGHT = 25;
-    double HIGH_HEIGHT = 35;
+    public static double BASE_HEIGHT = 0;
+    public static double LOW_HEIGHT = 10;
+    public static double MID_HEIGHT = 25;
+    public static double HIGH_HEIGHT = 35;
 
     double power;
     double target = 0;

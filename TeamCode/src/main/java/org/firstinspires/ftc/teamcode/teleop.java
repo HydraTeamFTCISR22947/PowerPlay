@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.commands.DriveCommand;
 import org.firstinspires.ftc.teamcode.util.AxisDirection;
 import org.firstinspires.ftc.teamcode.util.BNO055IMUUtil;
 
-@TeleOp(name = "TeleOp", group = "Tests")
+@TeleOp(name = "TeleOp", group = "Main")
 public class teleop extends LinearOpMode {
     DriveCommand driveCommand;
     CatchAndReleaseCommand catchAndReleaseCommand;

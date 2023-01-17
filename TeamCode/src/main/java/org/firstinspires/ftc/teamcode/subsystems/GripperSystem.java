@@ -1,14 +1,16 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
+@Config
 public class GripperSystem
 {
     private Servo  _left , _right;
     private HardwareMap _hardwaremap;
-    private double _openServoPos = 0;
-    private double _closeServoPos = 0;
+    public static double _openServoPos = 0;
+    public static double _closeServoPos = 0;
     //in this part I write changes and for some of them I add values
 
     public GripperSystem(HardwareMap hardwaremap)
