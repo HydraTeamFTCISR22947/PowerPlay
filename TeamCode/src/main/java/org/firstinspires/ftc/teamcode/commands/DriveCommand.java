@@ -21,7 +21,7 @@ public class DriveCommand implements RobotCommand {
     }
 
     @Override
-    public void initCommand(HardwareMap hardwareMap, Gamepad gamepad1) {
+    public void initCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
         robotController = new GamepadController(hardwareMap, gamepad1);
         gamepadOneHelper = new GamepadHelper(gamepad1);
     }

@@ -13,7 +13,7 @@ public class GamepadController
     private static final double STRAFE_CORRECTION = 1.1;
     private static final double DRIVETRAIN_MOTOR_POWER = 0.6;
 
-    public static boolean fieldCentric = true;
+    public static boolean fieldCentric = false;
 
     private Gamepad _currentGamepad = null;
 
