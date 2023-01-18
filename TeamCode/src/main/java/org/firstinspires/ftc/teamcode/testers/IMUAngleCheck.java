@@ -24,6 +24,7 @@ public class IMUAngleCheck extends LinearOpMode {
 
             telemetry.addData("Heading Velocity(RADS):", getExternalHeadingVelocity());
             telemetry.addData("Heading Velocity(DEG):", Math.toDegrees(getExternalHeadingVelocity()));
+            telemetry.update();
         }
     }
 

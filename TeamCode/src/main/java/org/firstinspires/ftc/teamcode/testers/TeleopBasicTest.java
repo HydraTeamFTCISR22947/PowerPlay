@@ -12,7 +12,6 @@ public class TeleopBasicTest extends LinearOpMode {
     public void runOpMode()
     {
         GamepadController robotController = new GamepadController(hardwareMap,gamepad1);
-        GamepadHelper gamepadOneHelper = new GamepadHelper(gamepad1);
 
         telemetry.addData("Status: ","Initialized!");
         telemetry.update();
@@ -20,12 +19,20 @@ public class TeleopBasicTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive())
         {
-            robotController.setMotorPowers();
-
-            if(gamepadOneHelper.XOnce())
+            if(gamepad2.right_bumper)
             {
-                robotController.setFieldCentric(!robotController.isFieldCentric());
+                robotController.setDrivetrainMotorPower(.9);
             }
+            else if(gamepad2.left_bumper)
+            {
+                robotController.setDrivetrainMotorPower(.2);
+            }
+            else
+            {
+                robotController.setDrivetrainMotorPower(.6);
+            }
+
+            robotController.setMotorPowers();
 
             telemetry.addData("Motors: ", "mFR: (%.2f), mFL: (%.2f), mBR: (%.2f), mBL: (%.2f) ", robotController.get_mFR_power(), robotController.get_mFL_power(),robotController.get_mBR_power(),robotController.get_mBL_power());
             telemetry.update();

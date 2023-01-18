@@ -1,6 +1,6 @@
 //package org.firstinspires.ftc.teamcode.commands;
 //
-//import com.qualcomm.robotcore.hardware.Gamepad;
+//import com.qualcomm.robotcore.hardware.Mecanum;
 //import com.qualcomm.robotcore.hardware.HardwareMap;
 //import com.qualcomm.robotcore.util.ElapsedTime;
 //
@@ -16,7 +16,7 @@
 //    RotationServo rotationServo;
 //    ClawServo clawServo;
 //    GripperSystem gripperSystem;
-//    Gamepad gamepad1;
+//    Mecanum gamepad1;
 //    GamepadHelper gamepadHelper1;
 //
 //    double halfwayOffset = 0;
@@ -110,7 +110,7 @@
 //    }
 //
 //    @Override
-//    public void initCommand(HardwareMap hardwareMap, Gamepad gamepad1) {
+//    public void initCommand(HardwareMap hardwareMap, Mecanum gamepad1) {
 //        transferSystem = new TransferSystem(hardwareMap);
 //        rotationServo = new RotationServo(hardwareMap);
 //        clawServo = new ClawServo(hardwareMap);

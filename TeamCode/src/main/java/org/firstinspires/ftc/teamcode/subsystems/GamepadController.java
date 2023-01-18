@@ -8,6 +8,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.util.AxisDirection;
+import org.firstinspires.ftc.teamcode.util.BNO055IMUUtil;
+
 @Config
 public class GamepadController
 {
@@ -56,8 +59,8 @@ public class GamepadController
         double x = 0.0, y = 0.0, turn = 0.0;
 
         y = this._currentGamepad.left_stick_y;
-        x = this._currentGamepad.right_stick_x * STRAFE_CORRECTION;
-        turn = this._currentGamepad.left_stick_x;
+        x = -this._currentGamepad.right_stick_x * STRAFE_CORRECTION;
+        turn = -this._currentGamepad.left_stick_x;
 
         this._mFL_power = Range.clip(y + turn + x, -DRIVETRAIN_MOTOR_POWER, DRIVETRAIN_MOTOR_POWER);
         this._mBL_power = Range.clip(y - turn + x, -DRIVETRAIN_MOTOR_POWER, DRIVETRAIN_MOTOR_POWER);
@@ -68,12 +71,12 @@ public class GamepadController
     void getMotorsPowerFieldCentric()
     {
         // Read inverse IMU heading, as the IMU heading is CW positive
-        double botHeading = -imu.getAngularOrientation().firstAngle;
+        double botHeading = imu.getAngularOrientation().firstAngle;
         double x = 0.0, y = 0.0, turn = 0.0;
 
         y = -this._currentGamepad.left_stick_y;
-        x = this._currentGamepad.right_stick_x * STRAFE_CORRECTION;
-        turn = this._currentGamepad.left_stick_x;
+        x = -this._currentGamepad.right_stick_x * STRAFE_CORRECTION;
+        turn = -this._currentGamepad.left_stick_x;
 
         double rotX = x * Math.cos(botHeading) - y * Math.sin(botHeading);
         double rotY = x * Math.sin(botHeading) + y * Math.cos(botHeading);
@@ -115,6 +118,8 @@ public class GamepadController
         parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
         // Without this, data retrieving from the IMU throws an exception
         imu.initialize(parameters);
+
+        BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
     }
 
     public double get_mFR_power()
@@ -140,5 +145,21 @@ public class GamepadController
 
     public static boolean isFieldCentric() {
         return fieldCentric;
+    }
+
+    public static double getStrafeCorrection() {
+        return STRAFE_CORRECTION;
+    }
+
+    public static void setStrafeCorrection(double strafeCorrection) {
+        STRAFE_CORRECTION = strafeCorrection;
+    }
+
+    public static double getDrivetrainMotorPower() {
+        return DRIVETRAIN_MOTOR_POWER;
+    }
+
+    public static void setDrivetrainMotorPower(double drivetrainMotorPower) {
+        DRIVETRAIN_MOTOR_POWER = drivetrainMotorPower;
     }
 }
