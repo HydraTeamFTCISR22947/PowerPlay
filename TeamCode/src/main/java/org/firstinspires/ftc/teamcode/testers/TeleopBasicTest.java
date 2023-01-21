@@ -1,43 +1,42 @@
 package org.firstinspires.ftc.teamcode.testers;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.GamepadController;
-import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
-@TeleOp(name="Drivetrain Test", group="Tests")
+@Config
+@TeleOp(name = "Gamepad Red Test", group = "test")
 public class TeleopBasicTest extends LinearOpMode {
+
+    GamepadController gamepad;
+
     @Override
-    public void runOpMode()
-    {
-        GamepadController robotController = new GamepadController(hardwareMap,gamepad1);
+    public void runOpMode() throws InterruptedException {
+        gamepad = new GamepadController(hardwareMap, gamepad1, gamepad2, telemetry); // TeleopCommand(gamepad) class functions
+        gamepad.setRedAlliance(true);
 
-        telemetry.addData("Status: ","Initialized!");
-        telemetry.update();
-
+        // wait till after init
         waitForStart();
-        while (opModeIsActive())
-        {
+
+        while (opModeIsActive()) {
             if(gamepad2.right_bumper)
             {
-                robotController.setDrivetrainMotorPower(.9);
+                gamepad.setPower(.9);
             }
             else if(gamepad2.left_bumper)
             {
-                robotController.setDrivetrainMotorPower(.2);
+                gamepad.setPower(.2);
             }
             else
             {
-                robotController.setDrivetrainMotorPower(.6);
+                gamepad.setPower(.6);
             }
-
-            robotController.setMotorPowers();
-
-            telemetry.addData("Motors: ", "mFR: (%.2f), mFL: (%.2f), mBR: (%.2f), mBL: (%.2f) ", robotController.get_mFR_power(), robotController.get_mFL_power(),robotController.get_mBR_power(),robotController.get_mBL_power());
-            telemetry.update();
+            gamepad.update();
         }
 
-
     }
+
+
 }

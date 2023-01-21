@@ -35,7 +35,7 @@ public class Camera extends LinearOpMode {
 
     public void initPipeline()
     {
-        //setting up webcam from config, and displaying it in the teleop controller.
+        //setting up webcam from config, and displaying it in the TeleopCommand controller.
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 

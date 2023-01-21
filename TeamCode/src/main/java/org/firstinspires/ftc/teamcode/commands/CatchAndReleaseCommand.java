@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.ClawServo;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
 import org.firstinspires.ftc.teamcode.subsystems.GripperSystem;
@@ -51,9 +52,9 @@ public class CatchAndReleaseCommand implements RobotCommand {
     LiftTarget liftTarget = LiftTarget.HIGH;
     ElapsedTime timer;
 
-    public CatchAndReleaseCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2)
+    public CatchAndReleaseCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry)
     {
-        initCommand(hardwareMap, gamepad1, gamepad2);
+        initCommand(hardwareMap, gamepad1, gamepad2, telemetry);
     }
 
     @Override
@@ -176,7 +177,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
         }
     }
     @Override
-    public void initCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2) {
+    public void initCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         transferSystem = new TransferSystem(hardwareMap);
         rotationServo = new RotationServo(hardwareMap);
         clawServo = new ClawServo(hardwareMap);

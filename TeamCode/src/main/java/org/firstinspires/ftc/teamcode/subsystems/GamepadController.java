@@ -1,165 +1,193 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.util.ReadWriteFile;
 
-import org.firstinspires.ftc.teamcode.util.AxisDirection;
-import org.firstinspires.ftc.teamcode.util.BNO055IMUUtil;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
 @Config
-public class GamepadController
-{
-    private static double STRAFE_CORRECTION = 1.1;
-    private static double DRIVETRAIN_MOTOR_POWER = 0.6;
+public class GamepadController {
 
-    public static boolean fieldCentric = false;
+    public boolean redAlliance = true;
+    Gamepad gamepad1, gamepad2;
+    DcMotor mFL, mBL, mFR, mBR;
+    Telemetry telemetry;
+    double leftPower_f;
+    double leftPower_b;
+    double rightPower_f;
+    double rightPower_b;
+    double drive,  strafe, twist, power = mainPower;
+    public static double mainPower = .6, multiplier = .9, POWER_INCREMENT = 0.1;
+    public static boolean slowMove = false, isCentricDrive = true, canTwist = true;
+    GamepadHelper cGamepad1, cGamepad2;
+    SampleMecanumDrive drivetrain;
+    public static double startH = 0;
 
-    private Gamepad _currentGamepad = null;
+    /**
+     * constructor for gamepad
+     * @param gamepad1 the gamepad1 object from TeleopCommand
+     * @param gamepad2 the gamepad2 object from TeleopCommand
+     * @param telemetry the telemetry object from TeleopCommand
+     * //@param drivetrain the SampleMecanumDriveCancable object from TeleopCommand
+     */
+    public GamepadController(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
+        this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
+        this.mFL = hardwareMap.get(DcMotor.class, "mFL");
+        this.mBL = hardwareMap.get(DcMotor.class, "mBL");
+        this.mBR = hardwareMap.get(DcMotor.class, "mBR");
+        this.mFR = hardwareMap.get(DcMotor.class, "mFR");
+        this.mFL.setDirection(DcMotor.Direction.REVERSE);
+        this.mBL.setDirection(DcMotor.Direction.REVERSE);
+        cGamepad1 = new GamepadHelper(gamepad1);
+        cGamepad2 = new GamepadHelper(gamepad2);
+        this.telemetry = telemetry;
+        mBL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mFL.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mBR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        mFR.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-    private double _mFR_power = 0.0;
-    private double _mFL_power = 0.0;
-    private double _mBR_power = 0.0;
-    private double _mBL_power = 0.0;
-
-    private DcMotor _mFR =  null;
-    private DcMotor _mFL =  null;
-    private DcMotor _mBR =  null;
-    private DcMotor _mBL =  null;
-
-    BNO055IMU imu;
-
-    public GamepadController(HardwareMap hardwareMap, Gamepad gamepad1)
-    {
-        this._currentGamepad =gamepad1;
-
-        this._mFR = hardwareMap.get(DcMotor.class, "mFR");
-        this._mFL = hardwareMap.get(DcMotor.class,"mFL");
-        this._mBR = hardwareMap.get(DcMotor.class, "mBR");
-        this._mBL = hardwareMap.get(DcMotor.class, "mBL");
-
-        this.setMotorsDirections();
-
-        initIMU(hardwareMap);
-    }
-    void setMotorsDirections()
-    {
-        this._mFR.setDirection(DcMotor.Direction.FORWARD);
-        this._mFL.setDirection(DcMotor.Direction.REVERSE);
-        this._mBR.setDirection(DcMotor.Direction.FORWARD);
-        this._mBL.setDirection(DcMotor.Direction.REVERSE);
-    }
-
-    void getMotorsPower()
-    {
-        double x = 0.0, y = 0.0, turn = 0.0;
-
-        y = this._currentGamepad.left_stick_y;
-        x = -this._currentGamepad.right_stick_x * STRAFE_CORRECTION;
-        turn = -this._currentGamepad.left_stick_x;
-
-        this._mFL_power = Range.clip(y + turn + x, -DRIVETRAIN_MOTOR_POWER, DRIVETRAIN_MOTOR_POWER);
-        this._mBL_power = Range.clip(y - turn + x, -DRIVETRAIN_MOTOR_POWER, DRIVETRAIN_MOTOR_POWER);
-        this._mFR_power = Range.clip(y - turn - x, -DRIVETRAIN_MOTOR_POWER, DRIVETRAIN_MOTOR_POWER);
-        this._mBR_power = Range.clip(y + turn - x, -DRIVETRAIN_MOTOR_POWER, DRIVETRAIN_MOTOR_POWER);
-    }
-
-    void getMotorsPowerFieldCentric()
-    {
-        // Read inverse IMU heading, as the IMU heading is CW positive
-        double botHeading = imu.getAngularOrientation().firstAngle;
-        double x = 0.0, y = 0.0, turn = 0.0;
-
-        y = -this._currentGamepad.left_stick_y;
-        x = -this._currentGamepad.right_stick_x * STRAFE_CORRECTION;
-        turn = -this._currentGamepad.left_stick_x;
-
-        double rotX = x * Math.cos(botHeading) - y * Math.sin(botHeading);
-        double rotY = x * Math.sin(botHeading) + y * Math.cos(botHeading);
-
-        this._mFL_power = Range.clip(rotY + rotX + turn, -DRIVETRAIN_MOTOR_POWER, DRIVETRAIN_MOTOR_POWER);
-        this._mBL_power = Range.clip(rotY - rotX + turn, -DRIVETRAIN_MOTOR_POWER, DRIVETRAIN_MOTOR_POWER);
-        this._mFR_power = Range.clip(rotY - rotX - turn, -DRIVETRAIN_MOTOR_POWER, DRIVETRAIN_MOTOR_POWER);
-        this._mBR_power = Range.clip(rotY + rotX - turn, -DRIVETRAIN_MOTOR_POWER, DRIVETRAIN_MOTOR_POWER);
-    }
-
-    void activateDriveTrainMotors()
-    {
-        this._mFR.setPower(this._mFR_power);
-        this._mFL.setPower(this._mFL_power);
-        this._mBR.setPower(this._mBR_power);
-        this._mBL.setPower(this._mBL_power);
-    }
-
-    public void setMotorPowers()
-    {
-        if(fieldCentric)
+        if(redAlliance)
         {
-            getMotorsPowerFieldCentric();
+            startH = 0;
+            startH -= (Math.PI + Math.PI/2); // red
         }
         else
         {
-            getMotorsPower();
+            startH = 0;
+            startH -= Math.PI/2; // blue
         }
 
-        activateDriveTrainMotors();
+        this.drivetrain = new SampleMecanumDrive(hardwareMap);
+        this.drivetrain.setPoseEstimate(new Pose2d(0,0,startH));
+        // We want to turn off velocity control for TeleopCommand
+        // Velocity control per wheel is not necessary outside of motion profiled auto
+        this.drivetrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
-    void initIMU(HardwareMap hardwareMap)
+    public void update() {
+        drivetrain.update();
+        cGamepad1.update();
+        cGamepad2.update();
+
+        if(cGamepad1.XOnce())
+        {
+            if(redAlliance)
+            {
+                startH = 0;
+                startH -= (Math.PI + Math.PI/2); // red
+                this.drivetrain.setPoseEstimate(new Pose2d(0,0,startH));
+            }
+            else if(!redAlliance)
+            {
+                startH = 0;
+                startH -= Math.PI/2; // blue
+                this.drivetrain.setPoseEstimate(new Pose2d(0,0,startH));
+            }
+        }
+
+        if(cGamepad1.dpadUpOnce())
+        {
+            power += POWER_INCREMENT;
+        }
+        else if(cGamepad1.dpadDownOnce())
+        {
+            power -= POWER_INCREMENT;
+        }
+
+        getGamepadDirections();
+
+//        if(cGamepad1.dpadDownOnce())
+//        {
+//            isCentricDrive = !isCentricDrive;
+//        }
+//
+        if (isCentricDrive)
+        {
+            centricDrive();
+        }
+        else
+        {
+            regularDrive();
+        }
+
+        mFL.setPower(leftPower_f);
+        mBL.setPower(leftPower_b);
+        mFR.setPower(rightPower_f);
+        mBR.setPower(rightPower_b);
+    }
+
+    public void getGamepadDirections()
     {
-        // Retrieve the IMU from the hardware map
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        // Technically this is the default, however specifying it is clearer
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
-        // Without this, data retrieving from the IMU throws an exception
-        imu.initialize(parameters);
-
-        BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
+        drive = -gamepad1.left_stick_y;
+        strafe = gamepad1.left_stick_x;
+        if(canTwist)
+        {
+            twist = -gamepad1.right_stick_x * multiplier;
+        }
+        else
+        {
+            twist = 0;
+        }
     }
 
-    public double get_mFR_power()
+    public void regularDrive()
     {
-        return this._mFR_power;
+        leftPower_f = Range.clip(drive + twist + strafe, -power, power);
+        leftPower_b = Range.clip(drive + twist - strafe, -power, power);
+        rightPower_f = Range.clip(drive - twist - strafe, -power, power);
+        rightPower_b = Range.clip(drive - twist + strafe, -power, power);
     }
-    public double get_mFL_power()
+
+    public void centricDrive()
     {
-        return this._mFL_power;
+        Vector2d input = new Vector2d(
+                -gamepad1.left_stick_y,
+                gamepad1.left_stick_x
+        ).rotated(drivetrain.getExternalHeading());
+
+        leftPower_f = Range.clip(input.getX() + twist + input.getY() , -power, power);
+        leftPower_b = Range.clip(input.getX() + twist - input.getY(), -power, power);
+        rightPower_f = Range.clip(input.getX() - twist - input.getY(), -power, power);
+        rightPower_b = Range.clip(input.getX() - twist + input.getY(), -power, power);
     }
-    public double get_mBR_power()
+
+    public double getIMU()
     {
-        return this._mBR_power;
+        return drivetrain.getExternalHeading();
     }
-    public double get_mBL_power()
+
+    public void saveIMUHeading()
     {
-        return this._mBL_power;
+        ReadWriteFile.writeFile(AppUtil.getInstance().getSettingsFile("RRheadingValue.txt"), "" + getIMU());
     }
 
-    public static void setFieldCentric(boolean fieldCentric) {
-        GamepadController.fieldCentric = fieldCentric;
+    public void setSlowMove(boolean slowMove) {
+        this.slowMove = slowMove;
     }
 
-    public static boolean isFieldCentric() {
-        return fieldCentric;
+    public void setRedAlliance(boolean redAlliance) {
+        this.redAlliance = redAlliance;
     }
 
-    public static double getStrafeCorrection() {
-        return STRAFE_CORRECTION;
+    public static boolean isCanTwist() {
+        return canTwist;
     }
 
-    public static void setStrafeCorrection(double strafeCorrection) {
-        STRAFE_CORRECTION = strafeCorrection;
+    public void setCanTwist(boolean canTwist) {
+        this.canTwist = canTwist;
     }
 
-    public static double getDrivetrainMotorPower() {
-        return DRIVETRAIN_MOTOR_POWER;
-    }
-
-    public static void setDrivetrainMotorPower(double drivetrainMotorPower) {
-        DRIVETRAIN_MOTOR_POWER = drivetrainMotorPower;
+    public void setPower(double power) {
+        this.power = power;
     }
 }

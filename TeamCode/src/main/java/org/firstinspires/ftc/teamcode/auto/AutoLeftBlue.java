@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.testers;
+package org.firstinspires.ftc.teamcode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -8,15 +8,15 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Config
-@Autonomous(name = "Auto Right Blue", group = "test")
-public class AutoRightBlue extends LinearOpMode {
+@Autonomous(name = "Auto Left Blue", group = "test")
+public class AutoLeftBlue extends LinearOpMode {
 
     DcMotor motorLeftFront;
     DcMotor motorLeftBack;
     DcMotor motorRightFront;
     DcMotor motorRightBack;
 
-    double power = 0.5;
+    double power = 0.6;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -36,7 +36,7 @@ public class AutoRightBlue extends LinearOpMode {
         motorLeftFront.setPower(-power);
         motorRightBack.setPower(-power);
 
-        Thread.sleep(750);
+        Thread.sleep(1500);
 
         motorLeftBack.setPower(0);
         motorRightFront.setPower(0);

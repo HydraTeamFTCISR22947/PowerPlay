@@ -4,8 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.subsystems.ClawServo;
-import org.firstinspires.ftc.teamcode.subsystems.GamepadController;
-import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
 @TeleOp(name="Claw Test", group="Tests")
 public class ClawTest extends LinearOpMode {
