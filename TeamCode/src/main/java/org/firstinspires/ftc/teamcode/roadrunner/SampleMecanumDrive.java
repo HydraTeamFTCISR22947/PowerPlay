@@ -1,16 +1,16 @@
 package org.firstinspires.ftc.teamcode.roadrunner;
 
-import static org.firstinspires.ftc.teamcode.subsystems.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveConstants.kV;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.subsystems.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.encoderTicksToInches;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.kV;
 
 import androidx.annotation.NonNull;
 
@@ -29,20 +29,20 @@ import com.acmerobotics.roadrunner.trajectory.constraints.MinVelocityConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.ProfileAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryAccelerationConstraint;
 import com.acmerobotics.roadrunner.trajectory.constraints.TrajectoryVelocityConstraint;
-import com.qualcomm.hardware.bosch.BNO055IMU;
 import com.qualcomm.hardware.lynx.LynxModule;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.hardware.VoltageSensor;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
-import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceRunnerCancelable;
-import org.firstinspires.ftc.teamcode.util.AxisDirection;
-import org.firstinspires.ftc.teamcode.util.BNO055IMUUtil;
+import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceRunner;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
 
 import java.util.ArrayList;
@@ -50,38 +50,37 @@ import java.util.Arrays;
 import java.util.List;
 
 /*
- * Trajectory-cancelable version of the simple mecanum drive hardware implementation for REV hardware.
- * Ensure that this is copied into your project.
+ * Simple mecanum drive hardware implementation for REV hardware.
  */
 @Config
 public class SampleMecanumDrive extends MecanumDrive {
-    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(8, 0, 0);
-    public static PIDCoefficients HEADING_PID = new PIDCoefficients(10, 0, 0);
+    public static PIDCoefficients TRANSLATIONAL_PID = new PIDCoefficients(0, 0, 0);
+    public static PIDCoefficients HEADING_PID = new PIDCoefficients(0, 0, 0);
 
-    public static double LATERAL_MULTIPLIER = 0.9911784173;
+    public static double LATERAL_MULTIPLIER = 1;
 
     public static double VX_WEIGHT = 1;
     public static double VY_WEIGHT = 1;
     public static double OMEGA_WEIGHT = 1;
 
-    private TrajectorySequenceRunnerCancelable trajectorySequenceRunner;
+    private TrajectorySequenceRunner trajectorySequenceRunner;
 
     private static final TrajectoryVelocityConstraint VEL_CONSTRAINT = getVelocityConstraint(MAX_VEL, MAX_ANG_VEL, TRACK_WIDTH);
     private static final TrajectoryAccelerationConstraint ACCEL_CONSTRAINT = getAccelerationConstraint(MAX_ACCEL);
 
     private TrajectoryFollower follower;
 
-    private DcMotorEx mFL, mBL, mBR, mFR;
+    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
-    private BNO055IMU imu;
+    private IMU imu;
     private VoltageSensor batteryVoltageSensor;
 
     public SampleMecanumDrive(HardwareMap hardwareMap) {
         super(kV, kA, kStatic, TRACK_WIDTH, TRACK_WIDTH, LATERAL_MULTIPLIER);
 
         follower = new HolonomicPIDVAFollower(TRANSLATIONAL_PID, TRANSLATIONAL_PID, HEADING_PID,
-                new Pose2d(0.5, 0.5, Math.toRadians(1.0)), 0.5);
+                new Pose2d(0.5, 0.5, Math.toRadians(5.0)), 0.5);
 
         LynxModuleUtil.ensureMinimumFirmwareVersion(hardwareMap);
 
@@ -91,19 +90,21 @@ public class SampleMecanumDrive extends MecanumDrive {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        imu = hardwareMap.get(BNO055IMU.class, "imu");
-        BNO055IMU.Parameters parameters = new BNO055IMU.Parameters();
-        parameters.angleUnit = BNO055IMU.AngleUnit.RADIANS;
+        // TODO: adjust the names of the following hardware devices to match your configuration
+        imu = hardwareMap.get(IMU.class, "imu");
+        // TODO: Adjust the orientations here to match your robot. See the FTC SDK documentation for
+        // details
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
         imu.initialize(parameters);
 
-        BNO055IMUUtil.remapZAxis(imu, AxisDirection.NEG_Y);
+        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
+        leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
+        rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
+        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
 
-        mFL= hardwareMap.get(DcMotorEx.class, "mFL");
-        mBL = hardwareMap.get(DcMotorEx.class, "mBL");
-        mBR = hardwareMap.get(DcMotorEx.class, "mBR");
-        mFR = hardwareMap.get(DcMotorEx.class, "mFR");
-
-        motors = Arrays.asList(mFL, mBL, mBR, mFR);
+        motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -121,17 +122,12 @@ public class SampleMecanumDrive extends MecanumDrive {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
         }
 
-        mFL = hardwareMap.get(DcMotorEx.class, "mFL");
-        mBL = hardwareMap.get(DcMotorEx.class, "mBL");
-        mBR = hardwareMap.get(DcMotorEx.class, "mBR");
-        mFR = hardwareMap.get(DcMotorEx.class, "mFR");
+        // TODO: reverse any motors using DcMotor.setDirection()
 
-        mFL.setDirection(DcMotorSimple.Direction.REVERSE);
-        mBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        // TODO: if desired, use setLocalizer() to change the localization method
+        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
 
-        setLocalizer(new MecanumLocalizer(this, true));
-
-        trajectorySequenceRunner = new TrajectorySequenceRunnerCancelable(follower, HEADING_PID);
+        trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
 
     public TrajectoryBuilder trajectoryBuilder(Pose2d startPose) {
@@ -187,10 +183,6 @@ public class SampleMecanumDrive extends MecanumDrive {
     public void followTrajectorySequence(TrajectorySequence trajectorySequence) {
         followTrajectorySequenceAsync(trajectorySequence);
         waitForIdle();
-    }
-
-    public void breakFollowing() {
-        trajectorySequenceRunner.breakFollowing();
     }
 
     public Pose2d getLastError() {
@@ -276,25 +268,20 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        mFL.setPower(v);
-        mBL.setPower(v1);
-        mBR.setPower(v2);
-        mFR.setPower(v3);
+        leftFront.setPower(v);
+        leftRear.setPower(v1);
+        rightRear.setPower(v2);
+        rightFront.setPower(v3);
     }
 
     @Override
     public double getRawExternalHeading() {
-        return imu.getAngularOrientation().firstAngle;
+        return imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
     }
 
     @Override
     public Double getExternalHeadingVelocity() {
-        // To work around an SDK bug, use -zRotationRate in place of xRotationRate
-        // and -xRotationRate in place of zRotationRate (yRotationRate behaves as
-        // expected). This bug does NOT affect orientation.
-        //
-        // See https://github.com/FIRST-Tech-Challenge/FtcRobotController/issues/251 for details.
-        return (double) -imu.getAngularVelocity().xRotationRate;
+        return (double) imu.getRobotAngularVelocity(AngleUnit.RADIANS).zRotationRate;
     }
 
     public static TrajectoryVelocityConstraint getVelocityConstraint(double maxVel, double maxAngularVel, double trackWidth) {

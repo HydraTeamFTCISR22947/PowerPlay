@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.subsystems;
+package org.firstinspires.ftc.teamcode.roadrunner;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
@@ -20,8 +20,8 @@ public class DriveConstants {
     /*
      * These are motor constants that should be listed online for your motors.
      */
-    public static final double TICKS_PER_REV = 537.7;
-    public static final double MAX_RPM = 312;
+    public static final double TICKS_PER_REV = 1;
+    public static final double MAX_RPM = 1;
 
     /*
      * Set RUN_USING_ENCODER to true to enable built-in hub velocity control using drive encoders.
@@ -32,8 +32,8 @@ public class DriveConstants {
      * from DriveVelocityPIDTuner.
      */
     public static final boolean RUN_USING_ENCODER = true;
-    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(18, 0, 6,
-            13.76);
+    public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
+            getMotorVelocityF(MAX_RPM / 60 * TICKS_PER_REV));
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -43,9 +43,9 @@ public class DriveConstants {
      * angular distances although most angular parameters are wrapped in Math.toRadians() for
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
-    public static double WHEEL_RADIUS = 1.889765; // in
-    public static double GEAR_RATIO = 1.5 *  1.0127742864; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 10.76; // in
+    public static double WHEEL_RADIUS = 2; // in
+    public static double GEAR_RATIO = 1; // output (wheel) speed / input (motor) speed
+    public static double TRACK_WIDTH = 1; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -64,26 +64,11 @@ public class DriveConstants {
      * small and gradually increase them later after everything is working. All distance units are
      * inches.
      */
-    public static double MAX_VEL = 80;
-    public static double MAX_ACCEL = 80;
-    public static double MAX_ANG_VEL = 7.11111;
-    public static double MAX_ANG_ACCEL = 7.11111;
+    public static double MAX_VEL = 30;
+    public static double MAX_ACCEL = 30;
+    public static double MAX_ANG_VEL = Math.toRadians(60);
+    public static double MAX_ANG_ACCEL = Math.toRadians(60);
 
-    public static void setMaxVel(double maxVel) {
-        MAX_VEL = maxVel;
-    }
-
-    public static void setMaxAccel(double maxAccel) {
-        MAX_ACCEL = maxAccel;
-    }
-
-    public static void setMaxAngVel(double maxAngVel) {
-        MAX_ANG_VEL = maxAngVel;
-    }
-
-    public static void setMaxAngAccel(double maxAngAccel) {
-        MAX_ANG_ACCEL = maxAngAccel;
-    }
 
     public static double encoderTicksToInches(double ticks) {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;
