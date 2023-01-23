@@ -23,7 +23,9 @@ public class TransferTest extends LinearOpMode {
         {
             transferSystem.update();
 
-            if (gamepadHelper1.YOnce()) {
+           // if (gamepadHelper1.YOnce()) {
+            gamepadHelper1.update();
+             if(gamepadHelper1.YOnce()){
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.FINAL);
             } else if (gamepadHelper1.BOnce()) {
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.MID);

@@ -21,6 +21,7 @@ public class ElevatorTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive())
         {
+            gamepadHelper1.update();
             if(gamepadHelper1.YOnce())
             {
                 elevatorSystem.highRod();

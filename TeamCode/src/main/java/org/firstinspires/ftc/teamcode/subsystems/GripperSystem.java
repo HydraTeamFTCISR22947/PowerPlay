@@ -8,18 +8,15 @@ import com.qualcomm.robotcore.hardware.Servo;
 public class GripperSystem
 {
     private Servo  _left , _right;
-    private HardwareMap _hardwaremap;
     public static double _openServoPos = 0;
-    public static double _closeServoPos = 0;
+    public static double _closeServoPos = 0.3;
     //in this part I write changes and for some of them I add values
 
     public GripperSystem(HardwareMap hardwaremap)
     {
-        this._hardwaremap = hardwaremap;
         _left = hardwaremap.get(Servo.class, "gripper_servo_left");
         _right = hardwaremap.get(Servo.class, "gripper_servo_right");
-        _left.setDirection(Servo.Direction.REVERSE);
-        openGripper();
+        _right.setDirection(Servo.Direction.REVERSE);
     //in this part I make fuction that change left servo direction,call other fuction and etc
     }
     public void openGripper()

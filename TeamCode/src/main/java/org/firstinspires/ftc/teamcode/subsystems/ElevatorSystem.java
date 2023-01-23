@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 @Config
@@ -10,16 +11,13 @@ public class ElevatorSystem
 
     DcMotor mE;
 
-    public static double BASE_HEIGHT = 0;
-    public static double LOW_HEIGHT = 10;
-    public static double MID_HEIGHT = 25;
-    public static double HIGH_HEIGHT = 35;
+    public static int BASE_HEIGHT = 0;
+    public static int LOW_HEIGHT = 1000;
+    public static int MID_HEIGHT = 1700;
+    public static int HIGH_HEIGHT = 2470;
 
-    double power;
-    double target = 0;
-
-    public static double TICKS_PER_REV = 384.5;
-    public static double SPOOL_RADIUS = 2.204725; // in
+    public static double power = 0.2;
+    int target = 0;
 
     public enum elevatorState {
         BASE_LEVEL,
@@ -58,56 +56,41 @@ public class ElevatorSystem
         }
 
         // set target
-        mE.setTargetPosition(inchesToEncoderTicks(target));
+        mE.setTargetPosition(target);
         mE.setPower(power);
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void baseLevel() {
-
-        mE.setTargetPosition(inchesToEncoderTicks(BASE_HEIGHT));
-        if (mE.getCurrentPosition() > inchesToEncoderTicks(BASE_HEIGHT)) {
-            mE.setPower(-power);
-        }
+    public void baseLevel()
+    {
+        mE.setTargetPosition(BASE_HEIGHT);
+        mE.setPower(power);
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
-        public void lowRod() {
 
-            mE.setTargetPosition(inchesToEncoderTicks(LOW_HEIGHT));
-            if (mE.getCurrentPosition() < inchesToEncoderTicks(LOW_HEIGHT))
-            {
-                mE.setPower(power);
-            }
-            mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        }
-
-        public void midRod() {
-
-        mE.setTargetPosition(inchesToEncoderTicks(MID_HEIGHT));
-        if (mE.getCurrentPosition() < inchesToEncoderTicks(MID_HEIGHT))
-        {
-            mE.setPower(power);
-        }
+    public void lowRod()
+    {
+        mE.setTargetPosition(LOW_HEIGHT);
+        mE.setPower(power);
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
     }
 
 
-        public void highRod() {
-
-        mE.setTargetPosition(inchesToEncoderTicks(HIGH_HEIGHT));
-        if (mE.getCurrentPosition() < inchesToEncoderTicks(HIGH_HEIGHT))
-        {
-            mE.setPower(power);
-        }
+    public void midRod()
+    {
+        mE.setTargetPosition(MID_HEIGHT);
+        mE.setPower(power);
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
     }
 
-    public static int inchesToEncoderTicks(double inches) {
-        return (int)Math.round((inches * TICKS_PER_REV) / (SPOOL_RADIUS * 2 * Math.PI));
+
+    public void highRod()
+    {
+        mE.setTargetPosition(HIGH_HEIGHT);
+        mE.setPower(power);
+        mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
+
 
     public elevatorState getLiftState() {
         return liftState;

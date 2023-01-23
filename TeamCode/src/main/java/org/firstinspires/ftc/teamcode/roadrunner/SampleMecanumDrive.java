@@ -70,7 +70,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private TrajectoryFollower follower;
 
-    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
+    private DcMotorEx mFL, mBL, mBR, mFR;
     private List<DcMotorEx> motors;
 
     private IMU imu;
@@ -99,12 +99,12 @@ public class SampleMecanumDrive extends MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
         imu.initialize(parameters);
 
-        leftFront = hardwareMap.get(DcMotorEx.class, "leftFront");
-        leftRear = hardwareMap.get(DcMotorEx.class, "leftRear");
-        rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
-        rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
+        mFL = hardwareMap.get(DcMotorEx.class, "mFL");
+        mBL = hardwareMap.get(DcMotorEx.class, "mBL");
+        mBR = hardwareMap.get(DcMotorEx.class, "mBR");
+        mFR = hardwareMap.get(DcMotorEx.class, "mFR");
 
-        motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
+        motors = Arrays.asList(mFL, mBL, mBR, mFR);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -268,10 +268,10 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        leftFront.setPower(v);
-        leftRear.setPower(v1);
-        rightRear.setPower(v2);
-        rightFront.setPower(v3);
+        mFL.setPower(v);
+        mBL.setPower(v1);
+        mBR.setPower(v2);
+        mFR.setPower(v3);
     }
 
     @Override
