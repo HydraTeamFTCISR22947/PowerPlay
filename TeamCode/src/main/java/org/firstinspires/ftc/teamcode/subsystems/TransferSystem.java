@@ -1,10 +1,17 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedforward.NoFeedforward;
+import com.ThermalEquilibrium.homeostasis.Filters.Estimators.RawValue;
+import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
+import com.ThermalEquilibrium.homeostasis.Systems.BasicSystem;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
+
+import java.util.function.DoubleSupplier;
 
 /*
  * Hardware class for our transfer system using FIRST'S set target position.
@@ -12,10 +19,9 @@ import com.qualcomm.robotcore.util.Range;
 @Config
 public class TransferSystem
 {
+    public static double kP = 0, kI = 0, kD = 0;
     // set transfer levels values
-    //public static double FINAL = 20;
     public static double FINAL = -100;
-   // public static double MID = 12;
     public static double MID = -50;
     public static double ZERO = 0;
 
@@ -35,13 +41,27 @@ public class TransferSystem
 
     // set initial transfer level
     public static TransferLevels transferLevel = TransferLevels.ZERO;
+    double command = 0;
+    PIDCoefficients coefficients = new PIDCoefficients(kP,kI,kD);
+    DoubleSupplier motorPosition;
+    BasicPID controller = new BasicPID(coefficients);
+    NoFeedforward feedforward = new NoFeedforward();
+    RawValue noFilter = new RawValue(motorPosition);
+    BasicSystem system = new BasicSystem(noFilter,controller,feedforward);
 
     public TransferSystem(HardwareMap hardwareMap)
     {
         this.motor_transfer = hardwareMap.get(DcMotorEx.class, "motor_transfer");
         this.motor_transfer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motor_transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        this.motor_transfer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.motor_transfer.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+        motorPosition = new DoubleSupplier() {
+        @Override
+        public double getAsDouble() {
+            return motor_transfer.getCurrentPosition();
+        }
+    };
     }
 
     //
@@ -61,10 +81,9 @@ public class TransferSystem
                 break;
         }
 
-        // set target
-        motor_transfer.setTargetPosition(degreesToEncoderTicks(target));
-        motor_transfer.setPower(power);
-        motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        command = system.update(degreesToEncoderTicks(target));
+        //motor_transfer.setPower(Range.clip(command, -power, power));
+        motor_transfer.setPower(command);
     }
 
     // function to convert degrees to encoder ticks
