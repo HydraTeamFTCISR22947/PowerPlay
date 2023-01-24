@@ -17,12 +17,12 @@ import java.util.function.DoubleSupplier;
 public class ElevatorSystem
 {
     public static double kP = 0, kI = 0, kD = 0;
-    PIDCoefficients coefficients = new PIDCoefficients(kP,kI,kD);
+    PIDCoefficients coefficients;
     DoubleSupplier motorPosition;
-    BasicPID controller = new BasicPID(coefficients);
-    NoFeedforward feedforward = new NoFeedforward();
-    RawValue noFilter = new RawValue(motorPosition);
-    BasicSystem system = new BasicSystem(noFilter,controller,feedforward);
+    BasicPID controller;
+    NoFeedforward feedforward;
+    RawValue noFilter;
+    BasicSystem system;
 
     DcMotor mE;
 
@@ -57,7 +57,13 @@ public class ElevatorSystem
         public double getAsDouble() {
             return mE.getCurrentPosition();
         }
-    };
+        };
+
+        coefficients = new PIDCoefficients(kP,kI,kD);
+        controller = new BasicPID(coefficients);
+        feedforward = new NoFeedforward();
+        noFilter = new RawValue(motorPosition);
+        system = new BasicSystem(noFilter,controller,feedforward);
     }
 
     public void update()

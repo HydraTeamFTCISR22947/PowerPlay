@@ -8,6 +8,7 @@ import com.ThermalEquilibrium.homeostasis.Systems.BasicSystem;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
 
@@ -42,12 +43,12 @@ public class TransferSystem
     // set initial transfer level
     public static TransferLevels transferLevel = TransferLevels.ZERO;
     double command = 0;
-    PIDCoefficients coefficients = new PIDCoefficients(kP,kI,kD);
+    PIDCoefficients coefficients;
     DoubleSupplier motorPosition;
-    BasicPID controller = new BasicPID(coefficients);
-    NoFeedforward feedforward = new NoFeedforward();
-    RawValue noFilter = new RawValue(motorPosition);
-    BasicSystem system = new BasicSystem(noFilter,controller,feedforward);
+    BasicPID controller;
+    NoFeedforward feedforward;
+    RawValue noFilter;
+    BasicSystem system;
 
     public TransferSystem(HardwareMap hardwareMap)
     {
@@ -55,18 +56,27 @@ public class TransferSystem
         this.motor_transfer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motor_transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.motor_transfer.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.motor_transfer.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorPosition = new DoubleSupplier() {
         @Override
         public double getAsDouble() {
             return motor_transfer.getCurrentPosition();
         }
-    };
+        };
+
+
     }
 
     //
     public void update()
     {
+        coefficients = new PIDCoefficients(kP,kI,kD);
+        controller = new BasicPID(coefficients);
+        feedforward = new NoFeedforward();
+        noFilter = new RawValue(motorPosition);
+        system = new BasicSystem(noFilter,controller,feedforward);
+
         switch (transferLevel)
         // set levels
         {
