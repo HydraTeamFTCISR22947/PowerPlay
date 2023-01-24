@@ -90,13 +90,12 @@ public class SampleMecanumDrive extends MecanumDrive {
             module.setBulkCachingMode(LynxModule.BulkCachingMode.AUTO);
         }
 
-        // TODO: adjust the names of the following hardware devices to match your configuration
         imu = hardwareMap.get(IMU.class, "imu");
-        // TODO: Adjust the orientations here to match your robot. See the FTC SDK documentation for
         // details
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD));
+                RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
+                RevHubOrientationOnRobot.UsbFacingDirection.UP));
+
         imu.initialize(parameters);
 
         mFL = hardwareMap.get(DcMotorEx.class, "mFL");
@@ -272,6 +271,18 @@ public class SampleMecanumDrive extends MecanumDrive {
         mBL.setPower(v1);
         mBR.setPower(v2);
         mFR.setPower(v3);
+    }
+
+    public List<DcMotor> getMotors()
+    {
+        List<DcMotor> list = new ArrayList<DcMotor>();
+
+        list.add(mFL);
+        list.add(mBL);
+        list.add(mBR);
+        list.add(mFR);
+
+        return list;
     }
 
     @Override

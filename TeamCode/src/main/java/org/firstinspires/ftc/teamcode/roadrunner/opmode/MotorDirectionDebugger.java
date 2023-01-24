@@ -86,6 +86,10 @@ public class MotorDirectionDebugger extends LinearOpMode {
                 telemetry.addLine("Running Motor: None");
             }
 
+            telemetry.addData("Motor Front Left:", drive.getMotors().get(0).getCurrentPosition());
+            telemetry.addData("Motor Back Left:", drive.getMotors().get(1).getCurrentPosition());
+            telemetry.addData("Motor Back Right:", drive.getMotors().get(2).getCurrentPosition());
+            telemetry.addData("Motor Front Right:", drive.getMotors().get(3).getCurrentPosition());
             telemetry.update();
         }
     }

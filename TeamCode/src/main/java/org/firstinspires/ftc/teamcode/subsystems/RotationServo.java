@@ -12,10 +12,8 @@ public class RotationServo {
     public static double halfRotationBackward = 0; // declare angle of rotation, facing the next cone
 
     private Servo _rotationServo; // declare rotation servo
-    private HardwareMap _hardwareMap; // declare hardware map
 
     public RotationServo(HardwareMap hardwareMap){
-        this._hardwareMap = hardwareMap;
         _rotationServo = hardwareMap.get(Servo.class,"rotation_servo");
     }
 
