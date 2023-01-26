@@ -18,11 +18,11 @@ public class ClawTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive())
         {
-            if(gamepad1.right_bumper)
+            if(gamepad1.left_bumper)
             {
                 clawServo.openClaw();
             }
-            else if(gamepad1.left_bumper)
+            else if(gamepad1.right_bumper)
             {
                 clawServo.closeClaw();
             }

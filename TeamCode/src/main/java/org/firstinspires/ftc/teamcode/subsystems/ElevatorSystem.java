@@ -27,11 +27,11 @@ public class ElevatorSystem
     DcMotor mE;
 
     public static int BASE_HEIGHT = 0;
-    public static int LOW_HEIGHT = 1000;
-    public static int MID_HEIGHT = 1700;
-    public static int HIGH_HEIGHT = 2470;
+    public static int LOW_HEIGHT = 600;
+    public static int MID_HEIGHT = 1500;
+    public static int HIGH_HEIGHT = 2375;
 
-    public static double power = 0.2;
+    public static double power = 1;
     int target = 0;
     double command = 0;
 
@@ -55,7 +55,7 @@ public class ElevatorSystem
         motorPosition = new DoubleSupplier() {
         @Override
         public double getAsDouble() {
-            return mE.getCurrentPosition();
+            return -mE.getCurrentPosition();
         }
         };
 

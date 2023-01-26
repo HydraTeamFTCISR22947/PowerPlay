@@ -20,10 +20,10 @@ import java.util.function.DoubleSupplier;
 @Config
 public class TransferSystem
 {
-    public static double kP = 0, kI = 0, kD = 0;
+    public static double kP = 0.01, kI = 0, kD = 0;
     // set transfer levels values
-    public static double FINAL = -100;
-    public static double MID = -50;
+    public static double FINAL = 320;
+    public static double MID = 160;
     public static double ZERO = 0;
 
     public static double TICKS_PER_REV = 751.8;
