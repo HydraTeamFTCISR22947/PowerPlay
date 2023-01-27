@@ -22,15 +22,15 @@ public class TransferSystem
 {
     public static double kP = 0.01, kI = 0, kD = 0;
     // set transfer levels values
-    public static double FINAL = 320;
+    public static double FINAL = 305;
     public static double MID = 160;
-    public static double ZERO = 0;
+    public static double ZERO = 10;
 
     public static double TICKS_PER_REV = 751.8;
     public static double TOTAL_DEGREES = 360;      // total engine spin degrees
     public static double GEAR_RATIO = 1;
     double target = 0;
-    public static double power = 0.2;         // engine power
+    public static double power = 0.5;         // engine power
     DcMotorEx motor_transfer;    // set motor
 
     // enum for transfer levels
@@ -41,7 +41,7 @@ public class TransferSystem
     }
 
     // set initial transfer level
-    public static TransferLevels transferLevel = TransferLevels.ZERO;
+    public static TransferLevels transferLevel = TransferLevels.FINAL;
     double command = 0;
     PIDCoefficients coefficients;
     DoubleSupplier motorPosition;
@@ -92,8 +92,8 @@ public class TransferSystem
         }
 
         command = system.update(degreesToEncoderTicks(target));
-        //motor_transfer.setPower(Range.clip(command, -power, power));
-        motor_transfer.setPower(command);
+        motor_transfer.setPower(Range.clip(command, -power, power));
+        //motor_transfer.setPower(command);
     }
 
     // function to convert degrees to encoder ticks
@@ -109,4 +109,5 @@ public class TransferSystem
     public static void setTransferLevel(TransferLevels transferLevel) {
         TransferSystem.transferLevel = transferLevel;
     }
+
 }

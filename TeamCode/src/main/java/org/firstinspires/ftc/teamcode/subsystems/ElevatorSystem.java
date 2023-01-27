@@ -16,14 +16,6 @@ import java.util.function.DoubleSupplier;
 @Config
 public class ElevatorSystem
 {
-    public static double kP = 0, kI = 0, kD = 0;
-    PIDCoefficients coefficients;
-    DoubleSupplier motorPosition;
-    BasicPID controller;
-    NoFeedforward feedforward;
-    RawValue noFilter;
-    BasicSystem system;
-
     DcMotor mE;
 
     public static int BASE_HEIGHT = 0;
@@ -33,7 +25,6 @@ public class ElevatorSystem
 
     public static double power = 1;
     int target = 0;
-    double command = 0;
 
     public enum elevatorState {
         BASE_LEVEL,
@@ -51,19 +42,6 @@ public class ElevatorSystem
         this.mE.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.mE.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.mE.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-        motorPosition = new DoubleSupplier() {
-        @Override
-        public double getAsDouble() {
-            return -mE.getCurrentPosition();
-        }
-        };
-
-        coefficients = new PIDCoefficients(kP,kI,kD);
-        controller = new BasicPID(coefficients);
-        feedforward = new NoFeedforward();
-        noFilter = new RawValue(motorPosition);
-        system = new BasicSystem(noFilter,controller,feedforward);
     }
 
     public void update()
@@ -84,9 +62,9 @@ public class ElevatorSystem
                 break;
         }
 
-        command = system.update(target);
-        //mE.setPower(Range.clip(command, -power, power));
-        mE.setPower(command);
+        mE.setTargetPosition(target);
+        mE.setPower(power);
+        mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void baseLevel()

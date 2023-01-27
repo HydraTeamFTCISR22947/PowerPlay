@@ -9,7 +9,7 @@ public class GripperSystem
 {
     private Servo  _left , _right;
     public static double _openServoPos = 0;
-    public static double _closeServoPos = 0.3;
+    public static double _closeServoPos = 0.4;
     //in this part I write changes and for some of them I add values
 
     public GripperSystem(HardwareMap hardwaremap)
