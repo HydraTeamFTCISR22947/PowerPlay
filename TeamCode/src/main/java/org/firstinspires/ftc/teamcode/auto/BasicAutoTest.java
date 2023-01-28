@@ -18,8 +18,9 @@ public class BasicAutoTest extends LinearOpMode
     public static double startPoseX = -36, startPoseY = -72, startPoseAngle = 90;
 
     /* NOT FINAL*/
-    public static final double coneDeliveryPoseX = -36, coneDeliveryPoseY = 0, coneDeliveryAngle = 0;
-    public static double coneIntakePoseX = -56, coneIntakePoseY = -12;
+    public static final double startConeDeliveryPoseX = -36, startConeDeliveryPoseY = 0, startConeDeliveryAngle = 0;
+    public static final double coneDeliveryPoseX = -32, coneDeliveryPoseY = -12, coneDeliveryAngle = 30;
+    public static final double coneIntakePoseX = -56, coneIntakePoseY = -12, coneIntakeAngle = 0;
     //Need to put actual coordiantes
     public static final double  parkX = 0, parkY = 0, parkAngle = 180;
 
@@ -32,23 +33,33 @@ public class BasicAutoTest extends LinearOpMode
         Pose2d startPose = new Pose2d(startPoseX,startPoseY, Math.toRadians(startPoseAngle));
         drivetrain.setPoseEstimate(startPose);
 
-        Pose2d firstCycleBarPose = new Pose2d(coneIntakePoseX,coneIntakePoseY, Math.toRadians(startPoseAngle));
-        Vector2d secondCycleBarVector = new Vector2d(coneDeliveryPoseX,coneDeliveryPoseY);
-        Vector2d coneStackVector = new Vector2d(coneIntakePoseX,coneIntakePoseY);
+        Pose2d firstCycleBarPose = new Pose2d(startConeDeliveryPoseX,startConeDeliveryPoseY, Math.toRadians(startConeDeliveryAngle));
+        Pose2d secondCycleBarPose = new Pose2d(coneDeliveryPoseX,coneDeliveryPoseY,Math.toRadians(coneDeliveryAngle));
+        Pose2d coneStackPose = new Pose2d(coneIntakePoseX,coneIntakePoseY, Math.toRadians(coneIntakeAngle));
+
         //  Pose2d parkPose = new Pose2d(parkX,parkY, Math.toRadians(parkAngle));
 
 
-        Trajectory firstCycleScore = drivetrain.trajectoryBuilder(startPose)
-                .splineToLinearHeading(firstCycleBarPose,coneDeliveryAngle)
+        Trajectory firstCycleDelivery = drivetrain.trajectoryBuilder(startPose)
+                .lineToLinearHeading(firstCycleBarPose)
                 .build();
 
-        Trajectory firstCycleCatch = drivetrain.trajectoryBuilder(firstCycleScore.end())
-                .lineTo(coneStackVector)
+        Trajectory firstCycleIntake = drivetrain.trajectoryBuilder(firstCycleDelivery.end())
+                .splineToLinearHeading(coneStackPose,Math.toRadians(startPoseAngle))
                 .build();
 
-        Trajectory secondCycleScore = drivetrain.trajectoryBuilder(firstCycleCatch.end())
-                .lineTo(secondCycleBarVector)
+        Trajectory secondCycleDelivery = drivetrain.trajectoryBuilder(firstCycleIntake.end())
+                .lineToLinearHeading(secondCycleBarPose)
                 .build();
+
+        Trajectory secondCycleIntake = drivetrain.trajectoryBuilder(secondCycleDelivery.end())
+                .lineToLinearHeading(coneStackPose)
+                .build();
+
+        Trajectory thridCycleDelivery = drivetrain.trajectoryBuilder(secondCycleIntake.end())
+                .lineToLinearHeading(secondCycleBarPose)
+                .build();
+
 /*
             Trajectory park = drivetrain.trajectoryBuilder(secondCycleScore.end())
                     .splineToLinearHeading(parkPose,parkAngle)
@@ -58,9 +69,13 @@ public class BasicAutoTest extends LinearOpMode
         while(opModeIsActive())
         {
 
-            drivetrain.followTrajectory(firstCycleScore);
-            drivetrain.followTrajectory(firstCycleCatch);
-            drivetrain.followTrajectory(secondCycleScore);
+            drivetrain.followTrajectory(firstCycleDelivery);
+            drivetrain.followTrajectory(firstCycleIntake);
+
+            drivetrain.followTrajectory(secondCycleDelivery);
+            drivetrain.followTrajectory(secondCycleIntake);
+
+            drivetrain.followTrajectory(thridCycleDelivery);
             //   drivetrain.followTrajectory(park);
         }
     }

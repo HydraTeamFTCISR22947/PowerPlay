@@ -20,7 +20,9 @@ public class MeepMeepREDLEFT {
         Pose2d firstCycleBarPose = new Pose2d(startConeDeliveryPoseX,startConeDeliveryPoseY, Math.toRadians(startConeDeliveryAngle));
         Pose2d secondCycleBarPose = new Pose2d(coneDeliveryPoseX,coneDeliveryPoseY,Math.toRadians(coneDeliveryAngle));
         Pose2d coneStackPose = new Pose2d(coneIntakePoseX,coneIntakePoseY, Math.toRadians(coneIntakeAngle));
+
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(80, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
@@ -28,7 +30,7 @@ public class MeepMeepREDLEFT {
                                 //First Cycle
                                 .lineToLinearHeading(firstCycleBarPose)
                                 //Second cycle
-                                .lineToLinearHeading(coneStackPose)
+                                .splineToLinearHeading(coneStackPose,Math.toRadians(startPoseAngle))
                                 .lineToLinearHeading(secondCycleBarPose)
                                 //Third cycle
                                 .lineToLinearHeading(coneStackPose)
