@@ -6,6 +6,10 @@ import com.ThermalEquilibrium.homeostasis.Filters.Estimators.RawValue;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.ThermalEquilibrium.homeostasis.Systems.BasicSystem;
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.roadrunner.profile.MotionProfile;
+import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
+import com.acmerobotics.roadrunner.profile.MotionState;
+import com.arcrobotics.ftclib.controller.PIDFController;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -21,27 +25,18 @@ import java.util.function.DoubleSupplier;
 public class TransferSystem
 {
     public static double kP = 0.01, kI = 0, kD = 0;
+
     // set transfer levels values
-    public static double FINAL = 305;
+    public static double PICK_UP = 305;
     public static double MID = 160;
-    public static double ZERO = 10;
+    public static double RELEASE = 10;
 
     public static double TICKS_PER_REV = 751.8;
     public static double TOTAL_DEGREES = 360;      // total engine spin degrees
     public static double GEAR_RATIO = 1;
     double target = 0;
-    public static double power = 0.5;         // engine power
     DcMotorEx motor_transfer;    // set motor
 
-    // enum for transfer levels
-    public enum TransferLevels {
-        ZERO,
-        MID,
-        FINAL
-    }
-
-    // set initial transfer level
-    public static TransferLevels transferLevel = TransferLevels.FINAL;
     double command = 0;
     PIDCoefficients coefficients;
     DoubleSupplier motorPosition;
@@ -49,6 +44,15 @@ public class TransferSystem
     NoFeedforward feedforward;
     RawValue noFilter;
     BasicSystem system;
+    // enum for transfer levels
+    public enum TransferLevels {
+        PICK_UP,
+        MID,
+        RELEASE
+    }
+
+    // set initial transfer level
+    public static TransferLevels transferLevel = TransferLevels.RELEASE;
 
     public TransferSystem(HardwareMap hardwareMap)
     {
@@ -59,12 +63,11 @@ public class TransferSystem
         this.motor_transfer.setDirection(DcMotorSimple.Direction.REVERSE);
 
         motorPosition = new DoubleSupplier() {
-        @Override
-        public double getAsDouble() {
-            return motor_transfer.getCurrentPosition();
-        }
+            @Override
+            public double getAsDouble() {
+                return motor_transfer.getCurrentPosition();
+            }
         };
-
 
     }
 
@@ -80,20 +83,19 @@ public class TransferSystem
         switch (transferLevel)
         // set levels
         {
-            case ZERO:
-                target = ZERO;
+            case PICK_UP:
+                target = PICK_UP;
                 break;
             case MID:
                 target = MID;
                 break;
-            case FINAL:
-                target = FINAL;
+            case RELEASE:
+                target = RELEASE;
                 break;
         }
 
         command = system.update(degreesToEncoderTicks(target));
-        motor_transfer.setPower(Range.clip(command, -power, power));
-        //motor_transfer.setPower(command);
+        motor_transfer.setPower(command);
     }
 
     // function to convert degrees to encoder ticks

@@ -62,7 +62,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
         switch (catchingState)
         {
             case RESET_CATCH:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.FINAL);
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
                 rotationServo.rotateClawBackward();
 
@@ -101,7 +101,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
                 break;
             case FINISH_TRANSFER:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.ZERO);
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.RELEASE);
                 transferSystem.update();
 
                 finalOffset = timer.time();
@@ -129,7 +129,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 }
                 break;
             case LIFT_UP:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.FINAL);
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
 
                 rotationServo.rotateClawBackward();
 
