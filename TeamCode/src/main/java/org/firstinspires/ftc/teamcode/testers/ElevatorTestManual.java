@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
 @Config
-@TeleOp(name="Manual Elevator Test", group="Tests")
+@TeleOp(name="Manual TransferSystemProfile Test", group="Tests")
 public class ElevatorTestManual extends LinearOpMode {
     DcMotor mE;
     public static double power = 0.1;

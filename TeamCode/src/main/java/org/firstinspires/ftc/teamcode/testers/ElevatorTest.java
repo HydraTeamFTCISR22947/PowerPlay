@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ClawServo;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
-@TeleOp(name="Elevator Test", group="Tests")
+@TeleOp(name="TransferSystemProfile Test", group="Tests")
 public class ElevatorTest extends LinearOpMode {
     @Override
     public void runOpMode()
