@@ -11,26 +11,19 @@ public class MeepMeepBLUELEFT {
 
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(550);
-
-        double startPoseX = -36, startPoseY = -72, startPoseAngle = 90;
-        double coneDeliveryPoseX = -36, coneDeliveryPoseY = 0, coneDeliveryAngle = 0;
-        double coneIntakePoseX = -56, coneIntakePoseY = -12;
-
-        Pose2d startPose = new Pose2d(startPoseX,startPoseY, Math.toRadians(startPoseAngle));
-
-        Pose2d firstCycleBarPose = new Pose2d(coneIntakePoseX,coneIntakePoseY, Math.toRadians(startPoseAngle));
-        Vector2d secondCycleBarVector = new Vector2d(coneDeliveryPoseX,coneDeliveryPoseY);
-        Vector2d coneStackVector = new Vector2d(coneIntakePoseX,coneIntakePoseY);
-
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPose)
-                                .splineToLinearHeading(firstCycleBarPose,coneDeliveryAngle)
-                                .lineTo(coneStackVector)
-                                .lineTo(secondCycleBarVector)
-
+                        drive.trajectorySequenceBuilder(new Pose2d(0, 0, 0))
+                                .forward(30)
+                                .turn(Math.toRadians(90))
+                                .forward(30)
+                                .turn(Math.toRadians(90))
+                                .forward(30)
+                                .turn(Math.toRadians(90))
+                                .forward(30)
+                                .turn(Math.toRadians(90))
                                 .build()
                 );
 
