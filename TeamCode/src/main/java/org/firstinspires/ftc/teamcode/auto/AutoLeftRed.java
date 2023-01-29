@@ -66,31 +66,10 @@ public class AutoLeftRed extends LinearOpMode
                 .lineToLinearHeading(secondCycleBarPose)//delivery
                 .build();
 
-       /* Trajectory firstCycleDelivery = drivetrain.trajectoryBuilder(startPose)
-                .lineToLinearHeading(firstCycleBarPose)
-                .build();
-
-        Trajectory firstCycleIntake = drivetrain.trajectoryBuilder(firstCycleDelivery.end())
-                .splineToLinearHeading(coneStackPose,Math.toRadians(START_POSE_ANGLE))
-                .build();
-
-        Trajectory secondCycleDelivery = drivetrain.trajectoryBuilder(firstCycleIntake.end())
-                .lineToLinearHeading(secondCycleBarPose)
-                .build();
-
-        Trajectory secondCycleIntake = drivetrain.trajectoryBuilder(secondCycleDelivery.end())
-                .lineToLinearHeading(coneStackPose)
-                .build();
-
-        Trajectory thridCycleDelivery = drivetrain.trajectoryBuilder(secondCycleIntake.end())
-                .lineToLinearHeading(secondCycleBarPose)
-                .build();*/
-
-/*
-            Trajectory park = drivetrain.trajectoryBuilder(secondCycleScore.end())
-                    .splineToLinearHeading(parkPose,parkAngle)
-                    .build();
-*/
+        if(isStopRequested())
+        {
+            return;
+        }
         waitForStart();
         while(opModeIsActive())
         {
