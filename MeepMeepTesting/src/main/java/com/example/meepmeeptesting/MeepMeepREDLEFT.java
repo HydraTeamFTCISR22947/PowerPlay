@@ -12,7 +12,7 @@ public class MeepMeepREDLEFT {
 
         double startPoseX = -36, startPoseY = -72, startPoseAngle = 90;
         double startConeDeliveryPoseX = -36, startConeDeliveryPoseY = 0, startConeDeliveryAngle = 0;
-        double coneDeliveryPoseX = -32, coneDeliveryPoseY = -12, coneDeliveryAngle = 30;
+        double coneDeliveryPoseX = -32, coneDeliveryPoseY = -12, coneDeliveryAngle = 45;
         double coneIntakePoseX = -56, coneIntakePoseY = -12, coneIntakeAngle = 0;
 
         Pose2d startPose = new Pose2d(startPoseX,startPoseY, Math.toRadians(startPoseAngle));
