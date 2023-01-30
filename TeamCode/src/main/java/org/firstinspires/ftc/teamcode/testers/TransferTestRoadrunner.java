@@ -12,23 +12,23 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 @Config
 @TeleOp(name="First Transfer Test", group="Tests")
-public class TransferTestFirst extends LinearOpMode {
+public class TransferTestRoadrunner extends LinearOpMode {
     DcMotorEx motor_transfer;
     public static double power = 0.1;
     public static int pos = 0;
-
-    public static double kP = 0, kI = 0, kD = 0, kF = 0;
+    public static int velo = 0;
+    PIDCoefficients coeffs = new PIDCoefficients(1, 1, 1);
+    // create the controller
+    PIDFController controller = new PIDFController(coeffs);
 
     @Override
     public void runOpMode()
     {
-        PIDFCoefficients coefficients = new PIDFCoefficients(kP,kI, kD,kF);
         this.motor_transfer = hardwareMap.get(DcMotorEx.class, "motor_transfer");
         this.motor_transfer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motor_transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        this.motor_transfer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.motor_transfer.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.motor_transfer.setDirection(DcMotorSimple.Direction.REVERSE);
-        this.motor_transfer.setPIDFCoefficients(DcMotor.RunMode.RUN_TO_POSITION, coefficients);
 
         telemetry.addData("Status: ","Initialized!");
         telemetry.update();
@@ -36,14 +36,12 @@ public class TransferTestFirst extends LinearOpMode {
         waitForStart();
         while (opModeIsActive())
         {
-            if(gamepad1.right_bumper)
-            {
-                motor_transfer.setTargetPosition(pos);
-                motor_transfer.setPower(power);
-                motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            }
+            controller.setTargetPosition(pos);
+            controller.setTargetVelocity(velo);
+            motor_transfer.setPower(controller.update(motor_transfer.getCurrentPosition(), motor_transfer.getVelocity()));
 
             telemetry.addData("pos: ", motor_transfer.getCurrentPosition());
+            telemetry.addData("velo: ", motor_transfer.getVelocity());
             telemetry.update();
         }
     }
