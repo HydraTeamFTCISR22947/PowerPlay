@@ -19,9 +19,8 @@ public class ElevatorSystem {
     DcMotor mE;
 
     public static int BASE_HEIGHT = 0;
-    public static int LOW_HEIGHT = 0;
     public static int MID_HEIGHT = 1200;
-    public static int HIGH_HEIGHT = 2000;
+    public static int HIGH_HEIGHT = 1900;
 
     public static double power = 1;
     public static double maxPower = 1;
@@ -30,7 +29,6 @@ public class ElevatorSystem {
 
     public enum elevatorState {
         BASE_LEVEL,
-        LOW_ROD,
         MID_ROD,
         HIGH_ROD,
     }
@@ -42,11 +40,11 @@ public class ElevatorSystem {
         this.mE = hardwareMap.get(DcMotor.class, "mE");
         this.mE.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.mE.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        this.mE.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        this.mE.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     public void update(Gamepad gamepad) {
-        if(usePID)
+        /*if(usePID)
         {
             switch (liftState) {
                 case BASE_LEVEL:
@@ -82,7 +80,22 @@ public class ElevatorSystem {
             {
                 mE.setPower(0);
             }
+        }*/
+        switch (liftState) {
+            case BASE_LEVEL:
+                target = BASE_HEIGHT;
+                break;
+            case MID_ROD:
+                target = MID_HEIGHT;
+                break;
+            case HIGH_ROD:
+                target = HIGH_HEIGHT;
+                break;
         }
+
+        mE.setTargetPosition(target);
+        mE.setPower(power);
+        mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void baseLevel() {
@@ -90,13 +103,6 @@ public class ElevatorSystem {
         mE.setPower(power);
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
-
-    public void lowRod() {
-        mE.setTargetPosition(LOW_HEIGHT);
-        mE.setPower(power);
-        mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
 
     public void midRod() {
         mE.setTargetPosition(MID_HEIGHT);
@@ -118,10 +124,6 @@ public class ElevatorSystem {
 
     public void setLiftState(elevatorState liftState) {
         this.liftState = liftState;
-    }
-
-    public static void setLowHeight(int lowHeight) {
-        LOW_HEIGHT = lowHeight;
     }
 
     public static void setMidHeight(int midHeight) {

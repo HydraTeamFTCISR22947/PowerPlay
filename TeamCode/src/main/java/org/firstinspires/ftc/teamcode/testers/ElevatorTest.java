@@ -7,7 +7,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ClawServo;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
-@TeleOp(name="TransferSystemProfile Test", group="Tests")
+@TeleOp(name="Elevator Test", group="Tests")
 public class ElevatorTest extends LinearOpMode {
     @Override
     public void runOpMode()
@@ -32,12 +32,11 @@ public class ElevatorTest extends LinearOpMode {
             }
             else if(gamepadHelper1.AOnce())
             {
-                elevatorSystem.lowRod();
-            }
-            else if(gamepadHelper1.XOnce())
-            {
                 elevatorSystem.baseLevel();
             }
+
+            telemetry.addData("pos", elevatorSystem.currentPos());
+            telemetry.update();
         }
     }
 }

@@ -15,7 +15,6 @@ public class RotationServo {
 
     public RotationServo(HardwareMap hardwareMap){
         _rotationServo = hardwareMap.get(Servo.class,"rotation_servo");
-        rotateClawForward();
     }
 
     public void rotateClawForward(){

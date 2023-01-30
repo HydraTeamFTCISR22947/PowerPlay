@@ -22,7 +22,6 @@ public class ElevatorTestManual extends LinearOpMode {
         this.mE.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.mE.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.mE.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        this.mE.setDirection(DcMotorSimple.Direction.REVERSE);
 
         GamepadHelper gamepadHelper1 = new GamepadHelper(gamepad1);
 
@@ -46,7 +45,7 @@ public class ElevatorTestManual extends LinearOpMode {
                 mE.setPower(0);
             }
 
-            telemetry.addData("pos: ", -mE.getCurrentPosition());
+            telemetry.addData("pos: ", mE.getCurrentPosition());
             telemetry.update();
         }
     }

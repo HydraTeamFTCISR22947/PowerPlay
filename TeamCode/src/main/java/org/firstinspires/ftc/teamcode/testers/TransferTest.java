@@ -3,11 +3,10 @@ package org.firstinspires.ftc.teamcode.testers;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
-@TeleOp(name="Transfer Test", group="Tests")
+@TeleOp(name="Transfer Test First", group="Tests")
 public class TransferTest extends LinearOpMode {
     @Override
     public void runOpMode()
@@ -21,11 +20,7 @@ public class TransferTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive())
         {
-            try {
-                transferSystem.update();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            transferSystem.update();
 
             // if (gamepadHelper1.YOnce()) {
             gamepadHelper1.update();
@@ -37,8 +32,9 @@ public class TransferTest extends LinearOpMode {
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
             }
 
-
              telemetry.addData("pos", transferSystem.getMotor().getCurrentPosition());
+             telemetry.addData("target", transferSystem.getTarget());
+             telemetry.addData("target in ticks", transferSystem.degreesToEncoderTicks(transferSystem.getTarget()));
              telemetry.update();
         }
     }
