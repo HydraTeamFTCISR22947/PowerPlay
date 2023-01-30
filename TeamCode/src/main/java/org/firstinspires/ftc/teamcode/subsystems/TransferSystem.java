@@ -1,10 +1,18 @@
 package org.firstinspires.ftc.teamcode.subsystems;
 
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.BasicPID;
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedback.FullStateFeedback;
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedforward.BasicFeedforward;
+import com.ThermalEquilibrium.homeostasis.Controllers.Feedforward.FeedforwardEx;
 import com.ThermalEquilibrium.homeostasis.Controllers.Feedforward.NoFeedforward;
+import com.ThermalEquilibrium.homeostasis.Filters.Estimators.KalmanEstimator;
 import com.ThermalEquilibrium.homeostasis.Filters.Estimators.RawValue;
+import com.ThermalEquilibrium.homeostasis.Parameters.FeedforwardCoefficients;
+import com.ThermalEquilibrium.homeostasis.Parameters.FeedforwardCoefficientsEx;
 import com.ThermalEquilibrium.homeostasis.Parameters.PIDCoefficients;
 import com.ThermalEquilibrium.homeostasis.Systems.BasicSystem;
+import com.ThermalEquilibrium.homeostasis.Systems.PositionVelocitySystem;
+import com.ThermalEquilibrium.homeostasis.Utils.Vector;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.profile.MotionProfile;
 import com.acmerobotics.roadrunner.profile.MotionProfileGenerator;
@@ -24,12 +32,10 @@ import java.util.function.DoubleSupplier;
 @Config
 public class TransferSystem
 {
-    public static double kP = 0.01, kI = 0, kD = 0;
-
     // set transfer levels values
-    public static double PICK_UP = 305;
-    public static double MID = 160;
-    public static double RELEASE = 10;
+    public static double PICK_UP = 10;
+    public static double MID = 30;
+    public static double HIGH = 50;
 
     public static double TICKS_PER_REV = 751.8;
     public static double TOTAL_DEGREES = 360;      // total engine spin degrees
@@ -37,22 +43,20 @@ public class TransferSystem
     double target = 0;
     DcMotorEx motor_transfer;    // set motor
 
-    double command = 0;
-    PIDCoefficients coefficients;
-    DoubleSupplier motorPosition;
-    BasicPID controller;
-    NoFeedforward feedforward;
-    RawValue noFilter;
-    BasicSystem system;
+    public static double kP = 0.00022;
+    public static double kI = 0;
+    public static double kD = 0;
+
     // enum for transfer levels
     public enum TransferLevels {
         PICK_UP,
         MID,
-        RELEASE
+        HIGH
     }
 
     // set initial transfer level
-    public static TransferLevels transferLevel = TransferLevels.RELEASE;
+    public static TransferLevels transferLevel = TransferLevels.PICK_UP;
+    DoubleSupplier motorPosition;
 
     public TransferSystem(HardwareMap hardwareMap)
     {
@@ -62,23 +66,22 @@ public class TransferSystem
         this.motor_transfer.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         this.motor_transfer.setDirection(DcMotorSimple.Direction.REVERSE);
 
+
         motorPosition = new DoubleSupplier() {
             @Override
             public double getAsDouble() {
                 return motor_transfer.getCurrentPosition();
             }
         };
-
     }
 
     //
-    public void update()
-    {
-        coefficients = new PIDCoefficients(kP,kI,kD);
-        controller = new BasicPID(coefficients);
-        feedforward = new NoFeedforward();
-        noFilter = new RawValue(motorPosition);
-        system = new BasicSystem(noFilter,controller,feedforward);
+    public void update() throws Exception {
+        PIDCoefficients coefficients = new PIDCoefficients(kP,kI,kD);
+        BasicPID controller = new BasicPID(coefficients);
+        NoFeedforward feedforward = new NoFeedforward();
+        RawValue noFilter = new RawValue(motorPosition);
+        BasicSystem system = new BasicSystem(noFilter,controller,feedforward);
 
         switch (transferLevel)
         // set levels
@@ -89,12 +92,12 @@ public class TransferSystem
             case MID:
                 target = MID;
                 break;
-            case RELEASE:
-                target = RELEASE;
+            case HIGH:
+                target = HIGH;
                 break;
         }
 
-        command = system.update(degreesToEncoderTicks(target));
+        double command = system.update(target);
         motor_transfer.setPower(command);
     }
 
@@ -110,6 +113,11 @@ public class TransferSystem
 
     public static void setTransferLevel(TransferLevels transferLevel) {
         TransferSystem.transferLevel = transferLevel;
+    }
+
+    public DcMotor getMotor()
+    {
+        return this.motor_transfer;
     }
 
 }

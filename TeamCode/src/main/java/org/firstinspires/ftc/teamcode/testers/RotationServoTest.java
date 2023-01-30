@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.testers;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.subsystems.GripperSystem;
 import org.firstinspires.ftc.teamcode.subsystems.RotationServo;
 
 @TeleOp(name="Rotation Servo Test", group="Tests")

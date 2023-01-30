@@ -7,7 +7,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.ClawServo;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
-import org.firstinspires.ftc.teamcode.subsystems.GripperSystem;
 import org.firstinspires.ftc.teamcode.subsystems.RotationServo;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
@@ -17,7 +16,6 @@ public class CatchAndReleaseCommand implements RobotCommand {
     TransferSystem transferSystem;
     RotationServo rotationServo;
     ClawServo clawServo;
-    GripperSystem gripperSystem;
     ElevatorSystem elevatorSystem;
     Gamepad gamepad1;
     GamepadHelper gamepadHelper1;
@@ -58,7 +56,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
     }
 
     @Override
-    public void runCommand() {
+    public void runCommand() throws Exception {
         switch (catchingState)
         {
             case RESET_CATCH:
@@ -67,8 +65,6 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 rotationServo.rotateClawBackward();
 
                 clawServo.openClaw();
-
-                gripperSystem.openGripper();
 
                 if(gamepadHelper1.rightBumperOnce())
                 {
@@ -85,7 +81,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
                 break;
             case TRANSFER_HALF_WAY:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.MID);
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
                 transferSystem.update();
 
                 halfwayOffset = timer.time();
@@ -101,8 +97,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
                 break;
             case FINISH_TRANSFER:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.RELEASE);
-                transferSystem.update();
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
 
                 finalOffset = timer.time();
 
@@ -122,15 +117,11 @@ public class CatchAndReleaseCommand implements RobotCommand {
             case CLOSE_GRIPPER:
                 if(timer.time() - gripperOffset >= gripperDelay)
                 {
-                    gripperSystem.closeGripper();
-
                     catchingState = CatchingState.LIFT_UP;
 
                 }
                 break;
             case LIFT_UP:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
-
                 rotationServo.rotateClawBackward();
 
                 clawServo.openClaw();
@@ -186,7 +177,6 @@ public class CatchAndReleaseCommand implements RobotCommand {
         transferSystem = new TransferSystem(hardwareMap);
         rotationServo = new RotationServo(hardwareMap);
         clawServo = new ClawServo(hardwareMap);
-        gripperSystem = new GripperSystem(hardwareMap);
         elevatorSystem = new ElevatorSystem(hardwareMap);
         timer =  new ElapsedTime();
         this.gamepad1 = gamepad1;

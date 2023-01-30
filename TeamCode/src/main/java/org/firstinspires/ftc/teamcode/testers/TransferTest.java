@@ -21,17 +21,25 @@ public class TransferTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive())
         {
-            transferSystem.update();
+            try {
+                transferSystem.update();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-           // if (gamepadHelper1.YOnce()) {
+            // if (gamepadHelper1.YOnce()) {
             gamepadHelper1.update();
              if(gamepadHelper1.YOnce()){
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.RELEASE);
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
             } else if (gamepadHelper1.BOnce()) {
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.MID);
             } else if (gamepadHelper1.AOnce()) {
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
             }
+
+
+             telemetry.addData("pos", transferSystem.getMotor().getCurrentPosition());
+             telemetry.update();
         }
     }
 }

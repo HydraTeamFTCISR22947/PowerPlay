@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
 @Config
-@TeleOp(name="Manual TransferSystemProfile Test", group="Tests")
+@TeleOp(name="Manual Elevator Test", group="Tests")
 public class ElevatorTestManual extends LinearOpMode {
     DcMotor mE;
     public static double power = 0.1;
@@ -22,6 +22,7 @@ public class ElevatorTestManual extends LinearOpMode {
         this.mE.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.mE.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.mE.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.mE.setDirection(DcMotorSimple.Direction.REVERSE);
 
         GamepadHelper gamepadHelper1 = new GamepadHelper(gamepad1);
 

@@ -20,8 +20,7 @@ public class TeleopCommand implements RobotCommand
     }
 
     @Override
-    public void runCommand()
-    {
+    public void runCommand() throws Exception {
         driveCommand.runCommand();
         catchAndReleaseCommand.runCommand();
     }

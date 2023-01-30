@@ -18,7 +18,11 @@ public class teleopBlue extends LinearOpMode {
 
         while (opModeIsActive())
         {
-            teleop.runCommand();
+            try {
+                teleop.runCommand();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }

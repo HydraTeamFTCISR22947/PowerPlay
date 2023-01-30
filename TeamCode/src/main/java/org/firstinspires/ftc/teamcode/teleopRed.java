@@ -18,7 +18,11 @@ public class teleopRed extends LinearOpMode {
 
         while (opModeIsActive())
         {
-            teleop.runCommand();
+            try {
+                teleop.runCommand();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 }
