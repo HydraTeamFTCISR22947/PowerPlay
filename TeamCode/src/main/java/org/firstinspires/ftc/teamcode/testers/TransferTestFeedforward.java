@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Config
-@TeleOp(name="First Transfer Test", group="Tests")
+@TeleOp(name="Feedforward Transfer Test", group="Tests")
 public class TransferTestFeedforward extends LinearOpMode {
     DcMotorEx motor_transfer;
     public static double power = 0.1;

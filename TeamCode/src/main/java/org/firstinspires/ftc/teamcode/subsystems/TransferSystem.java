@@ -120,4 +120,7 @@ public class TransferSystem
         return this.motor_transfer;
     }
 
+    public static void setHIGH(double HIGH) {
+        TransferSystem.HIGH = HIGH;
+    }
 }

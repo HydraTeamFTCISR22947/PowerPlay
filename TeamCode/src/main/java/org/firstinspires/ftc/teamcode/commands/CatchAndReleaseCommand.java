@@ -17,25 +17,16 @@ public class CatchAndReleaseCommand implements RobotCommand {
     RotationServo rotationServo;
     ClawServo clawServo;
     ElevatorSystem elevatorSystem;
-    Gamepad gamepad1;
+    Gamepad gamepad1, gamepad2;
     GamepadHelper gamepadHelper1;
     GamepadHelper gamepadHelper2;
-
-    double halfwayOffset = 0;
-    public static double transferDelay = .5;
-    double finalOffset = 0;
-    public static double releaseDelay = 1;
-    double gripperOffset = 0;
-    public static double gripperDelay = 1.5;
 
     public enum CatchingState {
         CATCH,
         TRANSFER_HALF_WAY,
         ROTATE,
         FINISH_TRANSFER,
-        CLOSE_GRIPPER,
         LIFT_UP,
-        RELEASE_CONE,
         RESET_CATCH
     }
 
@@ -74,52 +65,29 @@ public class CatchAndReleaseCommand implements RobotCommand {
             case CATCH:
                 clawServo.closeClaw();
 
-                if(gamepadHelper1.rightBumperOnce())
-                {
+                //if(gamepadHelper1.rightBumperOnce())
+                //{
                     catchingState = CatchingState.TRANSFER_HALF_WAY;
-                }
+                //}
 
                 break;
             case TRANSFER_HALF_WAY:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
-                transferSystem.update();
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.MID);
 
-                halfwayOffset = timer.time();
-                catchingState = CatchingState.ROTATE;
+                if(gamepadHelper1.rightBumperOnce())
+                {
+                    catchingState = CatchingState.ROTATE;
+                }
                 break;
             case ROTATE:
-                if(timer.time() - halfwayOffset >= transferDelay)
-                {
-                    rotationServo.rotateClawForward();
+                rotationServo.rotateClawForward();
 
-                    catchingState = CatchingState.FINISH_TRANSFER;
-                }
-
+                catchingState = CatchingState.FINISH_TRANSFER;
                 break;
             case FINISH_TRANSFER:
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
 
-                finalOffset = timer.time();
-
-                catchingState = CatchingState.RELEASE_CONE;
-                break;
-            case RELEASE_CONE:
-                if(timer.time() - finalOffset >= releaseDelay)
-                {
-                    clawServo.openClaw();
-
-                    gripperOffset = timer.time();
-
-                    catchingState = CatchingState.CLOSE_GRIPPER;
-                }
-
-                break;
-            case CLOSE_GRIPPER:
-                if(timer.time() - gripperOffset >= gripperDelay)
-                {
-                    catchingState = CatchingState.LIFT_UP;
-
-                }
+                catchingState = CatchingState.LIFT_UP;
                 break;
             case LIFT_UP:
                 rotationServo.rotateClawBackward();
@@ -146,13 +114,35 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
         if(gamepadHelper1.leftBumperOnce())
         {
+            //saveCurrentPos();
             catchingState = CatchingState.RESET_CATCH;
         }
 
-        elevatorSystem.update();
+        elevatorSystem.update(gamepad2);
         transferSystem.update();
         gamepadHelper1.update();
         gamepadHelper2.update();
+    }
+
+    void saveCurrentPosElevator()
+    {
+        switch (liftTarget)
+        {
+            case LOW:
+                elevatorSystem.setLowHeight(elevatorSystem.currentPos());
+                break;
+            case MID:
+                elevatorSystem.setMidHeight(elevatorSystem.currentPos());
+                break;
+            case HIGH:
+                elevatorSystem.setHighHeight(elevatorSystem.currentPos());
+                break;
+        }
+    }
+
+    void saveCurrentPosTransfer()
+    {
+        transferSystem.setHIGH(transferSystem.getMotor().getCurrentPosition());
     }
 
     void targetElevator()
@@ -170,7 +160,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 break;
         }
 
-        elevatorSystem.update();
+        elevatorSystem.update(gamepad2);
     }
     @Override
     public void initCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
@@ -180,6 +170,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
         elevatorSystem = new ElevatorSystem(hardwareMap);
         timer =  new ElapsedTime();
         this.gamepad1 = gamepad1;
+        this.gamepad2 = gamepad2;
         gamepadHelper1 = new GamepadHelper(gamepad1);
         gamepadHelper2 = new GamepadHelper(gamepad2);
     }

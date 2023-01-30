@@ -11,7 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 @Config
-@TeleOp(name="First Transfer Test", group="Tests")
+@TeleOp(name="Roadrunner Transfer Test", group="Tests")
 public class TransferTestRoadrunner extends LinearOpMode {
     DcMotorEx motor_transfer;
     public static double power = 0.1;

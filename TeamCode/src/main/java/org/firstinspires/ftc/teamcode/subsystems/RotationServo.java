@@ -27,5 +27,10 @@ public class RotationServo {
 
     }
 
+    public void setPosition(double pos)
+    {
+        _rotationServo.setPosition(pos);
+    }
+
 
 }
