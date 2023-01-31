@@ -3,15 +3,13 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.arcrobotics.ftclib.drivebase.RobotDrive;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
-import com.qualcomm.robotcore.util.ReadWriteFile;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
@@ -48,7 +46,7 @@ public class GamepadController {
         this.mBR = hardwareMap.get(DcMotor.class, "mBR");
         this.mFR = hardwareMap.get(DcMotor.class, "mFR");
         mFR.setDirection(DcMotorSimple.Direction.REVERSE);
-        mBR.setDirection(DcMotorSimple.Direction.REVERSE);
+        mBL.setDirection(DcMotorSimple.Direction.REVERSE);
         cGamepad1 = new GamepadHelper(gamepad1);
         cGamepad2 = new GamepadHelper(gamepad2);
         this.telemetry = telemetry;
@@ -107,19 +105,7 @@ public class GamepadController {
 
         getGamepadDirections();
 
-        if (isCentricDrive)
-        {
-            centricDrive();
-        }
-        else
-        {
-            regularDrive();
-        }
-
-        mFL.setPower(leftPower_f);
-        mBL.setPower(leftPower_b);
-        mFR.setPower(rightPower_f);
-        mBR.setPower(rightPower_b);
+        centricDrive();
     }
 
     public void getGamepadDirections()
@@ -128,7 +114,7 @@ public class GamepadController {
         strafe = gamepad1.left_stick_x;
         if(canTwist)
         {
-            twist = gamepad1.right_stick_x * multiplier;
+            twist = -gamepad1.right_stick_x * multiplier;
         }
         else
         {
@@ -136,53 +122,23 @@ public class GamepadController {
         }
     }
 
-    public void regularDrive()
-    {
-        leftPower_f = Range.clip(drive + twist + strafe, -power, power);
-        leftPower_b = Range.clip(drive + twist - strafe, -power, power);
-        rightPower_f = Range.clip(drive - twist - strafe, -power, power);
-        rightPower_b = Range.clip(drive - twist + strafe, -power, power);
-    }
-
     public void centricDrive()
     {
-        // Create a vector from the gamepad x/y inputs
-        // Then, rotate that vector by the inverse of that heading
         Vector2d input = new Vector2d(
                 -gamepad1.left_stick_y,
                 gamepad1.left_stick_x
-        ).rotated(-drivetrain.getPoseEstimate().getHeading());
+        ).rotated(drivetrain.getExternalHeading());
 
-        leftPower_f = Range.clip(input.getX() + twist + input.getY() , -power, power);
-        leftPower_b = Range.clip(input.getX() + twist - input.getY(), -power, power);
-        rightPower_f = Range.clip(input.getX() - twist - input.getY(), -power, power);
-        rightPower_b = Range.clip(input.getX() - twist + input.getY(), -power, power);
-    }
+        double twist = -gamepad1.right_stick_x;
 
-    public double getIMU()
-    {
-        return drivetrain.getExternalHeading();
-    }
-
-    public void saveIMUHeading()
-    {
-        ReadWriteFile.writeFile(AppUtil.getInstance().getSettingsFile("RRheadingValue.txt"), "" + getIMU());
-    }
-
-    public void setSlowMove(boolean slowMove) {
-        this.slowMove = slowMove;
+        mFL.setPower(Range.clip(input.getX() + twist + input.getY(), -power, power));
+        mBL.setPower(Range.clip(input.getX() + twist - input.getY(), -power, power));
+        mFR.setPower(Range.clip(input.getX() - twist - input.getY(), -power, power));
+        mBR.setPower(Range.clip(input.getX() - twist + input.getY(), -power, power));
     }
 
     public void setRedAlliance(boolean redAlliance) {
         this.redAlliance = redAlliance;
-    }
-
-    public static boolean isCanTwist() {
-        return canTwist;
-    }
-
-    public void setCanTwist(boolean canTwist) {
-        this.canTwist = canTwist;
     }
 
     public void setPower(double power) {
