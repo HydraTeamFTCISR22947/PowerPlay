@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Range;
@@ -46,8 +47,8 @@ public class GamepadController {
         this.mBL = hardwareMap.get(DcMotor.class, "mBL");
         this.mBR = hardwareMap.get(DcMotor.class, "mBR");
         this.mFR = hardwareMap.get(DcMotor.class, "mFR");
-        this.mFL.setDirection(DcMotor.Direction.REVERSE);
-        this.mBL.setDirection(DcMotor.Direction.REVERSE);
+        mFR.setDirection(DcMotorSimple.Direction.REVERSE);
+        mBR.setDirection(DcMotorSimple.Direction.REVERSE);
         cGamepad1 = new GamepadHelper(gamepad1);
         cGamepad2 = new GamepadHelper(gamepad2);
         this.telemetry = telemetry;
@@ -106,11 +107,6 @@ public class GamepadController {
 
         getGamepadDirections();
 
-//        if(cGamepad1.dpadDownOnce())
-//        {
-//            isCentricDrive = !isCentricDrive;
-//        }
-//
         if (isCentricDrive)
         {
             centricDrive();
@@ -132,7 +128,7 @@ public class GamepadController {
         strafe = gamepad1.left_stick_x;
         if(canTwist)
         {
-            twist = -gamepad1.right_stick_x * multiplier;
+            twist = gamepad1.right_stick_x * multiplier;
         }
         else
         {
@@ -150,10 +146,12 @@ public class GamepadController {
 
     public void centricDrive()
     {
+        // Create a vector from the gamepad x/y inputs
+        // Then, rotate that vector by the inverse of that heading
         Vector2d input = new Vector2d(
                 -gamepad1.left_stick_y,
                 gamepad1.left_stick_x
-        ).rotated(drivetrain.getExternalHeading());
+        ).rotated(-drivetrain.getPoseEstimate().getHeading());
 
         leftPower_f = Range.clip(input.getX() + twist + input.getY() , -power, power);
         leftPower_b = Range.clip(input.getX() + twist - input.getY(), -power, power);

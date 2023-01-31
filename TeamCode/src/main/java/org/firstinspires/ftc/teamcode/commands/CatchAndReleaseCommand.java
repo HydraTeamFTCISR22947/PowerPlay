@@ -20,6 +20,9 @@ public class CatchAndReleaseCommand implements RobotCommand {
     Gamepad gamepad1, gamepad2;
     GamepadHelper gamepadHelper1;
     GamepadHelper gamepadHelper2;
+    boolean pressed = false;
+    double offset = 0;
+    public static double delay = 0.5;
 
     public enum CatchingState {
         CATCH,
@@ -78,9 +81,21 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
                 if(gamepadHelper1.leftBumperOnce())
                 {
-                    saveCurrentPosElevator();
-                    catchingState = CatchingState.RESET_CATCH;
+                    clawServo.openClaw();
+                    //saveCurrentPosElevator();
+                    pressed = true;
+                    offset = timer.time();
                 }
+
+                if(pressed)
+                {
+                    if(timer.time() - offset >= delay)
+                    {
+                        pressed = false;
+                        catchingState = CatchingState.RESET_CATCH;
+                    }
+                }
+
                 break;
         }
 
@@ -92,15 +107,12 @@ public class CatchAndReleaseCommand implements RobotCommand {
         {
             liftTarget = LiftTarget.MID;
         }
-        else if(gamepadHelper2.AOnce())
-        {
-            liftTarget = LiftTarget.LOW;
-        }
 
-        if(gamepadHelper1.leftBumperOnce())
+        if(gamepadHelper1.leftBumperOnce() && catchingState != CatchingState.UP)
         {
-            saveCurrentPosElevator();
+            //saveCurrentPosElevator();
             catchingState = CatchingState.RESET_CATCH;
+
         }
 
         elevatorSystem.update(gamepad2);

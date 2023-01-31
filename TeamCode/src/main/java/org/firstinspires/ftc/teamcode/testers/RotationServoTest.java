@@ -20,11 +20,11 @@ public class RotationServoTest extends LinearOpMode {
         {
             if(gamepad1.right_bumper)
             {
-                rotationServo.rotateClawForward();
+                rotationServo.pickUpPos();
             }
             else if(gamepad1.left_bumper)
             {
-                rotationServo.rotateClawBackward();
+                rotationServo.releasePos();
             }
         }
     }
