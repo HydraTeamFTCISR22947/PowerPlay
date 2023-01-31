@@ -49,9 +49,9 @@ public class CatchAndReleaseCommand implements RobotCommand {
         {
             case RESET_CATCH:
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
-                //elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
+                elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
                 elevatorSystem.baseLevel();
-                rotationServo.rotateClawBackward();
+                rotationServo.pickUpPos();
 
                 clawServo.openClaw();
 
@@ -65,6 +65,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
                 if(gamepadHelper1.rightBumperOnce())
                 {
+                    rotationServo.releasePos();
                     catchingState = CatchingState.UP;
                 }
 
@@ -72,12 +73,12 @@ public class CatchAndReleaseCommand implements RobotCommand {
             case UP:
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
 
-                //targetElevator();
+                targetElevator();
                 elevatorSystem.highRod();
 
-                //elevatorSystem.update(gamepad2);
                 if(gamepadHelper1.leftBumperOnce())
                 {
+                    saveCurrentPosElevator();
                     catchingState = CatchingState.RESET_CATCH;
                 }
                 break;
@@ -98,11 +99,11 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
         if(gamepadHelper1.leftBumperOnce())
         {
-            //saveCurrentPos();
+            saveCurrentPosElevator();
             catchingState = CatchingState.RESET_CATCH;
         }
 
-        //elevatorSystem.update(gamepad2);
+        elevatorSystem.update(gamepad2);
         transferSystem.update();
         gamepadHelper1.update();
         gamepadHelper2.update();
@@ -121,11 +122,6 @@ public class CatchAndReleaseCommand implements RobotCommand {
         }
     }
 
-    void saveCurrentPosTransfer()
-    {
-        transferSystem.setHIGH(transferSystem.getMotor().getCurrentPosition());
-    }
-
     void targetElevator()
     {
         switch (liftTarget)
@@ -140,6 +136,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
         elevatorSystem.update(gamepad2);
     }
+
     @Override
     public void initCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         transferSystem = new TransferSystem(hardwareMap);

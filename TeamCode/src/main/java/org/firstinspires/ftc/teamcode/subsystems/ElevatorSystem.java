@@ -44,14 +44,11 @@ public class ElevatorSystem {
     }
 
     public void update(Gamepad gamepad) {
-        /*if(usePID)
+        if(usePID)
         {
             switch (liftState) {
                 case BASE_LEVEL:
                     target = BASE_HEIGHT;
-                    break;
-                case LOW_ROD:
-                    target = LOW_HEIGHT;
                     break;
                 case MID_ROD:
                     target = MID_HEIGHT;
@@ -80,22 +77,7 @@ public class ElevatorSystem {
             {
                 mE.setPower(0);
             }
-        }*/
-        switch (liftState) {
-            case BASE_LEVEL:
-                target = BASE_HEIGHT;
-                break;
-            case MID_ROD:
-                target = MID_HEIGHT;
-                break;
-            case HIGH_ROD:
-                target = HIGH_HEIGHT;
-                break;
         }
-
-        mE.setTargetPosition(target);
-        mE.setPower(power);
-        mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
     public void baseLevel() {

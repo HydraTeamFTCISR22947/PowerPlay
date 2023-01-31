@@ -14,7 +14,7 @@ public class TransferSystem
     // set transfer levels values
     public static double PICK_UP = 35;
     public static double MID = 120;
-    public static double HIGH = 300;
+    public static double HIGH = 500;
 
     public static double TICKS_PER_REV = 751.8;
     public static double TOTAL_DEGREES = 360;      // total engine spin degrees

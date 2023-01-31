@@ -92,7 +92,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         imu = hardwareMap.get(IMU.class, "imu");
-        // details
+        // details // TODO: CHECK
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP));
