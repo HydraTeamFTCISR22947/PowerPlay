@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class TransferSystem
 {
     // set transfer levels values
-    public static double PICK_UP = 52;
+    public static double PICK_UP = 70;
     public static double HIGH = 430;
 
     public static double TICKS_PER_REV = 751.8;
@@ -96,5 +96,17 @@ public class TransferSystem
 
     public static double getHIGH() {
         return HIGH;
+    }
+
+    public void pickUp() {
+        motor_transfer.setTargetPosition(degreesToEncoderTicks(PICK_UP));
+        motor_transfer.setPower(power);
+        motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void highPos() {
+        motor_transfer.setTargetPosition(degreesToEncoderTicks(HIGH));
+        motor_transfer.setPower(power);
+        motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 }

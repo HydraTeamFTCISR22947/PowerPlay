@@ -58,12 +58,12 @@ public class GamepadController {
 
         if(redAlliance)
         {
-            this.drivetrain.setPoseEstimate(new Pose2d(0,0,(Math.PI/2)));
+            this.drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI/2)));
 
         }
         else
         {
-            this.drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI/2)));
+            this.drivetrain.setPoseEstimate(new Pose2d(0,0,(Math.PI/2)));
         }
 
         // We want to turn off velocity control for TeleopCommand
@@ -109,11 +109,11 @@ public class GamepadController {
 
         if(!slowTwist)
         {
-            twist = -gamepad1.right_stick_x * multiplier;
+            twist = gamepad1.right_stick_x * multiplier;
         }
         else
         {
-            twist = Range.clip(-gamepad1.right_stick_x * multiplier, -power/2, power/2);
+            twist = Range.clip(gamepad1.right_stick_x * multiplier, -power/2, power/2);
         }
 
     }
@@ -125,7 +125,7 @@ public class GamepadController {
                 gamepad1.left_stick_x
         ).rotated(drivetrain.getExternalHeading());
 
-        double twist = -gamepad1.right_stick_x;
+        double twist = gamepad1.right_stick_x * multiplier;
 
         if(gamepad2.left_bumper)
         {

@@ -8,8 +8,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 public class RotationServo {
 
-    public static double releasePos = 0.6; // declare angle of rotation, putting the cone on platform
-    public static double pickupPos = 0.05; // declare angle of rotation, facing the next cone
+    public static double releasePos = 0.1; // declare angle of rotation, putting the cone on platform
+    public static double pickupPos = 0.55; // declare angle of rotation, facing the next cone
 
     private Servo _rotationServo; // declare rotation servo
 

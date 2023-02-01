@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.testers;
 
+import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -92,6 +93,7 @@ public class AprilTagDemo extends LinearOpMode
 
             }
         });
+        FtcDashboard.getInstance().startCameraStream(camera,0);
 
         waitForStart();
 

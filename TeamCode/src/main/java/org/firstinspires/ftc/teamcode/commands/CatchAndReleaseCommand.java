@@ -54,11 +54,11 @@ public class CatchAndReleaseCommand implements RobotCommand {
         switch (catchingState)
         {
             case RESET_CATCH:
-                driveCommand.getRobotController().setSlowTwist(false);
+                //driveCommand.getRobotController().setSlowTwist(false);
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
-                liftTarget = LiftTarget.BASE;
+                //liftTarget = LiftTarget.BASE;
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
-                elevatorSystem.baseLevel();
+                //elevatorSystem.baseLevel();
                 rotationServo.pickUpPos();
 
                 clawServo.openClaw();
@@ -80,10 +80,9 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 break;
             case UP:
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
-                driveCommand.getRobotController().setSlowTwist(true);
+                //driveCommand.getRobotController().setSlowTwist(true);
 
                 targetElevator();
-                elevatorSystem.highRod();
 
                 if(gamepadHelper1.leftBumperOnce())
                 {

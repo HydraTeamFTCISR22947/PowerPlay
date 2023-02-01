@@ -19,9 +19,9 @@ public class ManualFixingCommand implements RobotCommand {
     TransferSystem transferSystem;
     ElevatorSystem elevatorSystem;
 
-    double y = 0;
+   // double y = 0;
 
-    public static double TRANSFER_INCREMENT = 2;
+    public static double TRANSFER_INCREMENT = 5.5;
 
     public ManualFixingCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, CatchAndReleaseCommand catchAndReleaseCommand)
     {
@@ -34,22 +34,22 @@ public class ManualFixingCommand implements RobotCommand {
         gamepadHelper1.update();
         gamepadHelper2.update();
 
-        userWantsElevatorControl();
-
-        switch (catchAndReleaseCommand.getLiftTarget())
+//        userWantsElevatorControl();
+//
+        switch (elevatorSystem.getLiftState())
         {
-            case BASE:
-                elevatorSystem.setUsePID(true);
+            case BASE_LEVEL:
+                //elevatorSystem.setUsePID(true);
                 fixBaseTransfer();
                 break;
-            case MID:
-            case HIGH:
-                elevatorSystem.setUsePID(false);
+            case MID_ROD:
+            case HIGH_ROD:
+                //elevatorSystem.setUsePID(false);
                 fixHighTransfer();
                 break;
         }
 
-        saveCurrentPosElevator();
+        //saveCurrentPosElevator();
 
 
     }
@@ -70,11 +70,11 @@ public class ManualFixingCommand implements RobotCommand {
     {
         if(gamepadHelper2.rightBumperOnce())
         {
-            transferSystem.setPickUp(transferSystem.getPickUp() + TRANSFER_INCREMENT);
+            transferSystem.setPickUp(transferSystem.getPickUp() - TRANSFER_INCREMENT);
         }
         else if(gamepadHelper2.leftBumperOnce())
         {
-            transferSystem.setPickUp(transferSystem.getPickUp() - TRANSFER_INCREMENT);
+            transferSystem.setPickUp(transferSystem.getPickUp() + TRANSFER_INCREMENT);
         }
     }
 
@@ -90,32 +90,32 @@ public class ManualFixingCommand implements RobotCommand {
         }
     }
 
-    void saveCurrentPosElevator()
-    {
-        switch (catchAndReleaseCommand.getLiftTarget())
-        {
-            case MID:
-                elevatorSystem.setMidHeight(elevatorSystem.currentPos());
-                break;
-            case HIGH:
-                elevatorSystem.setHighHeight(elevatorSystem.currentPos());
-                break;
-        }
-    }
+//    void saveCurrentPosElevator()
+//    {
+//        switch (catchAndReleaseCommand.getLiftTarget())
+//        {
+//            case MID:
+//                elevatorSystem.setMidHeight(elevatorSystem.currentPos());
+//                break;
+//            case HIGH:
+//                elevatorSystem.setHighHeight(elevatorSystem.currentPos());
+//                break;
+//        }
+//    }
 
-    void userWantsElevatorControl()
-    {
-        y = -gamepad2.left_stick_y;
-
-        if(y != 0)
-        {
-            elevatorSystem.setUsePID(false);
-        }
-        else if(catchAndReleaseCommand.getLiftTarget() != CatchAndReleaseCommand.LiftTarget.MID && catchAndReleaseCommand.getLiftTarget() != CatchAndReleaseCommand.LiftTarget.HIGH)
-        {
-            elevatorSystem.setUsePID(true);
-        }
-    }
+//    void userWantsElevatorControl()
+//    {
+//        y = -gamepad2.left_stick_y;
+//
+//        if(y != 0)
+//        {
+//            elevatorSystem.setUsePID(false);
+//        }
+//        else if(catchAndReleaseCommand.getLiftTarget() != CatchAndReleaseCommand.LiftTarget.MID && catchAndReleaseCommand.getLiftTarget() != CatchAndReleaseCommand.LiftTarget.HIGH)
+//        {
+//            elevatorSystem.setUsePID(true);
+//        }
+//    }
 
 
 }
