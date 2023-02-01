@@ -6,9 +6,11 @@ import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.util.Encoder;
 
 /**
  * This is a simple teleop routine for debugging your motor configuration.
@@ -86,10 +88,16 @@ public class MotorDirectionDebugger extends LinearOpMode {
                 telemetry.addLine("Running Motor: None");
             }
 
-            telemetry.addData("Motor Front Left:", drive.getMotors().get(0).getCurrentPosition());
+
+            telemetry.addData("Motor Front Left:",  drive.getMotors().get(0).getCurrentPosition());
             telemetry.addData("Motor Back Left:", drive.getMotors().get(1).getCurrentPosition());
             telemetry.addData("Motor Back Right:", drive.getMotors().get(2).getCurrentPosition());
             telemetry.addData("Motor Front Right:", drive.getMotors().get(3).getCurrentPosition());
+
+            telemetry.addData("Motor Front Left Reversed",  (drive.getMotors().get(0).getDirection() == DcMotor.Direction.REVERSE));
+            telemetry.addData("Motor Back Left Reversed", (drive.getMotors().get(1).getDirection() == DcMotor.Direction.REVERSE));
+            telemetry.addData("Motor Back Right Reversed", (drive.getMotors().get(2).getDirection() == DcMotor.Direction.REVERSE));
+            telemetry.addData("Motor Front Right Reversed", (drive.getMotors().get(3).getDirection() == DcMotor.Direction.REVERSE));
             telemetry.update();
         }
     }

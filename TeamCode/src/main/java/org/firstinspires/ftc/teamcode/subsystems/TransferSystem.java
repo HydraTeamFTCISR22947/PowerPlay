@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.subsystems;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 /*
@@ -37,6 +38,7 @@ public class TransferSystem
         this.motor_transfer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         this.motor_transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         this.motor_transfer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.motor_transfer.setDirection(DcMotorSimple.Direction.REVERSE);
     }
 
     //
