@@ -25,8 +25,8 @@ public class GamepadController {
     double rightPower_f;
     double rightPower_b;
     double drive,  strafe, twist, power = mainPower;
-    public static double mainPower = .6, multiplier = .9, POWER_INCREMENT = 0.1;
-    public static boolean slowMove = false, isCentricDrive = true, canTwist = true;
+    public static double mainPower = .5, multiplier = .9, POWER_INCREMENT = 0.1;
+    public static boolean slowTwist = true;
     GamepadHelper cGamepad1, cGamepad2;
     SampleMecanumDrive drivetrain;
     public static double startH = 0;
@@ -112,13 +112,13 @@ public class GamepadController {
     {
         drive = -gamepad1.left_stick_y;
         strafe = gamepad1.left_stick_x;
-        if(canTwist)
+        if(!slowTwist)
         {
             twist = -gamepad1.right_stick_x * multiplier;
         }
         else
         {
-            twist = 0;
+            twist = Range.clip(-gamepad1.right_stick_x * multiplier, -power/2, power/2);
         }
     }
 
@@ -143,5 +143,9 @@ public class GamepadController {
 
     public void setPower(double power) {
         this.power = power;
+    }
+
+    public static void setSlowTwist(boolean slowTwist) {
+        GamepadController.slowTwist = slowTwist;
     }
 }

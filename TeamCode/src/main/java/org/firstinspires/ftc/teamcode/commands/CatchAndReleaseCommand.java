@@ -13,7 +13,8 @@ import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 import org.firstinspires.ftc.teamcode.util.RobotCommand;
 
 public class CatchAndReleaseCommand implements RobotCommand {
-    TransferSystem transferSystem;
+    static TransferSystem transferSystem;
+    DriveCommand driveCommand;
     RotationServo rotationServo;
     ClawServo clawServo;
     ElevatorSystem elevatorSystem;
@@ -32,7 +33,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
     enum LiftTarget
     {
-        LOW,
+        BASE,
         MID,
         HIGH
     }
@@ -41,8 +42,10 @@ public class CatchAndReleaseCommand implements RobotCommand {
     LiftTarget liftTarget = LiftTarget.HIGH;
     ElapsedTime timer;
 
-    public CatchAndReleaseCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry)
+    public CatchAndReleaseCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, DriveCommand driveCommand)
     {
+        this.driveCommand = driveCommand;
+
         initCommand(hardwareMap, gamepad1, gamepad2, telemetry);
     }
 
@@ -51,7 +54,9 @@ public class CatchAndReleaseCommand implements RobotCommand {
         switch (catchingState)
         {
             case RESET_CATCH:
+                driveCommand.getRobotController().setSlowTwist(false);
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
+                liftTarget = LiftTarget.BASE;
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
                 elevatorSystem.baseLevel();
                 rotationServo.pickUpPos();
@@ -75,6 +80,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 break;
             case UP:
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
+                driveCommand.getRobotController().setSlowTwist(true);
 
                 targetElevator();
                 elevatorSystem.highRod();
@@ -107,6 +113,10 @@ public class CatchAndReleaseCommand implements RobotCommand {
         {
             liftTarget = LiftTarget.MID;
         }
+        else if(gamepadHelper2.AOnce())
+        {
+            liftTarget = LiftTarget.BASE;
+        }
 
         if(gamepadHelper1.leftBumperOnce() && catchingState != CatchingState.UP)
         {
@@ -121,19 +131,6 @@ public class CatchAndReleaseCommand implements RobotCommand {
         gamepadHelper2.update();
     }
 
-    void saveCurrentPosElevator()
-    {
-        switch (liftTarget)
-        {
-            case MID:
-                elevatorSystem.setMidHeight(elevatorSystem.currentPos());
-                break;
-            case HIGH:
-                elevatorSystem.setHighHeight(elevatorSystem.currentPos());
-                break;
-        }
-    }
-
     void targetElevator()
     {
         switch (liftTarget)
@@ -143,6 +140,8 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 break;
             case HIGH:
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.HIGH_ROD);
+                break;
+            case BASE:
                 break;
         }
 
@@ -162,4 +161,23 @@ public class CatchAndReleaseCommand implements RobotCommand {
         gamepadHelper2 = new GamepadHelper(gamepad2);
     }
 
+    public static TransferSystem getTransferSystem() {
+        return transferSystem;
+    }
+
+    public RotationServo getRotationServo() {
+        return rotationServo;
+    }
+
+    public ClawServo getClawServo() {
+        return clawServo;
+    }
+
+    public ElevatorSystem getElevatorSystem() {
+        return elevatorSystem;
+    }
+
+    public LiftTarget getLiftTarget() {
+        return liftTarget;
+    }
 }

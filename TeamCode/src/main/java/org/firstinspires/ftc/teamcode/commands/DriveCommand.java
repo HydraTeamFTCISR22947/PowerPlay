@@ -10,7 +10,6 @@ import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
 public class DriveCommand implements RobotCommand {
     GamepadController robotController;
-    GamepadHelper gamepadOneHelper;
 
     public DriveCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, boolean isRed)
     {
@@ -31,5 +30,9 @@ public class DriveCommand implements RobotCommand {
 
     public void setRedAlliance(boolean isRed) {
         robotController.setRedAlliance(isRed);
+    }
+
+    public GamepadController getRobotController() {
+        return robotController;
     }
 }

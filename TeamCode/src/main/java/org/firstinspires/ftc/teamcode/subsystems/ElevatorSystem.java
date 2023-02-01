@@ -120,4 +120,8 @@ public class ElevatorSystem {
     {
         return mE.getCurrentPosition();
     }
+
+    public void setUsePID(boolean usePID) {
+        this.usePID = usePID;
+    }
 }

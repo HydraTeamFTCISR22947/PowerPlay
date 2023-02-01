@@ -13,7 +13,6 @@ public class TransferSystem
 {
     // set transfer levels values
     public static double PICK_UP = 40;
-    public static double MID = 120;
     public static double HIGH = 430;
 
     public static double TICKS_PER_REV = 751.8;
@@ -26,7 +25,6 @@ public class TransferSystem
     // enum for transfer levels
     public enum TransferLevels {
         PICK_UP,
-        MID,
         HIGH
     }
 
@@ -48,9 +46,6 @@ public class TransferSystem
         {
             case PICK_UP:
                 target = PICK_UP;
-                break;
-            case MID:
-                target = MID;
                 break;
             case HIGH:
                 target = HIGH;
@@ -87,5 +82,17 @@ public class TransferSystem
 
     public double getTarget() {
         return target;
+    }
+
+    public static double getPickUp() {
+        return PICK_UP;
+    }
+
+    public static void setPickUp(double pickUp) {
+        PICK_UP = pickUp;
+    }
+
+    public static double getHIGH() {
+        return HIGH;
     }
 }
