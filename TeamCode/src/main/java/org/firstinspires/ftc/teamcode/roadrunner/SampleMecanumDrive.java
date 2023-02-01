@@ -1,17 +1,5 @@
 package org.firstinspires.ftc.teamcode.roadrunner;
 
-import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_ACCEL;
-import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_ANG_ACCEL;
-import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_ANG_VEL;
-import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_VEL;
-import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MOTOR_VELO_PID;
-import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.RUN_USING_ENCODER;
-import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.TRACK_WIDTH;
-import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.encoderTicksToInches;
-import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.kStatic;
-import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.kA;
-import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.kV;
-
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.config.Config;
@@ -45,10 +33,21 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceBuilder;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequenceRunner;
 import org.firstinspires.ftc.teamcode.util.LynxModuleUtil;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_ACCEL;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_ANG_ACCEL;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_ANG_VEL;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MAX_VEL;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.MOTOR_VELO_PID;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.RUN_USING_ENCODER;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.TRACK_WIDTH;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.kV;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.kA;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.kStatic;
+import static org.firstinspires.ftc.teamcode.roadrunner.DriveConstants.encoderTicksToInches;
 
 /*
  * Simple mecanum drive hardware implementation for REV hardware.
@@ -71,7 +70,7 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private TrajectoryFollower follower;
 
-    private DcMotorEx mFL, mBL, mBR, mFR;
+    private DcMotorEx leftFront, leftRear, rightRear, rightFront;
     private List<DcMotorEx> motors;
 
     private IMU imu;
@@ -92,22 +91,23 @@ public class SampleMecanumDrive extends MecanumDrive {
         }
 
         imu = hardwareMap.get(IMU.class, "imu");
-        // details // TODO: CHECK
+        // details
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 RevHubOrientationOnRobot.LogoFacingDirection.FORWARD,
                 RevHubOrientationOnRobot.UsbFacingDirection.UP));
-
         imu.initialize(parameters);
 
-        mFL = hardwareMap.get(DcMotorEx.class, "mFL");
-        mBL = hardwareMap.get(DcMotorEx.class, "mBL");
-        mBR = hardwareMap.get(DcMotorEx.class, "mBR");
-        mFR = hardwareMap.get(DcMotorEx.class, "mFR");
+        leftFront = hardwareMap.get(DcMotorEx.class, "mFL");
+        leftRear = hardwareMap.get(DcMotorEx.class, "mBL");
+        rightRear = hardwareMap.get(DcMotorEx.class, "mBR");
+        rightFront = hardwareMap.get(DcMotorEx.class, "mFR");
 
-        mBL.setDirection(DcMotorSimple.Direction.REVERSE);
-        mFL.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftFront.setDirection(DcMotorSimple.Direction.REVERSE);
+        leftRear.setDirection(DcMotorSimple.Direction.REVERSE);
+        rightFront.setDirection(DcMotorSimple.Direction.FORWARD);
+        rightRear.setDirection(DcMotorSimple.Direction.FORWARD);
 
-        motors = Arrays.asList(mFL, mBL, mBR, mFR);
+        motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -124,6 +124,11 @@ public class SampleMecanumDrive extends MecanumDrive {
         if (RUN_USING_ENCODER && MOTOR_VELO_PID != null) {
             setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, MOTOR_VELO_PID);
         }
+
+        // TODO: reverse any motors using DcMotor.setDirection()
+
+        // TODO: if desired, use setLocalizer() to change the localization method
+        // for instance, setLocalizer(new ThreeTrackingWheelLocalizer(...));
 
         trajectorySequenceRunner = new TrajectorySequenceRunner(follower, HEADING_PID);
     }
@@ -245,6 +250,10 @@ public class SampleMecanumDrive extends MecanumDrive {
         setDrivePower(vel);
     }
 
+    public List<DcMotorEx> getMotors()
+    {
+        return motors;
+    }
     @NonNull
     @Override
     public List<Double> getWheelPositions() {
@@ -266,22 +275,10 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     @Override
     public void setMotorPowers(double v, double v1, double v2, double v3) {
-        mFL.setPower(v);
-        mBL.setPower(v1);
-        mBR.setPower(v2);
-        mFR.setPower(v3);
-    }
-
-    public List<DcMotor> getMotors()
-    {
-        List<DcMotor> list = new ArrayList<DcMotor>();
-
-        list.add(mFL);
-        list.add(mBL);
-        list.add(mBR);
-        list.add(mFR);
-
-        return list;
+        leftFront.setPower(v);
+        leftRear.setPower(v1);
+        rightRear.setPower(v2);
+        rightFront.setPower(v3);
     }
 
     @Override
