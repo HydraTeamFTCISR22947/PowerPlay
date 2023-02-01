@@ -24,6 +24,7 @@ public class MeepMeepREDRIGHT {
         Pose2d firstCycleBarPose = new Pose2d(startConeDeliveryPoseX,startConeDeliveryPoseY, Math.toRadians(startConeDeliveryAngle));
         Pose2d secondCycleBarPose = new Pose2d(coneDeliveryPoseX,coneDeliveryPoseY,Math.toRadians(coneDeliveryAngle));
         Pose2d coneStackPose = new Pose2d(coneIntakePoseX,coneIntakePoseY, Math.toRadians(coneIntakeAngle));
+        Pose2d coneStackPose1 = new Pose2d(56,-12,Math.toRadians(180));
         Pose2d coneStackPoseSecond = new Pose2d(coneIntakePoseX+offsetBetweenIntakes,coneIntakePoseY,Math.toRadians(coneIntakeAngle));
         Pose2d coneStackPoseThird = new Pose2d(coneIntakePoseX+2*offsetBetweenIntakes,coneIntakePoseY,Math.toRadians(coneIntakeAngle));
         RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
@@ -37,13 +38,18 @@ public class MeepMeepREDRIGHT {
                                 .waitSeconds(DELIVERY_WAIT_TIME)
 
                                 //Second cycle
+                                .lineToSplineHeading(coneStackPose1)
                                 .splineToLinearHeading(coneStackPose,Math.toRadians(startPoseAngle))//intake
                                 .waitSeconds(INTAKE_WAIT_TIME)
 
-                                .lineToLinearHeading(secondCycleBarPose)//delivery
+                                .splineToLinearHeading(coneStackPose1,Math.toRadians(startPoseAngle))//intake
+                                .lineToSplineHeading(coneStackPose)
+                                //.lineToLinearHeading(secondCycleBarPose)//delivery
                                 .waitSeconds(DELIVERY_WAIT_TIME)
 
+                                /*
                                 //Third cycle
+
                                 .lineToLinearHeading(coneStackPoseSecond)//intake
                                 .waitSeconds(INTAKE_WAIT_TIME)
 
@@ -57,7 +63,7 @@ public class MeepMeepREDRIGHT {
                                 .lineToLinearHeading(secondCycleBarPose)//delivery
                                 .waitSeconds(DELIVERY_WAIT_TIME)
 
-
+*/
                                 .build()
                 );
 
