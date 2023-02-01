@@ -23,13 +23,6 @@ public class AutoRightRed extends LinearOpMode {
     public static final double CONE_DELIVERY_POSE_X = 32, CONE_DELIVERY_POSE_Y = -12, CONE_DELIVERY_POSE_ANGLE = 127;
     public static final double CONE_INTAKE_POSE_X = 56, CONE_INTAKE_POSE_Y = -12, CONE_INTAKE_POSE_ANGLE = 180;
     //Need to put actual coordinates
-    public static final double  PARK_POSE_X = 0, PARK_POSE_Y = 0, PARK_POSE_ANGLE = 180;
-
-    public static final double TRACK_WIDTH = 13.23;
-    public static final double MAX_VELOCITY = 80;
-    public static final double MAX_ACCELERATION = 60;
-    public static final double MAX_ANGLE_VELOCITY = 180;
-    public static final double MAX_ANGLE_ACCELERATION = 180;
 
     public static final double DELIVERY_WAIT_TIME = 2, INTAKE_WAIT_TIME = 4;
     public static final double INTAKE_OFFSET = 1;// move closer to cone stack each cycle ( check this irl )

@@ -19,17 +19,10 @@ public class AutoLeftRed extends LinearOpMode
     public static final double START_POSE_X = -36, START_POSE_Y = -72, START_POSE_ANGLE = 90;
 
     /* NOT FINAL */
-    public static final double START_CONE_DELIVERY_X = -36, START_CONE_DELIVERY_Y = 0, START_CONE_DELIVERY_ANGLE = 0;
-    public static final double CONE_DELIVERY_POSE_X = -32, CONE_DELIVERY_POSE_Y = -12, CONE_DELIVERY_POSE_ANGLE = 53;
-    public static final double CONE_INTAKE_POSE_X = -56, CONE_INTAKE_POSE_Y = -12, CONE_INTAKE_POSE_ANGLE = 0;
+    public static double START_CONE_DELIVERY_X = -36, START_CONE_DELIVERY_Y = 0, START_CONE_DELIVERY_ANGLE = 0;
+    public static double CONE_DELIVERY_POSE_X = -32, CONE_DELIVERY_POSE_Y = -12, CONE_DELIVERY_POSE_ANGLE = 53;
+    public static double CONE_INTAKE_POSE_X = -56, CONE_INTAKE_POSE_Y = -12, CONE_INTAKE_POSE_ANGLE = 0;
     //Need to put actual coordinates
-    public static final double  PARK_POSE_X = 0, PARK_POSE_Y = 0, PARK_POSE_ANGLE = 180;
-
-    public static final double TRACK_WIDTH = 13.23;
-    public static final double MAX_VELOCITY = 80;
-    public static final double MAX_ACCELERATION = 60;
-    public static final double MAX_ANGLE_VELOCITY = 180;
-    public static final double MAX_ANGLE_ACCELERATION = 180;
 
     public static final double DELIVERY_WAIT_TIME = 2, INTAKE_WAIT_TIME = 4;
     public static final double CONE_INTAKE_OFFSET = 1;// move closer to cone stack each cycle ( check this irl )
@@ -85,31 +78,6 @@ public class AutoLeftRed extends LinearOpMode
 
                 .build();
 
-       /* Trajectory firstCycleDelivery = drivetrain.trajectoryBuilder(startPose)
-                .lineToLinearHeading(firstCycleBarPose)
-                .build();
-
-        Trajectory firstCycleIntake = drivetrain.trajectoryBuilder(firstCycleDelivery.end())
-                .splineToLinearHeading(coneStackPose,Math.toRadians(START_POSE_ANGLE))
-                .build();
-
-        Trajectory secondCycleDelivery = drivetrain.trajectoryBuilder(firstCycleIntake.end())
-                .lineToLinearHeading(secondCycleBarPose)
-                .build();
-
-        Trajectory secondCycleIntake = drivetrain.trajectoryBuilder(secondCycleDelivery.end())
-                .lineToLinearHeading(coneStackPose)
-                .build();
-
-        Trajectory thirdCycleDelivery = drivetrain.trajectoryBuilder(secondCycleIntake.end())
-                .lineToLinearHeading(secondCycleBarPose)
-                .build();*/
-
-/*
-            Trajectory park = drivetrain.trajectoryBuilder(secondCycleScore.end())
-                    .splineToLinearHeading(parkPose,parkAngle)
-                    .build();
-*/
         if (isStopRequested())
         {
             return;

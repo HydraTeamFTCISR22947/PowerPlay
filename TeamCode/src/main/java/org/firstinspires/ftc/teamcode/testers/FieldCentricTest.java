@@ -24,7 +24,7 @@ public class FieldCentricTest extends LinearOpMode {
         mFL.setDirection(DcMotorSimple.Direction.REVERSE);
 
         SampleMecanumDrive drivetrain = new SampleMecanumDrive(hardwareMap);
-        drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI + Math.PI/2)));
+        drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI/2)));
         telemetry.addData("Status: ","Initialized!");
         telemetry.update();
 

@@ -20,10 +20,6 @@ public class GamepadController {
     Gamepad gamepad1, gamepad2;
     DcMotor mFL, mBL, mFR, mBR;
     Telemetry telemetry;
-    double leftPower_f;
-    double leftPower_b;
-    double rightPower_f;
-    double rightPower_b;
     double drive,  strafe, twist, power = mainPower;
     public static double mainPower = .5, multiplier = .9, POWER_INCREMENT = 0.1;
     public static boolean slowTwist = true;
@@ -41,12 +37,17 @@ public class GamepadController {
     public GamepadController(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         this.gamepad1 = gamepad1;
         this.gamepad2 = gamepad2;
+
         this.mFL = hardwareMap.get(DcMotor.class, "mFL");
+        this.mFR = hardwareMap.get(DcMotor.class, "mFR");
         this.mBL = hardwareMap.get(DcMotor.class, "mBL");
         this.mBR = hardwareMap.get(DcMotor.class, "mBR");
-        this.mFR = hardwareMap.get(DcMotor.class, "mFR");
-        mFR.setDirection(DcMotorSimple.Direction.REVERSE);
-        mBL.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        this.mBL.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.mFL.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        this.drivetrain = new SampleMecanumDrive(hardwareMap);
+
         cGamepad1 = new GamepadHelper(gamepad1);
         cGamepad2 = new GamepadHelper(gamepad2);
         this.telemetry = telemetry;
@@ -57,17 +58,14 @@ public class GamepadController {
 
         if(redAlliance)
         {
-            startH = 0;
-            startH -= (Math.PI + Math.PI/2); // red
+            this.drivetrain.setPoseEstimate(new Pose2d(0,0,(Math.PI/2)));
+
         }
         else
         {
-            startH = 0;
-            startH -= Math.PI/2; // blue
+            this.drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI/2)));
         }
 
-        this.drivetrain = new SampleMecanumDrive(hardwareMap);
-        this.drivetrain.setPoseEstimate(new Pose2d(0,0,startH));
         // We want to turn off velocity control for TeleopCommand
         // Velocity control per wheel is not necessary outside of motion profiled auto
         this.drivetrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -82,15 +80,11 @@ public class GamepadController {
         {
             if(redAlliance)
             {
-                startH = 0;
-                startH -= (Math.PI + Math.PI/2); // red
-                this.drivetrain.setPoseEstimate(new Pose2d(0,0,startH));
+                this.drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI/2)));
             }
             else if(!redAlliance)
             {
-                startH = 0;
-                startH -= Math.PI/2; // blue
-                this.drivetrain.setPoseEstimate(new Pose2d(0,0,startH));
+                this.drivetrain.setPoseEstimate(new Pose2d(0,0,(Math.PI/2)));
             }
         }
 
@@ -112,6 +106,7 @@ public class GamepadController {
     {
         drive = -gamepad1.left_stick_y;
         strafe = gamepad1.left_stick_x;
+
         if(!slowTwist)
         {
             twist = -gamepad1.right_stick_x * multiplier;
@@ -120,6 +115,7 @@ public class GamepadController {
         {
             twist = Range.clip(-gamepad1.right_stick_x * multiplier, -power/2, power/2);
         }
+
     }
 
     public void centricDrive()
@@ -130,6 +126,15 @@ public class GamepadController {
         ).rotated(drivetrain.getExternalHeading());
 
         double twist = -gamepad1.right_stick_x;
+
+        if(gamepad2.left_bumper)
+        {
+            power = 0.2;
+        }
+        else
+        {
+            power = .6;
+        }
 
         mFL.setPower(Range.clip(input.getX() + twist + input.getY(), -power, power));
         mBL.setPower(Range.clip(input.getX() + twist - input.getY(), -power, power));

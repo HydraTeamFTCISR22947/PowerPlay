@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 public class TransferSystem
 {
     // set transfer levels values
-    public static double PICK_UP = 40;
+    public static double PICK_UP = 52;
     public static double HIGH = 430;
 
     public static double TICKS_PER_REV = 751.8;
