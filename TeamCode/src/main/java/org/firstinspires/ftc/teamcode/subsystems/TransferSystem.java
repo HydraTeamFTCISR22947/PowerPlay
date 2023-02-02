@@ -14,7 +14,7 @@ public class TransferSystem
 {
     // set transfer levels values
     public static double PICK_UP = 70;
-    public static double HIGH_OPPOSITE = 245;
+    public static double HIGH_OPPOSITE = 250;
     public static double HIGH = 430;
 
     public static double TICKS_PER_REV = 751.8;
