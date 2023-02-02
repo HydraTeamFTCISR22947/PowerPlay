@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.MarkerCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.teamcode.commands.AutoCatchCommand;
 import org.firstinspires.ftc.teamcode.commands.AutoReleaseCommand;
+import org.firstinspires.ftc.teamcode.roadrunner.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.subsystems.ClawServo;
@@ -53,20 +55,20 @@ public class AutoRightRed extends LinearOpMode {
         {
             @Override
             public void onMarkerReached(){
-                releaseCommand.runCommand();
+                clawServo.openClaw();
+                transferSystem.pickUp();
+                elevatorSystem.baseLevel();
+                rotationServo.pickUpPos();
             }
         };
 
         drivetrain.setPoseEstimate(startPose);
 
         TrajectorySequence traj1 = drivetrain.trajectorySequenceBuilder(startPose)
-                //First cone
                 .lineToLinearHeading(startCone)
                 .forward(startConeHelpX)
-                .addTemporalMarker(releaseCone)
                 .waitSeconds(DELIVERY_WAIT_TIME)
-
-                //PARK
+                .addTemporalMarker(releaseCone)
                 .back(startConeHelpX)
                 .lineToLinearHeading(nearParkPose)
                 .build();
