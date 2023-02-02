@@ -55,6 +55,7 @@ public class ManualFixingCommand implements RobotCommand {
         if(y != 0 && elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL)
         {
             elevatorSystem.setUsePID(false);
+            elevatorSystem.setHeightByPos(elevatorSystem.currentPos());
         }
         else if(elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL && y == 0)
         {
@@ -74,12 +75,13 @@ public class ManualFixingCommand implements RobotCommand {
             }
             else if(gamepadHelper2.leftBumperOnce())
             {
-                elevatorSystem.setHeightByPos(elevatorSystem.currentPos() + elevatorSystem.INCREMENT);
+                elevatorSystem.setHeightByPos(elevatorSystem.currentPos() - elevatorSystem.INCREMENT);
             }
 
             if(y != 0)
             {
                 elevatorSystem.setUsePID(false);
+                elevatorSystem.setHeightByPos(elevatorSystem.currentPos());
             }
             else
             {

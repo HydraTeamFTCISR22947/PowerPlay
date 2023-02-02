@@ -52,7 +52,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
     }
 
     @Override
-    public void runCommand() throws Exception {
+    public void runCommand()  {
         switch (catchingState)
         {
             case RESET_CATCH:

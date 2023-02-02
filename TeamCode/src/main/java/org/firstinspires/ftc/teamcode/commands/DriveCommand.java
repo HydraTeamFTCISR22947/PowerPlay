@@ -28,7 +28,4 @@ public class DriveCommand implements RobotCommand {
         robotController = new GamepadController(hardwareMap, gamepad1, gamepad2, telemetry, redAlliance); // TeleopCommand(gamepad) class functions
     }
 
-    public GamepadController getRobotController() {
-        return robotController;
-    }
 }

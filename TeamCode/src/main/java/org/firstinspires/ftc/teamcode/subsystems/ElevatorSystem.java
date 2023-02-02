@@ -19,6 +19,10 @@ public class ElevatorSystem {
     DcMotor mE;
 
     public static int BASE_HEIGHT = 0;
+    public static int SECOND_STACK_HEIGHT = 20;
+    public static int THIRD_STACK_HEIGHT = 40;
+    public static int FORTH_STACK_HEIGHT = 60;
+    public static int FIFTH_STACK_HEIGHT = 80;
     public static int LOW_HEIGHT = 200;
     public static int MID_HEIGHT = 1200;
     public static int HIGH_HEIGHT = 1850;
@@ -71,6 +75,7 @@ public class ElevatorSystem {
         else
         {
             mE.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
             if(gamepad.left_stick_y != 0 && !gamepad.left_stick_button)
             {
                 mE.setPower(Range.clip(-gamepad.left_stick_y, -maxPower, maxPower));
@@ -92,6 +97,12 @@ public class ElevatorSystem {
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+    public void lowRod() {
+        mE.setTargetPosition(LOW_HEIGHT);
+        mE.setPower(power);
+        mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
     public void midRod() {
         mE.setTargetPosition(MID_HEIGHT);
         mE.setPower(power);
@@ -105,6 +116,15 @@ public class ElevatorSystem {
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+    public void goToPos(int pos) {
+        mE.setTargetPosition(pos);
+        mE.setPower(power);
+        mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public static void setBaseHeight(int baseHeight) {
+        BASE_HEIGHT = baseHeight;
+    }
 
     public elevatorState getLiftState() {
         return liftState;
@@ -132,20 +152,8 @@ public class ElevatorSystem {
     }
 
 
-    public static int getLowHeight() {
-        return LOW_HEIGHT;
-    }
-
     public static void setLowHeight(int lowHeight) {
         LOW_HEIGHT = lowHeight;
-    }
-
-    public static int getMidHeight() {
-        return MID_HEIGHT;
-    }
-
-    public static int getHighHeight() {
-        return HIGH_HEIGHT;
     }
 
     public int getPosition()
@@ -157,6 +165,8 @@ public class ElevatorSystem {
     {
         switch (liftState)
         {
+            case BASE_LEVEL:
+                setBaseHeight(pos);
             case LOW_ROD:
                 setLowHeight(pos);
                 break;
