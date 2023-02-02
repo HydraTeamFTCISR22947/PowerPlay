@@ -10,26 +10,22 @@ import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
 public class DriveCommand implements RobotCommand {
     GamepadController robotController;
+    boolean redAlliance;
 
     public DriveCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, boolean isRed)
     {
+        redAlliance = isRed;
         initCommand(hardwareMap, gamepad1, gamepad2, telemetry);
-        setRedAlliance(isRed);
     }
 
     @Override
     public void runCommand() {
-        robotController.update();
+        robotController.update(redAlliance);
     }
 
     @Override
     public void initCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
-        robotController = new GamepadController(hardwareMap, gamepad1, gamepad2, telemetry); // TeleopCommand(gamepad) class functions
-        robotController.setRedAlliance(true);
-    }
-
-    public void setRedAlliance(boolean isRed) {
-        robotController.setRedAlliance(isRed);
+        robotController = new GamepadController(hardwareMap, gamepad1, gamepad2, telemetry, redAlliance); // TeleopCommand(gamepad) class functions
     }
 
     public GamepadController getRobotController() {

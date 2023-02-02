@@ -19,9 +19,6 @@ public class ManualFixingCommand implements RobotCommand {
     TransferSystem transferSystem;
     ElevatorSystem elevatorSystem;
 
-   // double y = 0;
-
-    public static double TRANSFER_INCREMENT = 5.5;
 
     public ManualFixingCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, CatchAndReleaseCommand catchAndReleaseCommand)
     {
@@ -34,24 +31,9 @@ public class ManualFixingCommand implements RobotCommand {
         gamepadHelper1.update();
         gamepadHelper2.update();
 
-//        userWantsElevatorControl();
-//
-        switch (elevatorSystem.getLiftState())
-        {
-            case BASE_LEVEL:
-                //elevatorSystem.setUsePID(true);
-                fixBaseTransfer();
-                break;
-            case MID_ROD:
-            case HIGH_ROD:
-                //elevatorSystem.setUsePID(false);
-                fixHighTransfer();
-                break;
-        }
+        controlOpenedElevator();
 
-        //saveCurrentPosElevator();
-
-
+        userWantsBaseElevatorControl();
     }
 
     @Override
@@ -66,56 +48,45 @@ public class ManualFixingCommand implements RobotCommand {
         this.elevatorSystem = catchAndReleaseCommand.getElevatorSystem();
     }
 
-    void fixBaseTransfer()
+    void userWantsBaseElevatorControl()
     {
-        if(gamepadHelper2.rightBumperOnce())
+        double y = -gamepad2.left_stick_y;
+
+        if(y != 0 && elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL)
         {
-            transferSystem.setPickUp(transferSystem.getPickUp() - TRANSFER_INCREMENT);
+            elevatorSystem.setUsePID(false);
         }
-        else if(gamepadHelper2.leftBumperOnce())
+        else if(elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL && y == 0)
         {
-            transferSystem.setPickUp(transferSystem.getPickUp() + TRANSFER_INCREMENT);
+            elevatorSystem.setUsePID(true);
         }
     }
 
-    void fixHighTransfer()
+    void controlOpenedElevator()
     {
-        if(gamepadHelper2.rightBumperOnce())
+        if(catchAndReleaseCommand.isOpen)
         {
-            transferSystem.setHIGH(transferSystem.getHIGH() + TRANSFER_INCREMENT);
-        }
-        else if(gamepadHelper2.leftBumperOnce())
-        {
-            transferSystem.setHIGH(transferSystem.getHIGH() - TRANSFER_INCREMENT);
+            double y = -gamepad2.left_stick_y;
+
+            if(gamepadHelper2.rightBumperOnce())
+            {
+                elevatorSystem.setHeightByPos(elevatorSystem.currentPos() + elevatorSystem.INCREMENT);
+            }
+            else if(gamepadHelper2.leftBumperOnce())
+            {
+                elevatorSystem.setHeightByPos(elevatorSystem.currentPos() + elevatorSystem.INCREMENT);
+            }
+
+            if(y != 0)
+            {
+                elevatorSystem.setUsePID(false);
+            }
+            else
+            {
+                elevatorSystem.setUsePID(true);
+            }
         }
     }
-
-//    void saveCurrentPosElevator()
-//    {
-//        switch (catchAndReleaseCommand.getLiftTarget())
-//        {
-//            case MID:
-//                elevatorSystem.setMidHeight(elevatorSystem.currentPos());
-//                break;
-//            case HIGH:
-//                elevatorSystem.setHighHeight(elevatorSystem.currentPos());
-//                break;
-//        }
-//    }
-
-//    void userWantsElevatorControl()
-//    {
-//        y = -gamepad2.left_stick_y;
-//
-//        if(y != 0)
-//        {
-//            elevatorSystem.setUsePID(false);
-//        }
-//        else if(catchAndReleaseCommand.getLiftTarget() != CatchAndReleaseCommand.LiftTarget.MID && catchAndReleaseCommand.getLiftTarget() != CatchAndReleaseCommand.LiftTarget.HIGH)
-//        {
-//            elevatorSystem.setUsePID(true);
-//        }
-//    }
 
 
 }

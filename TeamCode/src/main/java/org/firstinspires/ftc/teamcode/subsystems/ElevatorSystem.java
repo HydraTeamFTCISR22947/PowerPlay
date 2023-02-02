@@ -19,16 +19,19 @@ public class ElevatorSystem {
     DcMotor mE;
 
     public static int BASE_HEIGHT = 0;
+    public static int LOW_HEIGHT = 200;
     public static int MID_HEIGHT = 1200;
     public static int HIGH_HEIGHT = 1850;
 
     public static double power = 1;
     public static double maxPower = 1;
+    public static int INCREMENT = 50;
     int target = 0;
     boolean usePID = true;
 
     public enum elevatorState {
         BASE_LEVEL,
+        LOW_ROD,
         MID_ROD,
         HIGH_ROD,
     }
@@ -49,6 +52,9 @@ public class ElevatorSystem {
             switch (liftState) {
                 case BASE_LEVEL:
                     target = BASE_HEIGHT;
+                    break;
+                case LOW_ROD:
+                    target = LOW_HEIGHT;
                     break;
                 case MID_ROD:
                     target = MID_HEIGHT;
@@ -123,5 +129,43 @@ public class ElevatorSystem {
 
     public void setUsePID(boolean usePID) {
         this.usePID = usePID;
+    }
+
+
+    public static int getLowHeight() {
+        return LOW_HEIGHT;
+    }
+
+    public static void setLowHeight(int lowHeight) {
+        LOW_HEIGHT = lowHeight;
+    }
+
+    public static int getMidHeight() {
+        return MID_HEIGHT;
+    }
+
+    public static int getHighHeight() {
+        return HIGH_HEIGHT;
+    }
+
+    public int getPosition()
+    {
+        return mE.getCurrentPosition();
+    }
+
+    public void setHeightByPos(int pos)
+    {
+        switch (liftState)
+        {
+            case LOW_ROD:
+                setLowHeight(pos);
+                break;
+            case MID_ROD:
+                setMidHeight(pos);
+                break;
+            case HIGH_ROD:
+                setHighHeight(pos);
+                break;
+        }
     }
 }

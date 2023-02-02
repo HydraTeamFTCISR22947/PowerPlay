@@ -24,6 +24,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
     boolean pressed = false;
     double offset = 0;
     public static double delay = 0.5;
+    boolean isOpen = false;
 
     public enum CatchingState {
         CATCH,
@@ -34,6 +35,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
     enum LiftTarget
     {
         BASE,
+        LOW,
         MID,
         HIGH
     }
@@ -54,13 +56,10 @@ public class CatchAndReleaseCommand implements RobotCommand {
         switch (catchingState)
         {
             case RESET_CATCH:
-                //driveCommand.getRobotController().setSlowTwist(false);
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
-                //liftTarget = LiftTarget.BASE;
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
-                //elevatorSystem.baseLevel();
                 rotationServo.pickUpPos();
-
+                isOpen = false;
                 clawServo.openClaw();
 
                 if(gamepadHelper1.rightBumperOnce())
@@ -79,15 +78,15 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
                 break;
             case UP:
+                isOpen = true;
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
-                //driveCommand.getRobotController().setSlowTwist(true);
 
                 targetElevator();
 
                 if(gamepadHelper1.leftBumperOnce())
                 {
                     clawServo.openClaw();
-                    //saveCurrentPosElevator();
+                    saveCurrentPosElevator();
                     pressed = true;
                     offset = timer.time();
                 }
@@ -114,12 +113,11 @@ public class CatchAndReleaseCommand implements RobotCommand {
         }
         else if(gamepadHelper2.AOnce())
         {
-            liftTarget = LiftTarget.BASE;
+            liftTarget = LiftTarget.LOW;
         }
 
         if(gamepadHelper1.leftBumperOnce() && catchingState != CatchingState.UP)
         {
-            //saveCurrentPosElevator();
             catchingState = CatchingState.RESET_CATCH;
 
         }
@@ -134,6 +132,9 @@ public class CatchAndReleaseCommand implements RobotCommand {
     {
         switch (liftTarget)
         {
+            case LOW:
+                elevatorSystem.setLiftState(ElevatorSystem.elevatorState.LOW_ROD);
+                break;
             case MID:
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.MID_ROD);
                 break;
@@ -164,19 +165,23 @@ public class CatchAndReleaseCommand implements RobotCommand {
         return transferSystem;
     }
 
-    public RotationServo getRotationServo() {
-        return rotationServo;
-    }
-
-    public ClawServo getClawServo() {
-        return clawServo;
-    }
-
     public ElevatorSystem getElevatorSystem() {
         return elevatorSystem;
     }
 
-    public LiftTarget getLiftTarget() {
-        return liftTarget;
+    void saveCurrentPosElevator()
+    {
+        switch (liftTarget)
+        {
+            case LOW:
+                elevatorSystem.setLowHeight(elevatorSystem.getPosition());
+                break;
+            case MID:
+                elevatorSystem.setMidHeight(elevatorSystem.getPosition());
+                break;
+            case HIGH:
+                elevatorSystem.setHighHeight(elevatorSystem.getPosition());
+                break;
+        }
     }
 }

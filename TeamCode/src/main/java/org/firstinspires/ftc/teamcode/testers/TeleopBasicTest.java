@@ -14,8 +14,7 @@ public class TeleopBasicTest extends LinearOpMode {
 
     @Override
     public void runOpMode() throws InterruptedException {
-        gamepad = new GamepadController(hardwareMap, gamepad1, gamepad2, telemetry); // TeleopCommand(gamepad) class functions
-        gamepad.setRedAlliance(true);
+        gamepad = new GamepadController(hardwareMap, gamepad1, gamepad2, telemetry, true); // TeleopCommand(gamepad) class functions
 
         // wait till after init
         waitForStart();
@@ -33,7 +32,7 @@ public class TeleopBasicTest extends LinearOpMode {
             {
                 gamepad.setPower(.6);
             }
-            gamepad.update();
+            gamepad.update(true);
         }
 
     }
