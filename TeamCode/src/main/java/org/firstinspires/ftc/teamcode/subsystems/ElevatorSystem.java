@@ -22,9 +22,9 @@ public class ElevatorSystem {
     public static int SECOND_STACK_HEIGHT = 20;
     public static int THIRD_STACK_HEIGHT = 40;
     public static int FORTH_STACK_HEIGHT = 60;
-    public static int FIFTH_STACK_HEIGHT = 80;
+    public static int FIFTH_STACK_HEIGHT = 100;
     public static int LOW_HEIGHT = 200;
-    public static int MID_HEIGHT = 1200;
+    public static int MID_HEIGHT = 1550;
     public static int HIGH_HEIGHT = 1850;
 
     public static double power = 1;

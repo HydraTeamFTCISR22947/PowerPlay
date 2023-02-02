@@ -14,8 +14,9 @@ public class TransferSystem
 {
     // set transfer levels values
     public static double PICK_UP = 70;
-    public static double HIGH_OPPOSITE = 250;
+    public static double HIGH_OPPOSITE = 150;
     public static double HIGH = 430;
+    public static double PICKUP_OPPOSITE = 515;
 
     public static double TICKS_PER_REV = 751.8;
     public static double TOTAL_DEGREES = 360;      // total engine spin degrees
@@ -101,6 +102,11 @@ public class TransferSystem
 
     public void pickUp() {
         motor_transfer.setTargetPosition(degreesToEncoderTicks(PICK_UP));
+        motor_transfer.setPower(power);
+        motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+    public void pickUpOpposite() {
+        motor_transfer.setTargetPosition(degreesToEncoderTicks(PICKUP_OPPOSITE));
         motor_transfer.setPower(power);
         motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
