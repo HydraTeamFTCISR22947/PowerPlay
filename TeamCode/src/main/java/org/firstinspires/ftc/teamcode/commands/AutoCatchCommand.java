@@ -23,7 +23,7 @@ public class AutoCatchCommand implements AutoRobotCommand {
         HIGH
     }
 
-    enum StackTarget
+    public enum StackTarget
     {
         FIFTH,
         FOURTH,
@@ -40,8 +40,6 @@ public class AutoCatchCommand implements AutoRobotCommand {
     {
         initCommand(hardwareMap);
     }
-
-
 
     @Override
     public void runCommand()
@@ -65,23 +63,12 @@ public class AutoCatchCommand implements AutoRobotCommand {
                 break;
         }
 
-        double offset = timer.time();
+        clawServo.closeClaw();
+        targetElevator();
 
-        if(timer.time() - offset >= 0.1)
-        {
-            clawServo.closeClaw();
+        rotationServo.pickUpPos();
 
-            double secondOffset = timer.time();
-
-            if(timer.time() - secondOffset >= 0.1)
-            {
-                targetElevator();
-
-                rotationServo.releasePos();
-
-                transferSystem.highPos();
-            }
-        }
+        transferSystem.highOppositePos();
     }
 
     void targetElevator()
@@ -116,5 +103,9 @@ public class AutoCatchCommand implements AutoRobotCommand {
 
     public void setLiftTarget(LiftTarget liftTarget) {
         this.liftTarget = liftTarget;
+    }
+
+    public void setStackTarget(StackTarget stackTarget) {
+        this.stackTarget = stackTarget;
     }
 }

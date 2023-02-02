@@ -5,97 +5,84 @@ import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.trajectory.MarkerCallback;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-
+import org.firstinspires.ftc.teamcode.commands.AutoCatchCommand;
+import org.firstinspires.ftc.teamcode.commands.AutoReleaseCommand;
 import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
-//import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
-//import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
+import org.firstinspires.ftc.teamcode.subsystems.ClawServo;
+import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
+import org.firstinspires.ftc.teamcode.subsystems.RotationServo;
+import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 
 
 @Config
 @Autonomous(name = "Auto Right Red", group = "auto")
 public class AutoRightRed extends LinearOpMode {
 
- //   ElevatorSystem elevator = new ElevatorSystem(hardwareMap);
-  //  TransferSystem transferSystem;
-    //start values.
-    public static final double START_POSE_X = 36, START_POSE_Y = -72, START_POSE_ANGLE = 90;
+    public static double startPosX = 36, startPosY = -66, startPosAngle = 90;
+    public static double startConeX = 36 , startConeY = -18, startConeAngle = 135;
+    public static double startConeHelpX = 12;
+    public static double nearParkX = 36 , nearParkY = -40, parkAngle = 90;
+    public static double DELIVERY_WAIT_TIME = 1.5, INTAKE_WAIT_TIME = 1.0;
 
-    /* NOT FINAL */
-    public static double START_CONE_DELIVERY_X = 36, START_CONE_DELIVERY_Y = -12, START_CONE_DELIVERY_ANGLE = 127;
-    public static double CONE_DELIVERY_POSE_X = 36, CONE_DELIVERY_POSE_Y = -12, CONE_DELIVERY_POSE_ANGLE = 127;
-    public static double CONE_INTAKE_POSE_X = 56, CONE_INTAKE_POSE_Y = -12, CONE_INTAKE_POSE_ANGLE = 0;
-
-    public static double NEAR_CONE_INTAKE_POSE_X = 44, NEAR_CONE_INTAKE_POSE_Y = -12;
-    //Need to put actual coordinates
-
-    public static final double DELIVERY_WAIT_TIME = 1, INTAKE_WAIT_TIME = 2;
-    public static final double INTAKE_OFFSET = 1;// move closer to cone stack each cycle ( check this irl )
-
+    AutoCatchCommand catchCommand;
+    AutoReleaseCommand releaseCommand;
+    TransferSystem transferSystem;
+    RotationServo rotationServo;
+    ClawServo clawServo;
+    ElevatorSystem elevatorSystem;
 
     @Override
     public void runOpMode() throws InterruptedException {
         SampleMecanumDrive drivetrain = new SampleMecanumDrive(hardwareMap);
 
-        Pose2d startPose = new Pose2d(START_POSE_X, START_POSE_Y, Math.toRadians(START_POSE_ANGLE));
+        Pose2d startPose = new Pose2d(startPosX, startPosY, Math.toRadians(startPosAngle));
+        Pose2d startCone = new Pose2d(startConeX, startConeY, Math.toRadians(startConeAngle));
+        Pose2d nearParkPose = new Pose2d(nearParkX, nearParkY,  Math.toRadians(parkAngle));
+
+        transferSystem = new TransferSystem(hardwareMap);
+        rotationServo = new RotationServo(hardwareMap);
+        clawServo = new ClawServo(hardwareMap);
+        elevatorSystem = new ElevatorSystem(hardwareMap);
+        catchCommand = new AutoCatchCommand(hardwareMap);
+        releaseCommand = new AutoReleaseCommand(hardwareMap);
+
+        catchCommand.setStackTarget(AutoCatchCommand.StackTarget.FIRST);
+
+        MarkerCallback releaseCone =  new MarkerCallback()
+        {
+            @Override
+            public void onMarkerReached(){
+                releaseCommand.runCommand();
+            }
+        };
+
         drivetrain.setPoseEstimate(startPose);
 
-        Pose2d firstCycleBarPose = new Pose2d(START_CONE_DELIVERY_X, START_CONE_DELIVERY_Y, Math.toRadians(START_CONE_DELIVERY_ANGLE));
-        Pose2d secondCycleBarPose = new Pose2d(CONE_DELIVERY_POSE_X, CONE_DELIVERY_POSE_Y, Math.toRadians(CONE_DELIVERY_POSE_ANGLE));
+        TrajectorySequence traj1 = drivetrain.trajectorySequenceBuilder(startPose)
+                //First cone
+                .lineToLinearHeading(startCone)
+                .forward(startConeHelpX)
+                .addTemporalMarker(releaseCone)
+                .waitSeconds(DELIVERY_WAIT_TIME)
 
-        Pose2d nearConeStackPose = new Pose2d(NEAR_CONE_INTAKE_POSE_X, NEAR_CONE_INTAKE_POSE_Y, Math.toRadians(CONE_INTAKE_POSE_ANGLE));
-        Pose2d coneStackPose = new Pose2d(CONE_INTAKE_POSE_X, CONE_INTAKE_POSE_Y, Math.toRadians(CONE_INTAKE_POSE_ANGLE));
+                //PARK
+                .back(startConeHelpX)
+                .lineToLinearHeading(nearParkPose)
+                .build();
 
+        if (isStopRequested()) {return;}
 
-        Pose2d coneStackPoseSecond = new Pose2d(CONE_INTAKE_POSE_X + INTAKE_OFFSET, CONE_INTAKE_POSE_Y, Math.toRadians(CONE_INTAKE_POSE_ANGLE));
-        Pose2d coneStackPoseThird = new Pose2d(CONE_INTAKE_POSE_X + 2 * INTAKE_OFFSET, CONE_INTAKE_POSE_Y, Math.toRadians(CONE_INTAKE_POSE_ANGLE));
+        clawServo.closeClaw();
 
-        /*
-        MarkerCallback ElevatorMax = new MarkerCallback() {
-            @Override
-            public void onMarkerReached() {
+        waitForStart();
 
-                elevator.highRod();
-            }
+        elevatorSystem.goToPos(elevatorSystem.BASE_HEIGHT);
+        elevatorSystem.highRod();
+        rotationServo.pickUpPos();
+        transferSystem.highOppositePos();
 
-
-        };*/
-
-            /* First Cycle*/
-            TrajectorySequence firstCycle =drivetrain.trajectorySequenceBuilder(startPose)
-                    .lineToLinearHeading(firstCycleBarPose)//delivery
-                    .waitSeconds(DELIVERY_WAIT_TIME)
-                    .build();
-
-            TrajectorySequence autoCycles = drivetrain.trajectorySequenceBuilder(firstCycle.end())
-
-
-
-                    /*Second Cycle*/
-                    .splineToLinearHeading(nearConeStackPose,Math.toRadians(CONE_DELIVERY_POSE_ANGLE))
-                    .lineToLinearHeading(coneStackPose)
-                    .build();
-
-
-
-        if (isStopRequested())
-        {
-                return;
-        }
-            waitForStart();
-        while(opModeIsActive())
-        {
-            drivetrain.followTrajectorySequence(firstCycle);
-            drivetrain.followTrajectorySequence(autoCycles);
-
-        }
-
-
-
-
+        drivetrain.followTrajectorySequence(traj1);
     }
 }
 
