@@ -20,7 +20,7 @@ public class GamepadController {
     DcMotor mFL, mBL, mFR, mBR;
     Telemetry telemetry;
     double power = mainPower;
-    public static double mainPower = .6, multiplier = .9, POWER_INCREMENT = 0.1, slowPower = .3;
+    public static double mainPower = .6, multiplier = .9, POWER_INCREMENT = 0.1, slowPower = .2;
     GamepadHelper cGamepad1, cGamepad2;
     SampleMecanumDrive drivetrain;
 

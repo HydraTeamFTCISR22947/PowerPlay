@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.commands;
+package org.firstinspires.ftc.teamcode.commands.teleop;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.Gamepad;
@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
-import org.firstinspires.ftc.teamcode.subsystems.GamepadController;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 import org.firstinspires.ftc.teamcode.util.RobotCommand;
@@ -61,6 +60,16 @@ public class ManualFixingCommand implements RobotCommand {
         {
             elevatorSystem.setUsePID(true);
         }
+
+        if(gamepadHelper2.rightBumperOnce() && elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL)
+        {
+            elevatorSystem.setHeightByPos(elevatorSystem.currentPos() + elevatorSystem.INCREMENT);
+        }
+        else if(gamepadHelper2.leftBumperOnce() && elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL)
+        {
+            elevatorSystem.setHeightByPos(elevatorSystem.currentPos() - elevatorSystem.INCREMENT);
+        }
+
     }
 
     void controlOpenedElevator()

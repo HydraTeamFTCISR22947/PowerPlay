@@ -4,9 +4,9 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
-import org.firstinspires.ftc.teamcode.commands.CatchAndReleaseCommand;
-import org.firstinspires.ftc.teamcode.commands.DriveCommand;
-import org.firstinspires.ftc.teamcode.commands.ManualFixingCommand;
+import org.firstinspires.ftc.teamcode.commands.teleop.CatchAndReleaseCommand;
+import org.firstinspires.ftc.teamcode.commands.teleop.DriveCommand;
+import org.firstinspires.ftc.teamcode.commands.teleop.ManualFixingCommand;
 import org.firstinspires.ftc.teamcode.util.RobotCommand;
 
 public class TeleopCommand implements RobotCommand
