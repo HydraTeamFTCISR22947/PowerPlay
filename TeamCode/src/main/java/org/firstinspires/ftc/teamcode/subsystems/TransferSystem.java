@@ -4,7 +4,9 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
+import com.qualcomm.robotcore.util.Range;
 
 /*
  * Hardware class for our transfer system using FIRST'S set target position.
@@ -22,12 +24,17 @@ public class TransferSystem
     public static double TOTAL_DEGREES = 360;      // total engine spin degrees
     public static double GEAR_RATIO = 1;
     double power = 1;
+    double maxPower = .5;
     double target = 0;
     DcMotorEx motor_transfer;    // set motor
+
+    boolean usePID = true;
 
     // enum for transfer levels
     public enum TransferLevels {
         PICK_UP,
+        PICK_UP_OPPOSITE,
+        HIGH_OPPOSITE,
         HIGH
     }
 
@@ -44,21 +51,47 @@ public class TransferSystem
     }
 
     //
-    public void update()  {
-        switch (transferLevel)
-        // set levels
-        {
-            case PICK_UP:
-                target = PICK_UP;
-                break;
-            case HIGH:
-                target = HIGH;
-                break;
-        }
+    public void update(Gamepad gamepad2)  {
+        if(usePID) {
 
-        motor_transfer.setTargetPosition(degreesToEncoderTicks(target));
-        motor_transfer.setPower(power);
-        motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            switch (transferLevel)
+            // set levels
+            {
+                case HIGH_OPPOSITE:
+                    target = HIGH_OPPOSITE;
+                    break;
+                case PICK_UP_OPPOSITE:
+                    target = PICKUP_OPPOSITE;
+                    break;
+                case PICK_UP:
+                    target = PICK_UP;
+                    break;
+                case HIGH:
+                    target = HIGH;
+                    break;
+            }
+
+            motor_transfer.setTargetPosition(degreesToEncoderTicks(target));
+            motor_transfer.setPower(power);
+            motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        }
+        else
+        {
+            motor_transfer.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            if(gamepad2.right_stick_y != 0 && !gamepad2.right_stick_button)
+            {
+                motor_transfer.setPower(Range.clip(-gamepad2.right_stick_y, -maxPower, maxPower));
+            }
+            else if(gamepad2.right_stick_y != 0 && gamepad2.right_stick_button)
+            {
+                motor_transfer.setPower(Range.clip(-gamepad2.right_stick_y, -1, 1));
+            }
+            else
+            {
+                motor_transfer.setPower(0);
+            }
+        }
     }
 
     // function to convert degrees to encoder ticks
@@ -121,5 +154,14 @@ public class TransferSystem
         motor_transfer.setTargetPosition(degreesToEncoderTicks(HIGH_OPPOSITE));
         motor_transfer.setPower(power);
         motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void setUsePID(boolean usePID) {
+        this.usePID = usePID;
+    }
+
+    public int currentPos()
+    {
+        return motor_transfer.getCurrentPosition();
     }
 }

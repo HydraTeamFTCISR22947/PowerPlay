@@ -20,7 +20,7 @@ public class TransferTest extends LinearOpMode {
         waitForStart();
         while (opModeIsActive())
         {
-            transferSystem.update();
+            transferSystem.update(gamepad2);
 
             // if (gamepadHelper1.YOnce()) {
             gamepadHelper1.update();

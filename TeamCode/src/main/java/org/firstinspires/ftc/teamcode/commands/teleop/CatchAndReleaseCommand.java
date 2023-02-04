@@ -35,6 +35,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
     enum LiftTarget
     {
         BASE,
+        TERMINAL,
         LOW,
         MID,
         HIGH
@@ -79,7 +80,6 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 break;
             case UP:
                 isOpen = true;
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
 
                 targetElevator();
 
@@ -115,6 +115,10 @@ public class CatchAndReleaseCommand implements RobotCommand {
         {
             liftTarget = LiftTarget.LOW;
         }
+        else if(gamepadHelper2.XOnce())
+        {
+            liftTarget = LiftTarget.TERMINAL;
+        }
 
         if(gamepadHelper1.leftBumperOnce() && catchingState != CatchingState.UP)
         {
@@ -123,7 +127,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
         }
 
         elevatorSystem.update(gamepad2);
-        transferSystem.update();
+        transferSystem.update(gamepad2);
         gamepadHelper1.update();
         gamepadHelper2.update();
     }
@@ -132,14 +136,21 @@ public class CatchAndReleaseCommand implements RobotCommand {
     {
         switch (liftTarget)
         {
+            case TERMINAL:
+                elevatorSystem.setLiftState(ElevatorSystem.elevatorState.LOW_ROD);
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP_OPPOSITE);
+                break;
             case LOW:
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.LOW_ROD);
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
                 break;
             case MID:
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.MID_ROD);
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
                 break;
             case HIGH:
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.HIGH_ROD);
+                transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
                 break;
             case BASE:
                 break;

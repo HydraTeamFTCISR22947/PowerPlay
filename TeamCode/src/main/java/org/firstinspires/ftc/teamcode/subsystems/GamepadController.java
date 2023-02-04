@@ -60,11 +60,11 @@ public class GamepadController {
 
         if(redAlliance)
         {
-            this.drivetrain.setPoseEstimate(new Pose2d(0,0,(Math.PI/2)));
+            this.drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI + Math.PI/2)));
         }
         else if(!redAlliance)
         {
-            this.drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI/2)));
+            this.drivetrain.setPoseEstimate(new Pose2d(0,0,(Math.PI + Math.PI/2)));
         }
     }
 
@@ -77,11 +77,11 @@ public class GamepadController {
         {
             if(redAlliance)
             {
-                this.drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI/2)));
+                this.drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI + Math.PI/2)));
             }
             else if(!redAlliance)
             {
-                this.drivetrain.setPoseEstimate(new Pose2d(0,0,(Math.PI/2)));
+                this.drivetrain.setPoseEstimate(new Pose2d(0,0,(Math.PI + Math.PI/2)));
             }
         }
 

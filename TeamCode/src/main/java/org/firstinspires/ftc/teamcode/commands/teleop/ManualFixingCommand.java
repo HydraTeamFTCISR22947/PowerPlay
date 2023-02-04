@@ -32,6 +32,7 @@ public class ManualFixingCommand implements RobotCommand {
 
         controlOpenedElevator();
 
+
         userWantsBaseElevatorControl();
     }
 
@@ -72,6 +73,22 @@ public class ManualFixingCommand implements RobotCommand {
 
     }
 
+    void userWantsBaseTransferControl()
+    {
+        double y = -gamepad2.left_stick_y;
+
+        if(y != 0 && (transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP || transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP_OPPOSITE))
+        {
+            transferSystem.setUsePID(false);
+            //transferSystem.setHeightByPos(transferSystem.currentPos());
+        }
+        else if((transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP || transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP_OPPOSITE) && y == 0)
+        {
+            transferSystem.setUsePID(true);
+        }
+
+    }
+
     void controlOpenedElevator()
     {
         if(catchAndReleaseCommand.isOpen)
@@ -98,6 +115,25 @@ public class ManualFixingCommand implements RobotCommand {
             }
         }
     }
+
+    void controlOpenedTransfer()
+    {
+        if(catchAndReleaseCommand.isOpen)
+        {
+            double y = -gamepad2.left_stick_y;
+
+            if(y != 0)
+            {
+                transferSystem.setUsePID(false);
+                //transferSystem.setHeightByPos(elevatorSystem.currentPos());
+            }
+            else
+            {
+                transferSystem.setUsePID(true);
+            }
+        }
+    }
+
 
 
 }
