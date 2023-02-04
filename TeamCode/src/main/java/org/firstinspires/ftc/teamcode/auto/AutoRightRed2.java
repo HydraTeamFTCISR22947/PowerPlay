@@ -30,9 +30,9 @@ public class AutoRightRed2 extends LinearOpMode {
 
     public static double startPosX = 36, startPosY = -66, startPosAngle = 180;
     public static double startConeStrafe1 = 58.8, startConeStrafe2 = 19.25, startConeForward = 4.75;
-    public static double intakePose1X = 35, intakePose1Y = -16, intakePose1Angle = 180;
-    public static double intakePose2X = 55, intakePose2Y = -12.5, intakePose2Angle = 180;
-    public static double conePosX = 27, posConeY = -20, posConeAngle = -135;
+    public static double intakePose1X = 35, intakePose1Y = -20, intakePose1Angle = 180;
+    public static double intakePose2X = 58, intakePose2Y = -14.5, intakePose2Angle = 180;
+    public static double posConeX = 30, posConeY = -27, posConeAngle = 185;
     public static double DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33;
     public static double PARK_ASSIST = 36, TARGET_ZONE = 24;
 
@@ -82,30 +82,40 @@ public class AutoRightRed2 extends LinearOpMode {
                 .waitSeconds(DELIVERY_WAIT_TIME*2)
                 .build();
 
-        TrajectorySequence place1 = drivetrain.trajectorySequenceBuilder(preload.end())
+        TrajectorySequence place1 = drivetrain.trajectorySequenceBuilder(cycle1.end())
                 .setReversed(true)
                 .lineTo(new Vector2d(intakePose1X, intakePose1Y))
                 .addTemporalMarker(autoCatch.readyToRelease())
-                .splineToLinearHeading(new Pose2d(intakePose2X, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(posConeX, posConeY, Math.toRadians(posConeAngle)), Math.toRadians(0))
                 .waitSeconds(DELIVERY_WAIT_TIME * 2)
                 .addTemporalMarker(release.releaseCone())
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .build();
+//
+//        drive.trajectorySequenceBuilder(new Pose2d(58, -16.5, Math.toRadians(180)))
+//                .setReversed(true)
+//                //.splineToLinearHeading(new Pose2d(35, -20, Math.toRadians(180)), Math.toRadians(0))
+//                ////drive.trajectorySequenceBuilder(new Pose2d(27, -25, Math.toRadians(180)))
+//                //.lineTo(new Vector2d(27, -25))
+//                //.splineToLinearHeading(new Pose2d(58, -16.5, Math.toRadians(180)), Math.toRadians(0))
+//                .lineTo(new Vector2d(35, -16))
+//                .splineToLinearHeading(new Pose2d(27, -27, Math.toRadians(180)), Math.toRadians(0))
+//                .build());
 
         TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
-                .strafeRight(PARK_ASSIST)
+                .strafeLeft(PARK_ASSIST)
                 .back(TARGET_ZONE)
                 .build();
 
         TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
-                .strafeRight(PARK_ASSIST)
+                .strafeLeft(PARK_ASSIST)
                 .build();
 
         TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
-                .strafeRight(PARK_ASSIST)
+                .strafeLeft(PARK_ASSIST)
                 .forward(TARGET_ZONE)
                 .build();
 
@@ -123,7 +133,7 @@ public class AutoRightRed2 extends LinearOpMode {
         drivetrain.followTrajectorySequence(preload);
         drivetrain.followTrajectorySequence(cycle1);
         drivetrain.followTrajectorySequence(place1);
-        drivetrain.followTrajectorySequence(park2);
+        //drivetrain.followTrajectorySequence(park2);
     }
 }
 
