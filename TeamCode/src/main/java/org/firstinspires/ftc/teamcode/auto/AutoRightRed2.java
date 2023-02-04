@@ -32,9 +32,11 @@ public class AutoRightRed2 extends LinearOpMode {
     public static double startConeStrafe1 = 58.8, startConeStrafe2 = 19.25, startConeForward = 4.75;
     public static double intakePose1X = 35, intakePose1Y = -20, intakePose1Angle = 180;
     public static double intakePose2X = 58, intakePose2Y = -14.5, intakePose2Angle = 180;
-    public static double posConeX = 30, posConeY = -27, posConeAngle = 185;
+    public static double posConeX = 32, posConeY = -27, posConeAngle = 185;
     public static double DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33;
-    public static double PARK_ASSIST = 36, TARGET_ZONE = 24;
+    public static double PARK_ASSIST = 23, TARGET_ZONE = 24;
+
+    public static int posConeHelperX1 = 1, posConeHelperX2 = 3;
 
     AutoRelease release;
     AutoCatch autoCatch;
@@ -78,6 +80,7 @@ public class AutoRightRed2 extends LinearOpMode {
                 .addTemporalMarker(release.readyToRelease())
                 .splineToLinearHeading(new Pose2d(intakePose2X, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
                 .waitSeconds(DELIVERY_WAIT_TIME)
+                .addTemporalMarker(autoCatch.intakeFirstCone())
                 .addTemporalMarker(autoCatch.catchCone())
                 .waitSeconds(DELIVERY_WAIT_TIME*2)
                 .build();
@@ -91,7 +94,49 @@ public class AutoRightRed2 extends LinearOpMode {
                 .addTemporalMarker(release.releaseCone())
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .build();
-//
+
+
+        TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(preload.end())
+                .lineTo(new Vector2d(intakePose1X, intakePose1Y))
+                .addTemporalMarker(release.readyToRelease())
+                .splineToLinearHeading(new Pose2d(intakePose2X, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
+                .waitSeconds(DELIVERY_WAIT_TIME)
+                .addTemporalMarker(autoCatch.intakeSecondCone())
+                .addTemporalMarker(autoCatch.catchCone())
+                .waitSeconds(DELIVERY_WAIT_TIME*2)
+                .build();
+
+        TrajectorySequence place2 = drivetrain.trajectorySequenceBuilder(cycle2.end())
+                .setReversed(true)
+                .lineTo(new Vector2d(intakePose1X, intakePose1Y))
+                .addTemporalMarker(autoCatch.readyToRelease())
+                .splineToLinearHeading(new Pose2d(posConeX + posConeHelperX1, posConeY, Math.toRadians(posConeAngle)), Math.toRadians(0))
+                .waitSeconds(DELIVERY_WAIT_TIME * 2)
+                .addTemporalMarker(release.releaseCone())
+                .waitSeconds(DELIVERY_WAIT_TIME)
+                .build();
+
+        TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(preload.end())
+                .lineTo(new Vector2d(intakePose1X, intakePose1Y))
+                .addTemporalMarker(release.readyToRelease())
+                .splineToLinearHeading(new Pose2d(intakePose2X + posConeHelperX2, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
+                .waitSeconds(DELIVERY_WAIT_TIME)
+                .addTemporalMarker(autoCatch.intakeThirdCone())
+                .addTemporalMarker(autoCatch.catchCone())
+                .waitSeconds(DELIVERY_WAIT_TIME*2)
+                .build();
+
+        TrajectorySequence place3 = drivetrain.trajectorySequenceBuilder(cycle2.end())
+                .setReversed(true)
+                .lineTo(new Vector2d(intakePose1X, intakePose1Y))
+                .addTemporalMarker(autoCatch.readyToRelease())
+                .splineToLinearHeading(new Pose2d(posConeX, posConeY, Math.toRadians(posConeAngle)), Math.toRadians(0))
+                .waitSeconds(DELIVERY_WAIT_TIME * 2)
+                .addTemporalMarker(release.releaseCone())
+                .waitSeconds(DELIVERY_WAIT_TIME)
+                .build();
+
+        //
 //        drive.trajectorySequenceBuilder(new Pose2d(58, -16.5, Math.toRadians(180)))
 //                .setReversed(true)
 //                //.splineToLinearHeading(new Pose2d(35, -20, Math.toRadians(180)), Math.toRadians(0))
@@ -131,9 +176,17 @@ public class AutoRightRed2 extends LinearOpMode {
         transferSystem.highOppositePos();
 
         drivetrain.followTrajectorySequence(preload);
+
         drivetrain.followTrajectorySequence(cycle1);
         drivetrain.followTrajectorySequence(place1);
-        //drivetrain.followTrajectorySequence(park2);
+
+        drivetrain.followTrajectorySequence(cycle2);
+        drivetrain.followTrajectorySequence(place2);
+
+        drivetrain.followTrajectorySequence(cycle3);
+        drivetrain.followTrajectorySequence(place3);
+
+        drivetrain.followTrajectorySequence(park2);
     }
 }
 

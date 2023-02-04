@@ -15,6 +15,8 @@ public class AutoCatch implements AutoRobotCommand {
     RotationServo rotationServo;
     ClawServo clawServo;
 
+    public static int firstConeElevatorHight = 0, coneElevatorOffset = 0;
+
     public MarkerCallback catchCone() {
         return new MarkerCallback()
         {
@@ -24,6 +26,42 @@ public class AutoCatch implements AutoRobotCommand {
             }
         };
     }
+
+    public MarkerCallback intakeFirstCone() {
+        return new MarkerCallback()
+        {
+            @Override
+            public void onMarkerReached(){
+                elevatorSystem.goToPos(firstConeElevatorHight);
+                transferSystem.pickUpOpposite();
+                rotationServo.pickUpPos();
+            }
+        };
+    }
+    public MarkerCallback intakeSecondCone() {
+        return new MarkerCallback()
+        {
+            @Override
+            public void onMarkerReached(){
+                elevatorSystem.goToPos(firstConeElevatorHight + coneElevatorOffset);
+                transferSystem.pickUpOpposite();
+                rotationServo.pickUpPos();
+            }
+        };
+    }
+
+    public MarkerCallback intakeThirdCone() {
+        return new MarkerCallback()
+        {
+            @Override
+            public void onMarkerReached(){
+                elevatorSystem.goToPos(firstConeElevatorHight + coneElevatorOffset * 2);
+                transferSystem.pickUpOpposite();
+                rotationServo.pickUpPos();
+            }
+        };
+    }
+
 
     public MarkerCallback readyToRelease() {
         return new MarkerCallback()
