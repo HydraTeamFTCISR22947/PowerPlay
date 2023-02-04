@@ -7,8 +7,7 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
-public class MeepMeepREDRIGHT {
-    public static double startPosX = 36, startPosY = -66, startPosAngle = 180;
+public class Test {
 
 
     public static void main(String[] args) {
@@ -19,11 +18,9 @@ public class MeepMeepREDRIGHT {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(130), Math.toRadians(130), 13.23)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(startPosX, startPosY, Math.toRadians(startPosAngle)))
-                                .strafeRight(45)
-                                .forward(8)
-                                .lineToLinearHeading(new Pose2d(35, -12, Math.toRadians(180)))
-                                .splineToLinearHeading(new Pose2d(60, -12, Math.toRadians(180)), Math.toRadians(180))
+                        drive.trajectorySequenceBuilder(new Pose2d(27, -20, Math.toRadians(-135)))
+                                .lineTo(new Vector2d(30, -16))
+                                .splineToSplineHeading(new Pose2d(55, -12.5, Math.toRadians(180)), Math.toRadians(-5))
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)

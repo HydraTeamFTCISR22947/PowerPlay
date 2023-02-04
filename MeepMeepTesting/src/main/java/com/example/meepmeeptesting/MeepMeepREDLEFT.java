@@ -15,7 +15,6 @@ public class MeepMeepREDLEFT {
         double startConeDeliveryPoseX = -36, startConeDeliveryPoseY = 0, startConeDeliveryAngle = 0;
         double coneDeliveryPoseX = -32, coneDeliveryPoseY = -12, coneDeliveryAngle = 53;
         double coneIntakePoseX = -56, coneIntakePoseY = -12, coneIntakeAngle = 0;
-
         double offsetBetweenIntakes = 1;
         double DELIVERY_WAIT_TIME = 2, INTAKE_WAIT_TIME = 4;
 

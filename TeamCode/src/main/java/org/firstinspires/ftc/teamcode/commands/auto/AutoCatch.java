@@ -15,15 +15,30 @@ public class AutoCatch implements AutoRobotCommand {
     RotationServo rotationServo;
     ClawServo clawServo;
 
-    public MarkerCallback releaseCone() {
+    public MarkerCallback catchCone() {
         return new MarkerCallback()
         {
             @Override
             public void onMarkerReached(){
-                clawServo.openClaw();
+                clawServo.closeClaw();
             }
         };
     }
+
+    public MarkerCallback readyToRelease() {
+        return new MarkerCallback()
+        {
+            @Override
+            public void onMarkerReached(){
+                transferSystem.highOppositePos();
+                elevatorSystem.midRod();
+                rotationServo.pickUpPos();
+            }
+        };
+    }
+
+
+
 
     public AutoCatch(HardwareMap hardwareMap) {
         initCommand(hardwareMap);

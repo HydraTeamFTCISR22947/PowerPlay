@@ -26,7 +26,7 @@ import java.util.Arrays;
 
 @Config
 @Autonomous(name = "Auto Right Red", group = "auto")
-public class AutoRightRed extends LinearOpMode {
+public class AutoRightRed1 extends LinearOpMode {
 
     public static double startPosX = 36, startPosY = -66, startPosAngle = 180;
     public static double startConeStrafe1 = 58.8, startConeStrafe2 = 19.25, startConeForward = 4.75;
@@ -55,49 +55,6 @@ public class AutoRightRed extends LinearOpMode {
         transferSystem = new TransferSystem(hardwareMap);
         rotationServo = new RotationServo(hardwareMap);
 
-        MarkerCallback releaseCone2 =  new MarkerCallback()
-        {
-            @Override
-            public void onMarkerReached(){
-                transferSystem.pickUpOpposite();
-                elevatorSystem.baseLevel();
-                rotationServo.releasePos();
-            }
-        };
-
-        MarkerCallback getCone =  new MarkerCallback()
-        {
-            @Override
-            public void onMarkerReached(){
-                rotationServo.releasePos();
-            }
-        };
-
-        MarkerCallback getCone2 =  new MarkerCallback()
-        {
-            @Override
-            public void onMarkerReached(){
-                clawServo.closeClaw();
-            }
-        };
-
-        MarkerCallback getCone3 =  new MarkerCallback()
-        {
-            @Override
-            public void onMarkerReached(){
-                elevatorSystem.midRod();
-            }
-        };
-
-        MarkerCallback placeCone =  new MarkerCallback()
-        {
-            @Override
-            public void onMarkerReached(){
-                transferSystem.highOppositePos();
-                elevatorSystem.midRod();
-                rotationServo.pickUpPos();
-            }
-        };
 
         drivetrain.setPoseEstimate(startPose);
 
@@ -118,17 +75,14 @@ public class AutoRightRed extends LinearOpMode {
 
         TrajectorySequence cycle1 = drivetrain.trajectorySequenceBuilder(preload.end())
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
-                .addTemporalMarker(releaseCone2)
+                .addTemporalMarker(release.readyToRelease())
                 .lineToLinearHeading(new Pose2d(intakePose2X, intakePose2Y, Math.toRadians(intakePose2Angle)))
-                .addTemporalMarker(getCone)
                 .waitSeconds(DELIVERY_WAIT_TIME)
-                .addTemporalMarker(getCone2)
+                .addTemporalMarker(autoCatch.catchCone())
                 .waitSeconds(DELIVERY_WAIT_TIME*2)
-                .addTemporalMarker(getCone3)
-                .waitSeconds(DELIVERY_WAIT_TIME)
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
                 .lineToLinearHeading(new Pose2d(conePosX, posConeY, Math.toRadians(posConeAngle)))
-                .addTemporalMarker(placeCone)
+                .addTemporalMarker(autoCatch.readyToRelease())
                 .waitSeconds(RELEASE_WAIT_TIME * 2)
                 .addTemporalMarker(release.releaseCone())
                 .waitSeconds(RELEASE_WAIT_TIME)
@@ -136,17 +90,14 @@ public class AutoRightRed extends LinearOpMode {
 
         TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(cycle1.end())
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
-                .addTemporalMarker(releaseCone2)
+                .addTemporalMarker(release.readyToRelease())
                 .lineToLinearHeading(new Pose2d(intakePose2X, intakePose2Y, Math.toRadians(intakePose2Angle)))
-                .addTemporalMarker(getCone)
                 .waitSeconds(DELIVERY_WAIT_TIME)
-                .addTemporalMarker(getCone2)
+                .addTemporalMarker(autoCatch.catchCone())
                 .waitSeconds(DELIVERY_WAIT_TIME*2)
-                .addTemporalMarker(getCone3)
-                .waitSeconds(DELIVERY_WAIT_TIME)
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
                 .lineToLinearHeading(new Pose2d(conePosX, posConeY, Math.toRadians(posConeAngle)))
-                .addTemporalMarker(placeCone)
+                .addTemporalMarker(autoCatch.readyToRelease())
                 .waitSeconds(RELEASE_WAIT_TIME * 2)
                 .addTemporalMarker(release.releaseCone())
                 .waitSeconds(RELEASE_WAIT_TIME)
@@ -154,17 +105,14 @@ public class AutoRightRed extends LinearOpMode {
 
         TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(cycle2.end())
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
-                .addTemporalMarker(releaseCone2)
+                .addTemporalMarker(release.readyToRelease())
                 .lineToLinearHeading(new Pose2d(intakePose2X, intakePose2Y, Math.toRadians(intakePose2Angle)))
-                .addTemporalMarker(getCone)
                 .waitSeconds(DELIVERY_WAIT_TIME)
-                .addTemporalMarker(getCone2)
+                .addTemporalMarker(autoCatch.catchCone())
                 .waitSeconds(DELIVERY_WAIT_TIME*2)
-                .addTemporalMarker(getCone3)
-                .waitSeconds(DELIVERY_WAIT_TIME)
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
                 .lineToLinearHeading(new Pose2d(conePosX, posConeY, Math.toRadians(posConeAngle)))
-                .addTemporalMarker(placeCone)
+                .addTemporalMarker(autoCatch.readyToRelease())
                 .waitSeconds(RELEASE_WAIT_TIME * 2)
                 .addTemporalMarker(release.releaseCone())
                 .waitSeconds(RELEASE_WAIT_TIME)

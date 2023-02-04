@@ -14,7 +14,7 @@ public class DriveCommand implements RobotCommand {
 
     public DriveCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, boolean isRed)
     {
-        redAlliance = isRed;
+        this.redAlliance = isRed;
         initCommand(hardwareMap, gamepad1, gamepad2, telemetry);
     }
 

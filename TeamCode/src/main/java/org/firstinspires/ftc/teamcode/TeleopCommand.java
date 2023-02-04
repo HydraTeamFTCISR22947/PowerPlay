@@ -18,12 +18,12 @@ public class TeleopCommand implements RobotCommand
 
     public TeleopCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, boolean isRed)
     {
-        redAlliance = isRed;
+        this.redAlliance = isRed;
         initCommand(hardwareMap, gamepad1, gamepad2, telemetry);
     }
 
     @Override
-    public void runCommand() throws Exception {
+    public void runCommand()  {
         driveCommand.runCommand();
         catchAndReleaseCommand.runCommand();
         manualFixingCommand.runCommand();
