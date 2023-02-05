@@ -31,9 +31,13 @@ public class ManualFixingCommand implements RobotCommand {
         gamepadHelper2.update();
 
         controlOpenedElevator();
+        controlOpenedTransfer();
 
+        flipHighAndTerminal();
+        flipPickup();
 
         userWantsBaseElevatorControl();
+        userWantsBaseTransferControl();
     }
 
     @Override
@@ -62,11 +66,11 @@ public class ManualFixingCommand implements RobotCommand {
             elevatorSystem.setUsePID(true);
         }
 
-        if(gamepadHelper2.rightBumperOnce() && elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL)
+        if(gamepadHelper2.dpadUpOnce() && elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL)
         {
             elevatorSystem.setHeightByPos(elevatorSystem.currentPos() + elevatorSystem.INCREMENT);
         }
-        else if(gamepadHelper2.leftBumperOnce() && elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL)
+        else if(gamepadHelper2.dpadDownOnce() && elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL)
         {
             elevatorSystem.setHeightByPos(elevatorSystem.currentPos() - elevatorSystem.INCREMENT);
         }
@@ -77,12 +81,12 @@ public class ManualFixingCommand implements RobotCommand {
     {
         double y = -gamepad2.left_stick_y;
 
-        if(y != 0 && (transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP || transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP_OPPOSITE))
+        if(y != 0 && (transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP || transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP_EXPANSION))
         {
             transferSystem.setUsePID(false);
-            //transferSystem.setHeightByPos(transferSystem.currentPos());
+            transferSystem.setHeightByPos(transferSystem.currentPos());
         }
-        else if((transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP || transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP_OPPOSITE) && y == 0)
+        else if((transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP || transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP_EXPANSION) && y == 0)
         {
             transferSystem.setUsePID(true);
         }
@@ -95,11 +99,11 @@ public class ManualFixingCommand implements RobotCommand {
         {
             double y = -gamepad2.left_stick_y;
 
-            if(gamepadHelper2.rightBumperOnce())
+            if(gamepadHelper2.dpadUpOnce())
             {
                 elevatorSystem.setHeightByPos(elevatorSystem.currentPos() + elevatorSystem.INCREMENT);
             }
-            else if(gamepadHelper2.leftBumperOnce())
+            else if(gamepadHelper2.dpadDownOnce())
             {
                 elevatorSystem.setHeightByPos(elevatorSystem.currentPos() - elevatorSystem.INCREMENT);
             }
@@ -125,7 +129,7 @@ public class ManualFixingCommand implements RobotCommand {
             if(y != 0)
             {
                 transferSystem.setUsePID(false);
-                //transferSystem.setHeightByPos(elevatorSystem.currentPos());
+                transferSystem.setHeightByPos(transferSystem.currentPos());
             }
             else
             {
@@ -134,6 +138,32 @@ public class ManualFixingCommand implements RobotCommand {
         }
     }
 
+    void flipPickup()
+    {
+        if(gamepadHelper2.leftBumperOnce())
+        {
+            if (catchAndReleaseCommand.getPickUpTarget() == CatchAndReleaseCommand.PickUpTarget.EXPANSION)
+            {
+                catchAndReleaseCommand.setPickUpTarget(CatchAndReleaseCommand.PickUpTarget.CONTROL);
+            } else
+            {
+                catchAndReleaseCommand.setPickUpTarget(CatchAndReleaseCommand.PickUpTarget.EXPANSION);
+            }
+        }
+    }
 
+    void flipHighAndTerminal()
+    {
+        if(gamepadHelper2.rightBumperOnce())
+        {
+            if (catchAndReleaseCommand.getHighTarget() == CatchAndReleaseCommand.HighTarget.EXPANSION)
+            {
+                catchAndReleaseCommand.setHighTarget(CatchAndReleaseCommand.HighTarget.CONTROL);
+            } else
+            {
+                catchAndReleaseCommand.setHighTarget(CatchAndReleaseCommand.HighTarget.EXPANSION);
+            }
+        }
+    }
 
 }

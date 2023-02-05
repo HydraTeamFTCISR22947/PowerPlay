@@ -173,7 +173,7 @@ public class AutoRightRed2 extends LinearOpMode {
         elevatorSystem.goToPos(elevatorSystem.BASE_HEIGHT);
         elevatorSystem.midRod();
         rotationServo.pickUpPos();
-        transferSystem.highOppositePos();
+        transferSystem.highExpansionPos();
 
         drivetrain.followTrajectorySequence(preload);
 
