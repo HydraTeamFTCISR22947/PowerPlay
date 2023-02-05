@@ -26,7 +26,7 @@ import java.util.Arrays;
 
 @Config
 @Autonomous(name = "Auto Right Red Test 2", group = "auto")
-public class AutoRightRed2 extends LinearOpMode {
+public class AutoRightRed extends LinearOpMode {
 
     public static double startPosX = 36, startPosY = -66, startPosAngle = 180;
     public static double startConeStrafe1 = 58.8, startConeStrafe2 = 19.25, startConeForward = 4.75;
@@ -137,23 +137,24 @@ public class AutoRightRed2 extends LinearOpMode {
                 .build();
 
 
-
         TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
+                .addTemporalMarker(autoCatch.readyToRelease())
                 .strafeLeft(PARK_ASSIST)
                 .back(TARGET_ZONE)
                 .build();
 
         TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
+                .addTemporalMarker(autoCatch.readyToRelease())
                 .strafeLeft(PARK_ASSIST)
                 .build();
 
         TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
+                .addTemporalMarker(autoCatch.readyToRelease())
                 .strafeLeft(PARK_ASSIST)
                 .forward(TARGET_ZONE)
-                .addTemporalMarker(autoCatch.readyToRelease())
                 .build();
 
         if (isStopRequested()) {return;}

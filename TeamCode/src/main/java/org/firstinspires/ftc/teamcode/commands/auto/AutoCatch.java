@@ -15,7 +15,7 @@ public class AutoCatch implements AutoRobotCommand {
     RotationServo rotationServo;
     ClawServo clawServo;
 
-    public static int firstConeElevatorHight = 0, coneElevatorOffset = 0;
+    public static int firstConeElevatorHight = 100, coneElevatorOffset = 20;
 
     public MarkerCallback catchCone() {
         return new MarkerCallback()
