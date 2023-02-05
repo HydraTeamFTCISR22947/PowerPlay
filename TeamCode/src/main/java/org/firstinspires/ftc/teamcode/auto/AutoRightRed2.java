@@ -136,16 +136,7 @@ public class AutoRightRed2 extends LinearOpMode {
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .build();
 
-        //
-//        drive.trajectorySequenceBuilder(new Pose2d(58, -16.5, Math.toRadians(180)))
-//                .setReversed(true)
-//                //.splineToLinearHeading(new Pose2d(35, -20, Math.toRadians(180)), Math.toRadians(0))
-//                ////drive.trajectorySequenceBuilder(new Pose2d(27, -25, Math.toRadians(180)))
-//                //.lineTo(new Vector2d(27, -25))
-//                //.splineToLinearHeading(new Pose2d(58, -16.5, Math.toRadians(180)), Math.toRadians(0))
-//                .lineTo(new Vector2d(35, -16))
-//                .splineToLinearHeading(new Pose2d(27, -27, Math.toRadians(180)), Math.toRadians(0))
-//                .build());
+
 
         TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
@@ -162,6 +153,7 @@ public class AutoRightRed2 extends LinearOpMode {
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
                 .strafeLeft(PARK_ASSIST)
                 .forward(TARGET_ZONE)
+                .addTemporalMarker(autoCatch.readyToRelease())
                 .build();
 
         if (isStopRequested()) {return;}
