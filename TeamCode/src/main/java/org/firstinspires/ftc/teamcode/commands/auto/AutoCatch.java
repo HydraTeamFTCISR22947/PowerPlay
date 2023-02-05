@@ -33,7 +33,7 @@ public class AutoCatch implements AutoRobotCommand {
             @Override
             public void onMarkerReached(){
                 elevatorSystem.goToPos(firstConeElevatorHight);
-                transferSystem.pickUpOpposite();
+                transferSystem.pickUpExpansion();
                 rotationServo.pickUpPos();
             }
         };
@@ -44,7 +44,7 @@ public class AutoCatch implements AutoRobotCommand {
             @Override
             public void onMarkerReached(){
                 elevatorSystem.goToPos(firstConeElevatorHight + coneElevatorOffset);
-                transferSystem.pickUpOpposite();
+                transferSystem.pickUpExpansion();
                 rotationServo.pickUpPos();
             }
         };
@@ -56,7 +56,7 @@ public class AutoCatch implements AutoRobotCommand {
             @Override
             public void onMarkerReached(){
                 elevatorSystem.goToPos(firstConeElevatorHight + coneElevatorOffset * 2);
-                transferSystem.pickUpOpposite();
+                transferSystem.pickUpExpansion();
                 rotationServo.pickUpPos();
             }
         };
@@ -68,7 +68,7 @@ public class AutoCatch implements AutoRobotCommand {
         {
             @Override
             public void onMarkerReached(){
-                transferSystem.highOppositePos();
+                transferSystem.highExpansionPos();
                 elevatorSystem.midRod();
                 rotationServo.pickUpPos();
             }

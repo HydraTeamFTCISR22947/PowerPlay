@@ -16,9 +16,11 @@ public class TransferSystem
 {
     // set transfer levels values
     public static double PICK_UP = 70;
-    public static double HIGH_OPPOSITE = 260;
+    public static double PICKUP_EXPANSION = 680;
     public static double HIGH = 430;
-    public static double PICKUP_OPPOSITE = 680;
+    public static double HIGH_EXPANSION = 260;
+    public static double TERMINAL = 85;
+    public static double TERMINAL_EXPANSION = 670;
 
     public static double TICKS_PER_REV = 751.8;
     public static double TOTAL_DEGREES = 360;      // total engine spin degrees
@@ -33,8 +35,10 @@ public class TransferSystem
     // enum for transfer levels
     public enum TransferLevels {
         PICK_UP,
-        PICK_UP_OPPOSITE,
-        HIGH_OPPOSITE,
+        PICK_UP_EXPANSION,
+        TERMINAL,
+        TERMINAL_EXPANSION,
+        HIGH_EXPANSION,
         HIGH
     }
 
@@ -57,17 +61,23 @@ public class TransferSystem
             switch (transferLevel)
             // set levels
             {
-                case HIGH_OPPOSITE:
-                    target = HIGH_OPPOSITE;
+                case HIGH_EXPANSION:
+                    target = HIGH_EXPANSION;
                     break;
-                case PICK_UP_OPPOSITE:
-                    target = PICKUP_OPPOSITE;
+                case PICK_UP_EXPANSION:
+                    target = PICKUP_EXPANSION;
                     break;
                 case PICK_UP:
                     target = PICK_UP;
                     break;
                 case HIGH:
                     target = HIGH;
+                    break;
+                case TERMINAL:
+                    target = TERMINAL;
+                    break;
+                case TERMINAL_EXPANSION:
+                    target = TERMINAL_EXPANSION;
                     break;
             }
 
@@ -100,6 +110,11 @@ public class TransferSystem
         return (int)Math.round((TICKS_PER_REV * GEAR_RATIO) / (TOTAL_DEGREES / degrees));
     }
 
+    public static double encoderTicksToDegrees(int ticks)
+    {
+        return (TOTAL_DEGREES * ticks) / (TICKS_PER_REV * GEAR_RATIO);
+    }
+
     public static TransferLevels getTransferLevel() {
         return transferLevel;
     }
@@ -113,45 +128,18 @@ public class TransferSystem
         return this.motor_transfer;
     }
 
-    public static void setHIGH(double HIGH) {
-        TransferSystem.HIGH = HIGH;
-    }
-
     public double getTarget() {
         return target;
     }
 
-    public static double getPickUp() {
-        return PICK_UP;
-    }
-
-    public static void setPickUp(double pickUp) {
-        PICK_UP = pickUp;
-    }
-
-    public static double getHIGH() {
-        return HIGH;
-    }
-
-    public void pickUp() {
-        motor_transfer.setTargetPosition(degreesToEncoderTicks(PICK_UP));
-        motor_transfer.setPower(power);
-        motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-    public void pickUpOpposite() {
-        motor_transfer.setTargetPosition(degreesToEncoderTicks(PICKUP_OPPOSITE));
+    public void pickUpExpansion() {
+        motor_transfer.setTargetPosition(degreesToEncoderTicks(PICKUP_EXPANSION));
         motor_transfer.setPower(power);
         motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void highPos() {
-        motor_transfer.setTargetPosition(degreesToEncoderTicks(HIGH));
-        motor_transfer.setPower(power);
-        motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
-    public void highOppositePos() {
-        motor_transfer.setTargetPosition(degreesToEncoderTicks(HIGH_OPPOSITE));
+    public void highExpansionPos() {
+        motor_transfer.setTargetPosition(degreesToEncoderTicks(HIGH_EXPANSION));
         motor_transfer.setPower(power);
         motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
@@ -163,5 +151,30 @@ public class TransferSystem
     public int currentPos()
     {
         return motor_transfer.getCurrentPosition();
+    }
+
+    public void setHeightByPos(int pos)
+    {
+        switch (transferLevel)
+        {
+            case TERMINAL:
+                TERMINAL = encoderTicksToDegrees(pos);
+                break;
+            case TERMINAL_EXPANSION:
+                TERMINAL_EXPANSION = encoderTicksToDegrees(pos);
+                break;
+            case HIGH:
+                HIGH = encoderTicksToDegrees(pos);
+                break;
+            case HIGH_EXPANSION:
+                HIGH_EXPANSION = encoderTicksToDegrees(pos);
+                break;
+            case PICK_UP:
+                PICK_UP = encoderTicksToDegrees(pos);
+                break;
+            case PICK_UP_EXPANSION:
+                PICKUP_EXPANSION = encoderTicksToDegrees(pos);
+                break;
+        }
     }
 }

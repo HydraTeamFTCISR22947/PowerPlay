@@ -30,7 +30,7 @@ public class AutoRelease implements AutoRobotCommand {
         {
             @Override
             public void onMarkerReached(){
-                transferSystem.pickUpOpposite();
+                transferSystem.pickUpExpansion();
                 elevatorSystem.baseLevel();
                 rotationServo.releasePos();
             }
