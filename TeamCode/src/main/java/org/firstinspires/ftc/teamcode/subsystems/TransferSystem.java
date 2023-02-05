@@ -17,8 +17,8 @@ public class TransferSystem
     // set transfer levels values
     public static double PICK_UP = 70;
     public static double PICKUP_EXPANSION = 665;
-    public static double HIGH = 430;
-    public static double HIGH_EXPANSION = 260;
+    public static double HIGH = 260;
+    public static double HIGH_EXPANSION = 430;
     public static double TERMINAL = 85;
     public static double TERMINAL_EXPANSION = 670;
 

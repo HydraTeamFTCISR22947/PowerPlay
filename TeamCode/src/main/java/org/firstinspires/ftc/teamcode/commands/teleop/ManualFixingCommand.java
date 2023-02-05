@@ -79,7 +79,7 @@ public class ManualFixingCommand implements RobotCommand {
 
     void userWantsBaseTransferControl()
     {
-        double y = -gamepad2.left_stick_y;
+        double y = -gamepad2.right_stick_y;
 
         if(y != 0 && (transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP || transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP_EXPANSION))
         {
@@ -124,7 +124,7 @@ public class ManualFixingCommand implements RobotCommand {
     {
         if(catchAndReleaseCommand.isOpen)
         {
-            double y = -gamepad2.left_stick_y;
+            double y = -gamepad2.right_stick_y;
 
             if(y != 0)
             {
