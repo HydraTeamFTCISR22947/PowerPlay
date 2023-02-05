@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.commands.auto;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.trajectory.MarkerCallback;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
@@ -9,13 +10,14 @@ import org.firstinspires.ftc.teamcode.subsystems.RotationServo;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 import org.firstinspires.ftc.teamcode.util.AutoRobotCommand;
 
+@Config
 public class AutoCatch implements AutoRobotCommand {
     ElevatorSystem elevatorSystem;
     TransferSystem transferSystem;
     RotationServo rotationServo;
     ClawServo clawServo;
 
-    public static int SECOND_STACK_ELEVATOR_HEIGHT = 100, OFFSET = 20;
+    public static int STACK_ELEVATOR_HEIGHT = 100, OFFSET_BETWEEN_EACH_CONE = 20;
 
     public MarkerCallback catchCone() {
         return new MarkerCallback()
@@ -32,7 +34,7 @@ public class AutoCatch implements AutoRobotCommand {
         {
             @Override
             public void onMarkerReached(){
-                elevatorSystem.goToPos(SECOND_STACK_ELEVATOR_HEIGHT);
+                elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT);
                 transferSystem.pickUpExpansion();
                 rotationServo.pickUpPos();
             }
@@ -43,7 +45,7 @@ public class AutoCatch implements AutoRobotCommand {
         {
             @Override
             public void onMarkerReached(){
-                elevatorSystem.goToPos(SECOND_STACK_ELEVATOR_HEIGHT + SECOND_STACK_ELEVATOR_HEIGHT * OFFSET);
+                elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 2);
                 transferSystem.pickUpExpansion();
                 rotationServo.pickUpPos();
             }
@@ -55,7 +57,7 @@ public class AutoCatch implements AutoRobotCommand {
         {
             @Override
             public void onMarkerReached(){
-                elevatorSystem.goToPos(SECOND_STACK_ELEVATOR_HEIGHT + OFFSET * 2);
+                elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 3);
                 transferSystem.pickUpExpansion();
                 rotationServo.pickUpPos();
             }

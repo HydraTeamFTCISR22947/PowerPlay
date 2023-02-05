@@ -19,10 +19,6 @@ public class ElevatorSystem {
     DcMotor mE;
 
     public static int BASE_HEIGHT = 0;
-    public static int SECOND_STACK_HEIGHT = 20;
-    public static int THIRD_STACK_HEIGHT = 40;
-    public static int FORTH_STACK_HEIGHT = 60;
-    public static int FIFTH_STACK_HEIGHT = 100;
     public static int LOW_HEIGHT = 300;
     public static int MID_HEIGHT = 1550;
     public static int HIGH_HEIGHT = 1850;
