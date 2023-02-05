@@ -31,10 +31,10 @@ public class AutoRightRed extends LinearOpMode {
     public static double startPosX = 36, startPosY = -66, startPosAngle = 180;
     public static double startConeStrafe1 = 58.8, startConeStrafe2 = 19.25, startConeForward = 4.75;
     public static double intakePose1X = 35, intakePose1Y = -20, intakePose1Angle = 180;
-    public static double intakePose2X = 58, intakePose2Y = -14.5, intakePose2Angle = 180;
-    public static double posConeX = 32, posConeY = -27, posConeAngle = 185;
-    public static double DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33;
-    public static double PARK_ASSIST = 23, TARGET_ZONE = 24;
+    public static double intakePose2X = 55, intakePose2Y = -14.5, intakePose2Angle = 180;
+    public static double posConeX = 32, posConeY = -29, posConeAngle = 185;
+    public static double DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33, INTAKE_WAIT_TIME = 0.75;
+    public static double PARK_ASSIST = 20, TARGET_ZONE = 24;
 
     public static int posConeHelperX1 = 1, posConeHelperX2 = 3;
 
@@ -81,6 +81,7 @@ public class AutoRightRed extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(intakePose2X, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .addTemporalMarker(autoCatch.intakeFirstCone())
+                .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCatch.catchCone())
                 .waitSeconds(DELIVERY_WAIT_TIME*2)
                 .build();
@@ -102,6 +103,7 @@ public class AutoRightRed extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(intakePose2X, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .addTemporalMarker(autoCatch.intakeSecondCone())
+                .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCatch.catchCone())
                 .waitSeconds(DELIVERY_WAIT_TIME*2)
                 .build();
@@ -122,8 +124,9 @@ public class AutoRightRed extends LinearOpMode {
                 .splineToLinearHeading(new Pose2d(intakePose2X + posConeHelperX2, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .addTemporalMarker(autoCatch.intakeThirdCone())
+                .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCatch.catchCone())
-                .waitSeconds(DELIVERY_WAIT_TIME*2)
+                .waitSeconds(DELIVERY_WAIT_TIME * 3)
                 .build();
 
         TrajectorySequence place3 = drivetrain.trajectorySequenceBuilder(cycle2.end())
@@ -146,8 +149,8 @@ public class AutoRightRed extends LinearOpMode {
 
         TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
-                .addTemporalMarker(autoCatch.readyToRelease())
                 .strafeLeft(PARK_ASSIST)
+                .addTemporalMarker(autoCatch.readyToRelease())
                 .build();
 
         TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place1.end())
@@ -180,6 +183,7 @@ public class AutoRightRed extends LinearOpMode {
         drivetrain.followTrajectorySequence(place3);
 
         drivetrain.followTrajectorySequence(park2);
+        elevatorSystem.baseLevel();
     }
 }
 

@@ -34,7 +34,10 @@ public class ElevatorTest extends LinearOpMode {
             {
                 elevatorSystem.baseLevel();
             }
-
+            else if(gamepadHelper1.dpadLeft())
+            {
+                elevatorSystem.goToPos(elevatorSystem.STACK_ELEVATOR_HEIGHT);
+            }
             telemetry.addData("pos", elevatorSystem.currentPos());
             telemetry.update();
         }

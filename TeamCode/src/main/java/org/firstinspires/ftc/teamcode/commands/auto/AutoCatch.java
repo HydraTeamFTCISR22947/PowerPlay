@@ -17,7 +17,7 @@ public class AutoCatch implements AutoRobotCommand {
     RotationServo rotationServo;
     ClawServo clawServo;
 
-    public static int STACK_ELEVATOR_HEIGHT = 100, OFFSET_BETWEEN_EACH_CONE = 20;
+    public static int STACK_ELEVATOR_HEIGHT = 450, OFFSET_BETWEEN_EACH_CONE = 80;
 
     public MarkerCallback catchCone() {
         return new MarkerCallback()
@@ -29,6 +29,18 @@ public class AutoCatch implements AutoRobotCommand {
         };
     }
 
+
+    public MarkerCallback parkReset() {
+        return new MarkerCallback()
+        {
+            @Override
+            public void onMarkerReached(){
+                elevatorSystem.baseLevel();
+                transferSystem.pickUpExpansion();
+                rotationServo.pickUpPos();
+            }
+        };
+    }
     public MarkerCallback intakeFirstCone() {
         return new MarkerCallback()
         {

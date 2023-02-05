@@ -31,9 +31,6 @@ public class TransferTest extends LinearOpMode {
             else if (gamepadHelper1.AOnce()) {
                 transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
             }
-            else if (gamepadHelper1.XOnce()) {
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP_EXPANSION);
-            }
              telemetry.addData("pos", transferSystem.getMotor().getCurrentPosition());
              telemetry.addData("target", transferSystem.getTarget());
              telemetry.addData("target in ticks", transferSystem.degreesToEncoderTicks(transferSystem.getTarget()));
