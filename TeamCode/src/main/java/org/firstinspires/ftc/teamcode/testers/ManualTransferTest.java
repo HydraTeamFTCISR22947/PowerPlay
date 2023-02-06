@@ -4,24 +4,23 @@ import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 
-import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
 @Config
-@TeleOp(name="Manual Elevator Test", group="Tests")
-public class ElevatorTestManual extends LinearOpMode {
-    DcMotor mE;
+@TeleOp(name="Manual Transfer Test", group="Tests")
+public class ManualTransferTest extends LinearOpMode {
+    DcMotor motor_transfer;
     public static double power = 0.1;
 
     @Override
     public void runOpMode()
     {
-        this.mE = hardwareMap.get(DcMotor.class, "mE");
-        this.mE.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.mE.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        this.mE.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        this.motor_transfer = hardwareMap.get(DcMotorEx.class, "motor_transfer");
+        this.motor_transfer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        this.motor_transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        this.motor_transfer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         GamepadHelper gamepadHelper1 = new GamepadHelper(gamepad1);
 
@@ -34,18 +33,18 @@ public class ElevatorTestManual extends LinearOpMode {
             gamepadHelper1.update();
             if(gamepadHelper1.dpadUp())
             {
-                mE.setPower(power);
+                motor_transfer.setPower(power);
             }
             else if(gamepadHelper1.dpadDown())
             {
-                mE.setPower(-power);
+                motor_transfer.setPower(-power);
             }
             else
             {
-                mE.setPower(0);
+                motor_transfer.setPower(0);
             }
 
-            telemetry.addData("pos: ", mE.getCurrentPosition());
+            telemetry.addData("pos: ", motor_transfer.getCurrentPosition());
             telemetry.update();
         }
     }

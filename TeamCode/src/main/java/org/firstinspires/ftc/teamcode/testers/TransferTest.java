@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 
-@TeleOp(name="Transfer Test First", group="Tests")
+@TeleOp(name="Transfer Test", group="Tests")
 public class TransferTest extends LinearOpMode {
     @Override
     public void runOpMode()

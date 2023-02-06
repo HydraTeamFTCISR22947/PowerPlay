@@ -20,10 +20,9 @@ public class AutoCatch implements AutoRobotCommand {
     public static int STACK_ELEVATOR_HEIGHT = 450, OFFSET_BETWEEN_EACH_CONE = 80;
 
     public MarkerCallback catchCone() {
-        return new MarkerCallback()
-        {
+        return new MarkerCallback() {
             @Override
-            public void onMarkerReached(){
+            public void onMarkerReached() {
                 clawServo.closeClaw();
             }
         };
@@ -31,32 +30,31 @@ public class AutoCatch implements AutoRobotCommand {
 
 
     public MarkerCallback parkReset() {
-        return new MarkerCallback()
-        {
+        return new MarkerCallback() {
             @Override
-            public void onMarkerReached(){
+            public void onMarkerReached() {
                 elevatorSystem.baseLevel();
                 transferSystem.pickUpExpansion();
                 rotationServo.pickUpPos();
             }
         };
     }
+
     public MarkerCallback intakeFirstCone() {
-        return new MarkerCallback()
-        {
+        return new MarkerCallback() {
             @Override
-            public void onMarkerReached(){
+            public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT);
                 transferSystem.pickUpExpansion();
                 rotationServo.pickUpPos();
             }
         };
     }
+
     public MarkerCallback intakeSecondCone() {
-        return new MarkerCallback()
-        {
+        return new MarkerCallback() {
             @Override
-            public void onMarkerReached(){
+            public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 2);
                 transferSystem.pickUpExpansion();
                 rotationServo.pickUpPos();
@@ -65,10 +63,9 @@ public class AutoCatch implements AutoRobotCommand {
     }
 
     public MarkerCallback intakeThirdCone() {
-        return new MarkerCallback()
-        {
+        return new MarkerCallback() {
             @Override
-            public void onMarkerReached(){
+            public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 3);
                 transferSystem.pickUpExpansion();
                 rotationServo.pickUpPos();
@@ -78,17 +75,22 @@ public class AutoCatch implements AutoRobotCommand {
 
 
     public MarkerCallback readyToRelease() {
-        return new MarkerCallback()
-        {
+        return new MarkerCallback() {
             @Override
-            public void onMarkerReached(){
-                transferSystem.highExpansionPos();
+            public void onMarkerReached() {
+                transferSystem.highPos();
                 elevatorSystem.midRod();
                 rotationServo.pickUpPos();
             }
         };
     }
 
+    public MarkerCallback elevatorIntake = new MarkerCallback() {
+        @Override
+        public void onMarkerReached() {
+            elevatorSystem.midRod();
+        }
+    };
 
 
 

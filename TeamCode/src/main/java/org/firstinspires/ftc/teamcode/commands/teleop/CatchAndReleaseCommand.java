@@ -21,9 +21,9 @@ public class CatchAndReleaseCommand implements RobotCommand {
     Gamepad gamepad1, gamepad2;
     GamepadHelper gamepadHelper1;
     GamepadHelper gamepadHelper2;
-    boolean pressed = false;
+    boolean pressed = false, aboutToOpen = false;
     double offset = 0;
-    public static double delay = 0.5;
+    public static double delay = 0.5, lastOpened = 0, OPEN_BACK_DELAY = 0.5;
     boolean isOpen = false;
 
     public enum CatchingState {
@@ -71,12 +71,27 @@ public class CatchAndReleaseCommand implements RobotCommand {
         switch (catchingState)
         {
             case RESET_CATCH:
+                aboutToOpen = false;
                 transferPickUp();
 
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
-                rotationServo.pickUpPos();
+
+                switch (pickUpTarget)
+                {
+                    case EXPANSION:
+                        rotationServo.pickUpPosExpansion();
+                        break;
+                    case CONTROL:
+                        rotationServo.pickUpPos();
+                        break;
+                }
+
                 isOpen = false;
-                clawServo.openClaw();
+
+                if(timer.time() - lastOpened >= OPEN_BACK_DELAY)
+                {
+                    clawServo.openClaw();
+                }
 
                 if(gamepadHelper1.rightBumperOnce())
                 {
@@ -84,11 +99,33 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 }
                 break;
             case CATCH:
+                aboutToOpen = true;
                 clawServo.closeClaw();
+
+                switch (pickUpTarget)
+                {
+                    case EXPANSION:
+                        rotationServo.pickUpPosExpansion();
+                        break;
+                    case CONTROL:
+                        rotationServo.pickUpPos();
+                        break;
+                }
+
+                transferPickUp();
 
                 if(gamepadHelper1.rightBumperOnce())
                 {
-                    rotationServo.releasePos();
+                    switch (highTarget)
+                    {
+                        case CONTROL:
+                            rotationServo.releasePos();
+                            break;
+                        case EXPANSION:
+                            rotationServo.releasePosExpansion();
+                            break;
+                    }
+
                     catchingState = CatchingState.UP;
                 }
 
@@ -101,7 +138,6 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 if(gamepadHelper1.leftBumperOnce())
                 {
                     clawServo.openClaw();
-                    //saveCurrentPosElevator();
                     pressed = true;
                     offset = timer.time();
                 }
@@ -111,6 +147,8 @@ public class CatchAndReleaseCommand implements RobotCommand {
                     if(timer.time() - offset >= delay)
                     {
                         pressed = false;
+                        clawServo.closeClaw();
+                        lastOpened = timer.time();
                         catchingState = CatchingState.RESET_CATCH;
                     }
                 }
@@ -172,6 +210,16 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 highTransfer();
                 break;
             case BASE:
+                break;
+        }
+
+        switch (highTarget)
+        {
+            case CONTROL:
+                rotationServo.releasePos();
+                break;
+            case EXPANSION:
+                rotationServo.releasePosExpansion();
                 break;
         }
 

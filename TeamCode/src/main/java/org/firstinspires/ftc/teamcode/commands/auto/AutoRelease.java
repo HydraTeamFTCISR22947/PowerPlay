@@ -25,29 +25,7 @@ public class AutoRelease implements AutoRobotCommand {
         };
     }
 
-    public MarkerCallback readyToRelease() {
-        return new MarkerCallback()
-        {
-            @Override
-            public void onMarkerReached(){
-                transferSystem.pickUpExpansion();
-                elevatorSystem.baseLevel();
-                rotationServo.releasePos();
-            }
-        };
-    }
 
-    public MarkerCallback resetSystem() {
-        return new MarkerCallback()
-        {
-            @Override
-            public void onMarkerReached(){
-                transferSystem.pickUpExpansion();
-                elevatorSystem.baseLevel();
-                rotationServo.releasePos();
-            }
-        };
-    }
 
 
     public AutoRelease(HardwareMap hardwareMap) {
