@@ -11,13 +11,13 @@ import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 import org.firstinspires.ftc.teamcode.util.AutoRobotCommand;
 
 @Config
-public class AutoCatch implements AutoRobotCommand {
+public class AutoCommands implements AutoRobotCommand {
     ElevatorSystem elevatorSystem;
     TransferSystem transferSystem;
     RotationServo rotationServo;
     ClawServo clawServo;
 
-    public static int STACK_ELEVATOR_HEIGHT = 450, OFFSET_BETWEEN_EACH_CONE = 80;
+    public static int STACK_ELEVATOR_HEIGHT = 602, OFFSET_BETWEEN_EACH_CONE = 50;
 
     public MarkerCallback catchCone() {
         return new MarkerCallback() {
@@ -28,25 +28,13 @@ public class AutoCatch implements AutoRobotCommand {
         };
     }
 
-
-    public MarkerCallback parkReset() {
-        return new MarkerCallback() {
-            @Override
-            public void onMarkerReached() {
-                elevatorSystem.baseLevel();
-                transferSystem.pickUpExpansion();
-                rotationServo.pickUpPos();
-            }
-        };
-    }
-
     public MarkerCallback intakeFirstCone() {
         return new MarkerCallback() {
             @Override
             public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT);
                 transferSystem.pickUpExpansion();
-                rotationServo.pickUpPos();
+                rotationServo.pickUpPosExpansion();
             }
         };
     }
@@ -57,7 +45,7 @@ public class AutoCatch implements AutoRobotCommand {
             public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 2);
                 transferSystem.pickUpExpansion();
-                rotationServo.pickUpPos();
+                rotationServo.pickUpPosExpansion();
             }
         };
     }
@@ -68,7 +56,7 @@ public class AutoCatch implements AutoRobotCommand {
             public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 3);
                 transferSystem.pickUpExpansion();
-                rotationServo.pickUpPos();
+                rotationServo.pickUpPosExpansion();
             }
         };
     }
@@ -80,21 +68,34 @@ public class AutoCatch implements AutoRobotCommand {
             public void onMarkerReached() {
                 transferSystem.highPos();
                 elevatorSystem.midRod();
-                rotationServo.pickUpPos();
+                rotationServo.releasePos();
             }
         };
     }
 
-    public MarkerCallback elevatorIntake = new MarkerCallback() {
-        @Override
-        public void onMarkerReached() {
-            elevatorSystem.midRod();
-        }
-    };
+    public MarkerCallback elevatorIntake() {
+        return new MarkerCallback()
+        {
+            @Override
+            public void onMarkerReached(){
+                elevatorSystem.midRod();
+            }
+        };
+    }
 
 
+    public MarkerCallback releaseCone() {
+        return new MarkerCallback()
+        {
+            @Override
+            public void onMarkerReached(){
+                clawServo.openClaw();
+            }
+        };
+    }
 
-    public AutoCatch(HardwareMap hardwareMap) {
+
+    public AutoCommands(HardwareMap hardwareMap) {
         initCommand(hardwareMap);
     }
 

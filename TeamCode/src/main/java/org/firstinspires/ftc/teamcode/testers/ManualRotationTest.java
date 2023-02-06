@@ -16,6 +16,8 @@ public class ManualRotationTest extends LinearOpMode {
     public void runOpMode()
     {
         _rotationServo = hardwareMap.get(Servo.class,"rotation_servo");
+        _rotationServo.setDirection(Servo.Direction.REVERSE);
+
         telemetry.addData("Status: ","Initialized!");
         telemetry.update();
 

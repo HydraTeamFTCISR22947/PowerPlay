@@ -18,13 +18,9 @@ public class Test {
                 // Set bot constraints: maxVel, maxAccel, maxAngVel, maxAngAccel, track width
                 .setConstraints(60, 60, Math.toRadians(130), Math.toRadians(130), 13.23)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(58, -14.5, Math.toRadians(180)))
-                                //.splineToLinearHeading(new Pose2d(35, -20, Math.toRadians(180)), Math.toRadians(0))
-                                ////drive.trajectorySequenceBuilder(new Pose2d(27, -25, Math.toRadians(180)))
-                                //.lineTo(new Vector2d(27, -25))
-                                //.splineToLinearHeading(new Pose2d(58, -16.5, Math.toRadians(180)), Math.toRadians(0))
+                        drive.trajectorySequenceBuilder(new Pose2d(65, -14.5 , Math.toRadians(180)))
                                 .lineTo(new Vector2d(35, -20))
-                                .splineToLinearHeading(new Pose2d(30, -27, Math.toRadians(180)), Math.toRadians(0))
+                                .splineToLinearHeading(new Pose2d(32, -29, Math.toRadians(180)), Math.toRadians(0))
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)

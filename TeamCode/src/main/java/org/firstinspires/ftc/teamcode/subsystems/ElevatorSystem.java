@@ -20,10 +20,8 @@ public class ElevatorSystem {
 
     public static int BASE_HEIGHT = 0;
     public static int LOW_HEIGHT = 300;
-    public static int MID_HEIGHT = 1550;
+    public static int MID_HEIGHT = 1300;
     public static int HIGH_HEIGHT = 1850;
-
-    public static int STACK_ELEVATOR_HEIGHT = 300, OFFSET_BETWEEN_EACH_CONE = 50;
 
     public static double power = 1;
     public static double maxPower = 1;

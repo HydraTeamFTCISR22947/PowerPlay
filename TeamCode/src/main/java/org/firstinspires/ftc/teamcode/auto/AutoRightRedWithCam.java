@@ -11,31 +11,38 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityC
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.commands.auto.AutoCommands;
 import org.firstinspires.ftc.teamcode.roadrunner.DriveConstants;
 import org.firstinspires.ftc.teamcode.roadrunner.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySequence;
+import org.firstinspires.ftc.teamcode.subsystems.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.subsystems.ClawServo;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
 import org.firstinspires.ftc.teamcode.subsystems.RotationServo;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
+import org.openftc.apriltag.AprilTagDetection;
+import org.openftc.easyopencv.OpenCvCamera;
+import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
 @Config
-@Autonomous(name = "Auto Right Red", group = "auto")
-public class AutoRightRed extends LinearOpMode {
+@Autonomous(name = "Auto Right Red CAM", group = "auto")
+public class AutoRightRedWithCam extends LinearOpMode {
 
     public static double startPosX = 36, startPosY = -66, startPosAngle = 180;
-    public static double startConeStrafe1 = 58.8, startConeStrafe2 = 19.5, startConeForward = 4.5;
+    public static double startConeStrafe1 = 58.8, startConeStrafe2 = 19.5, startConeForward = 4.8;
     public static double intakePose1X = 35, intakePose1Y = -20.3, intakePose1Angle = 180;
     public static double intakePose2X = 62.5, intakePose2Y = -15, intakePose2Angle = 180;
     public static double posCone1X = 43.5, posCone1Y = -18;
-    public static double posCone2X = 35.5, posCone2Y = -29.5, posCone2Angle = 180;
+    public static double posCone2X = 35.2, posCone2Y = -29.8, posCone2Angle = 180;
     public static double posCone2HelpX = 2, posCone3HelpX = 3;
     public static double DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33, INTAKE_WAIT_TIME = .8, ELEVATOR_WAIT_TIME = .25;
-    public static double PARK_ASSIST = 20, TARGET_ZONE = 24;
+    public static double PARK_ASSIST = 15, TARGET_ZONE = 24;
 
     AutoCommands autoCommands;
     ClawServo clawServo;
@@ -43,8 +50,54 @@ public class AutoRightRed extends LinearOpMode {
     TransferSystem transferSystem;
     RotationServo rotationServo;
 
+    OpenCvCamera camera;
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+
+    static final double FEET_PER_METER = 3.28084;
+
+    // Lens intrinsics
+    // UNITS ARE PIXELS
+    // NOTE: this calibration is for the C920 webcam at 800x448.
+    // You will need to do your own calibration for other configurations!
+    double fx = 578.272;
+    double fy = 578.272;
+    double cx = 402.145;
+    double cy = 221.506;
+
+    // UNITS ARE METERS
+    double tagsize = 0.166;
+
+    int ID_TAG_OF_INTEREST1 = 0; // Tag ID 0 from the 36h11 family
+    int ID_TAG_OF_INTEREST2 = 1; // Tag ID 1 from the 36h11 family
+    int ID_TAG_OF_INTEREST3 = 2; // Tag ID 2 from the 36h11 family
+
+    AprilTagDetection tagOfInterest = null;
+
     @Override
     public void runOpMode() throws InterruptedException {
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+
+        camera.setPipeline(aprilTagDetectionPipeline);
+        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        {
+            @Override
+            public void onOpened()
+            {
+                camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+            }
+
+            @Override
+            public void onError(int errorCode)
+            {
+
+            }
+        });
+
+        telemetry.setMsTransmissionInterval(50);
+
         SampleMecanumDrive drivetrain = new SampleMecanumDrive(hardwareMap);
 
         Pose2d startPose = new Pose2d(startPosX, startPosY, Math.toRadians(startPosAngle));
@@ -140,20 +193,20 @@ public class AutoRightRed extends LinearOpMode {
 
 
         TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place1.end())
-                .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
+                .back(5)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .strafeLeft(PARK_ASSIST)
                 .back(TARGET_ZONE)
                 .build();
 
         TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place1.end())
-                .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
+                .back(5)
                 .strafeLeft(PARK_ASSIST)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .build();
 
         TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place1.end())
-                .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
+                .back(5)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .strafeLeft(PARK_ASSIST)
                 .forward(TARGET_ZONE)
@@ -162,6 +215,86 @@ public class AutoRightRed extends LinearOpMode {
         if (isStopRequested()) {return;}
 
         clawServo.closeClaw();
+
+        /*
+         * The INIT-loop:
+         * This REPLACES waitForStart!
+         */
+        while (!isStarted() && !isStopRequested())
+        {
+            ArrayList<AprilTagDetection> currentDetections = aprilTagDetectionPipeline.getLatestDetections();
+
+            if(currentDetections.size() != 0)
+            {
+                boolean tagFound = false;
+
+                for(AprilTagDetection tag : currentDetections)
+                {
+                    if(tag.id == ID_TAG_OF_INTEREST1)
+                    {
+                        tagOfInterest = tag;
+                        tagFound = true;
+                        break;
+                    }
+                    else if(tag.id == ID_TAG_OF_INTEREST2)
+                    {
+                        tagOfInterest = tag;
+                        tagFound = true;
+                        break;
+                    }
+                    else if(tag.id == ID_TAG_OF_INTEREST3)
+                    {
+                        tagOfInterest = tag;
+                        tagFound = true;
+                        break;
+                    }
+                }
+
+                if(tagFound)
+                {
+                    telemetry.addLine("Tag of interest is in sight!\n\nLocation data:");
+                    tagToTelemetry(tagOfInterest);
+                }
+                else
+                {
+                    telemetry.addLine("Don't see tag of interest :(");
+
+                    if(tagOfInterest == null)
+                    {
+                        telemetry.addLine("(The tag has never been seen)");
+                    }
+                    else
+                    {
+                        telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                        tagToTelemetry(tagOfInterest);
+                    }
+                }
+
+            }
+            else
+            {
+                telemetry.addLine("Don't see tag of interest :(");
+
+                if(tagOfInterest == null)
+                {
+                    telemetry.addLine("(The tag has never been seen)");
+                }
+                else
+                {
+                    telemetry.addLine("\nBut we HAVE seen the tag before; last seen at:");
+                    tagToTelemetry(tagOfInterest);
+                }
+
+            }
+
+            telemetry.update();
+            sleep(20);
+        }
+
+        /*
+         * The START command just came in: now work off the latest snapshot acquired
+         * during the init loop.
+         */
 
         waitForStart();
 
@@ -181,11 +314,35 @@ public class AutoRightRed extends LinearOpMode {
 //        drivetrain.followTrajectorySequence(cycle3);
 //        drivetrain.followTrajectorySequence(place3);
 
-        drivetrain.followTrajectorySequence(park2);
+        switch (tagOfInterest.id)
+        {
+            case 0:
+                drivetrain.followTrajectorySequence(park2);
+                break;
+            case 1:
+                drivetrain.followTrajectorySequence(park3);
+                break;
+            case 2:
+            default:
+                drivetrain.followTrajectorySequence(park1);
+                break;
+        }
+
         elevatorSystem.baseLevel();
         transferSystem.pickUp();
 
         while (opModeIsActive());
+    }
+
+    void tagToTelemetry(AprilTagDetection detection)
+    {
+        telemetry.addLine(String.format("\nDetected tag ID=%d", detection.id));
+        telemetry.addLine(String.format("Translation X: %.2f feet", detection.pose.x*FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Y: %.2f feet", detection.pose.y*FEET_PER_METER));
+        telemetry.addLine(String.format("Translation Z: %.2f feet", detection.pose.z*FEET_PER_METER));
+        telemetry.addLine(String.format("Rotation Yaw: %.2f degrees", Math.toDegrees(detection.pose.yaw)));
+        telemetry.addLine(String.format("Rotation Pitch: %.2f degrees", Math.toDegrees(detection.pose.pitch)));
+        telemetry.addLine(String.format("Rotation Roll: %.2f degrees", Math.toDegrees(detection.pose.roll)));
     }
 }
 
