@@ -33,12 +33,9 @@ public class AutoRightRed extends LinearOpMode {
     public static double intakePose2X = 62.5, intakePose2Y = -15, intakePose2Angle = 180;
     public static double posCone1X = 43.5, posCone1Y = -18;
     public static double posCone2X = 35.5, posCone2Y = -29.5, posCone2Angle = 180;
-    public static double cycleFixX = 35, CycleFixY = -19;
     public static double posCone2HelpX = 2, posCone3HelpX = 3;
     public static double DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33, INTAKE_WAIT_TIME = .8, ELEVATOR_WAIT_TIME = .25;
     public static double PARK_ASSIST = 20, TARGET_ZONE = 24;
-    public static double OFFSET = 3;
-    public static double intakeOffset = 10;
 
     AutoCommands autoCommands;
     ClawServo clawServo;
@@ -83,7 +80,6 @@ public class AutoRightRed extends LinearOpMode {
                 .waitSeconds(ELEVATOR_WAIT_TIME)
                 .addTemporalMarker(autoCommands.elevatorIntake())
                 .waitSeconds(DELIVERY_WAIT_TIME*2)
-                .forward(intakeOffset)
                 .build();
 
         TrajectorySequence place1 = drivetrain.trajectorySequenceBuilder(cycle1.end())
@@ -98,30 +94,28 @@ public class AutoRightRed extends LinearOpMode {
                 .build();
 
 
-        TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(place1.end())
-                .strafeTo(new Vector2d(cycleFixX,CycleFixY))
-                .waitSeconds(INTAKE_WAIT_TIME)
-                .lineTo(new Vector2d(intakePose1X, intakePose1Y))
-                .addTemporalMarker(autoCommands.intakeSecondCone())
-                .splineToLinearHeading(new Pose2d(intakePose2X + OFFSET, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
-                .waitSeconds(INTAKE_WAIT_TIME)
-                .addTemporalMarker(autoCommands.catchCone())
-                .waitSeconds(ELEVATOR_WAIT_TIME)
-                .addTemporalMarker(autoCommands.elevatorIntake())
-                .waitSeconds(DELIVERY_WAIT_TIME*2)
-                .forward(intakeOffset)
-                .build();
-
-        TrajectorySequence place2 = drivetrain.trajectorySequenceBuilder(cycle2.end())
-                .setReversed(true)
-                .lineTo(new Vector2d(posCone1X, posCone1Y))
-                .addTemporalMarker(autoCommands.readyToRelease())
-                .lineToLinearHeading(new Pose2d(posCone2X + posCone3HelpX, posCone2Y, Math.toRadians(posCone2Angle)))
-                .waitSeconds(DELIVERY_WAIT_TIME * 2)
-                .addTemporalMarker(autoCommands.releaseCone())
-                .waitSeconds(DELIVERY_WAIT_TIME)
-                .build();
-
+//        TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(preload.end())
+//                .lineTo(new Vector2d(intakePose1X, intakePose1Y))
+//                .addTemporalMarker(autoCommands.intakeSecondCone())
+//                .splineToLinearHeading(new Pose2d(intakePose2X + 2, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
+//                .waitSeconds(INTAKE_WAIT_TIME)
+//                .addTemporalMarker(autoCommands.catchCone())
+//                .waitSeconds(ELEVATOR_WAIT_TIME)
+//                .addTemporalMarker(autoCommands.elevatorIntake())
+//                .waitSeconds(DELIVERY_WAIT_TIME*2)
+//                .build();
+//
+//        TrajectorySequence place2 = drivetrain.trajectorySequenceBuilder(cycle2.end())
+//                .setReversed(true)
+//                .lineTo(new Vector2d(posCone1X, posCone1Y))
+//                .addTemporalMarker(autoCommands.readyToRelease())
+//                //.splineToLinearHeading(new Pose2d(posConeX, posConeY, Math.toRadians(posConeAngle)), Math.toRadians(0))
+//                .lineToLinearHeading(new Pose2d(posCone2X + posCone3HelpX, posCone2Y, Math.toRadians(posCone2Angle)))
+//                .waitSeconds(DELIVERY_WAIT_TIME * 2)
+//                .addTemporalMarker(autoCommands.releaseCone())
+//                .waitSeconds(DELIVERY_WAIT_TIME)
+//                .build();
+//
 //        TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(preload.end())
 //                .lineTo(new Vector2d(intakePose1X, intakePose1Y))
 //                .addTemporalMarker(autoCommands.intakeThirdCone())
@@ -180,10 +174,6 @@ public class AutoRightRed extends LinearOpMode {
 
         drivetrain.followTrajectorySequence(cycle1);
         drivetrain.followTrajectorySequence(place1);
-
-        drivetrain.followTrajectorySequence(cycle2);
-        drivetrain.followTrajectorySequence(place2);
-
 
 //        drivetrain.followTrajectorySequence(cycle2);
 //        drivetrain.followTrajectorySequence(place2);
