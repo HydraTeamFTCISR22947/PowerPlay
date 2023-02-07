@@ -320,11 +320,11 @@ public class AutoRightRedWithCam extends LinearOpMode {
                 drivetrain.followTrajectorySequence(park2);
                 break;
             case 1:
-                drivetrain.followTrajectorySequence(park3);
+                drivetrain.followTrajectorySequence(park1);
                 break;
             case 2:
             default:
-                drivetrain.followTrajectorySequence(park1);
+                drivetrain.followTrajectorySequence(park3);
                 break;
         }
 
