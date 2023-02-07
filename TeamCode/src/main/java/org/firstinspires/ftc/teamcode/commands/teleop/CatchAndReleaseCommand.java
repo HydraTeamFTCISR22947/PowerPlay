@@ -23,7 +23,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
     GamepadHelper gamepadHelper2;
     boolean pressed = false, aboutToOpen = false;
     double offset = 0;
-    public static double delay = 0.5, lastOpened = 0, OPEN_BACK_DELAY = 0.5;
+    public static double delay = 0.5, lastOpened = 0, OPEN_BACK_DELAY = 0.375;
     boolean isOpen = false;
 
     public enum CatchingState {
