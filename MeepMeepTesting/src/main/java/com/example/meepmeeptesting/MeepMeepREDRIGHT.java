@@ -17,14 +17,13 @@ import java.util.Arrays;
 public class MeepMeepREDRIGHT {
 
     public static double startPosX = 36, startPosY = -66, startPosAngle = 180;
-    public static double startConeStrafe1 = 58.8, startConeStrafe2 = 19.5, startConeForward = 4.5;
+    public static double startConeStrafe1 = 58.8, startConeStrafe2 = 20, startConeForward = 4.5;
     public static double intakePose1X = 35, intakePose1Y = -20.3, intakePose1Angle = 180;
-    public static double intakePose2X = 62.5, intakePose2Y = -15, intakePose2Angle = 180;
+    public static double intakePose2X = 62, intakePose2Y = -15, intakePose2Angle = 180;
     public static double intakePoseCycleX = 38;
     public static double posCone1X = 40, posCone1Y = -15;
-    public static double posCone2X = 28, posCone2Y = -21, posCone2Angle = 225;
-    public static double PARK_ASSIST = 20;
-
+    public static double posCone2X = 32, posCone2Y = -21, posCone2Angle = 225;
+    public static double PARK_ASSIST = 20, TARGET_ZONE = 20;
 
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(550);

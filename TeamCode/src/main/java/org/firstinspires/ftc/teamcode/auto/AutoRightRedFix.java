@@ -28,12 +28,13 @@ import java.util.Arrays;
 public class AutoRightRedFix extends LinearOpMode {
 
     public static double startPosX = 36, startPosY = -66, startPosAngle = 180;
-    public static double startConeStrafe1 = 58.8, startConeStrafe2 = 19.5, startConeForward = 4.5;
+    public static double startConeStrafe1 = 58.8, startConeStrafe2 = 20, startConeForward = 4.5;
     public static double intakePose1X = 35, intakePose1Y = -20.3, intakePose1Angle = 180;
-    public static double intakePose2X = 62.5, intakePose2Y = -15, intakePose2Angle = 180;
+    public static double intakePose2X = 61.8, intakePose2Y = -15, intakePose2Angle = 180;
     public static double intakePoseCycleX = 38;
+    public static double intakeHelp1X = 2, intakeHelp2X = 4, intakeHelp3X = 5;
     public static double posCone1X = 40, posCone1Y = -15;
-    public static double posCone2X = 28, posCone2Y = -21, posCone2Angle = 225;
+    public static double posCone2X = 34, posCone2Y = -19, posCone2Angle = 225;
     public static double PARK_ASSIST = 20, TARGET_ZONE = 20;
 
     public static double DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33, INTAKE_WAIT_TIME = .8, ELEVATOR_WAIT_TIME = .25;
@@ -75,7 +76,7 @@ public class AutoRightRedFix extends LinearOpMode {
         TrajectorySequence cycle1 = drivetrain.trajectorySequenceBuilder(preload.end())
                 .lineTo(new Vector2d(intakePose1X, intakePose1Y))
                 .addTemporalMarker(autoCommands.intakeFirstCone())
-                .splineToLinearHeading(new Pose2d(intakePose2X, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(intakePose2X + intakeHelp1X, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
                 .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCommands.catchCone())
                 .waitSeconds(ELEVATOR_WAIT_TIME)
@@ -95,7 +96,7 @@ public class AutoRightRedFix extends LinearOpMode {
 
         TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(intakePoseCycleX, intakePose2Y, Math.toRadians(intakePose1Angle)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(intakePoseCycleX + intakeHelp2X, intakePose2Y, Math.toRadians(intakePose1Angle)), Math.toRadians(0))
                 .addTemporalMarker(autoCommands.intakeSecondCone())
                 .lineTo(new Vector2d(intakePose2X, intakePose2Y))
                 .waitSeconds(INTAKE_WAIT_TIME)
@@ -116,7 +117,7 @@ public class AutoRightRedFix extends LinearOpMode {
 
         TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(place2.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(intakePoseCycleX, intakePose2Y, Math.toRadians(intakePose1Angle)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(intakePoseCycleX + intakeHelp3X, intakePose2Y, Math.toRadians(intakePose1Angle)), Math.toRadians(0))
                 .addTemporalMarker(autoCommands.intakeSecondCone())
                 .lineTo(new Vector2d(intakePose2X, intakePose2Y))
                 .waitSeconds(INTAKE_WAIT_TIME)
