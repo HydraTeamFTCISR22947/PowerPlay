@@ -26,7 +26,7 @@ public class TransferSystem
     public static double TOTAL_DEGREES = 360;      // total engine spin degrees
     public static double GEAR_RATIO = 1;
     double power = 1;
-    double maxPower = .25;
+    double maxPower = .15;
     double target = 0;
     DcMotorEx motor_transfer;    // set motor
 
@@ -92,10 +92,6 @@ public class TransferSystem
             if(gamepad2.right_stick_y != 0 && !gamepad2.right_stick_button)
             {
                 motor_transfer.setPower(Range.clip(-gamepad2.right_stick_y, -maxPower, maxPower));
-            }
-            else if(gamepad2.right_stick_y != 0 && gamepad2.right_stick_button)
-            {
-                motor_transfer.setPower(Range.clip(-gamepad2.right_stick_y, -1, 1));
             }
             else
             {

@@ -37,7 +37,7 @@ public class AutoRightRedFix extends LinearOpMode {
     public static double posCone2X = 33.8, posCone2Y = -18.2, posCone2Angle = 225;
     public static double PARK_ASSIST = 20, TARGET_ZONE = 20;
 
-    public static double DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33, INTAKE_WAIT_TIME = .8, ELEVATOR_WAIT_TIME = .25;
+    public static double DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33, INTAKE_WAIT_TIME = 1.2, ELEVATOR_WAIT_TIME = .25;
 
     AutoCommands autoCommands;
     ClawServo clawServo;

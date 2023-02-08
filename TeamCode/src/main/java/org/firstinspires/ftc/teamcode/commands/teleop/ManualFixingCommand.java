@@ -84,7 +84,7 @@ public class ManualFixingCommand implements RobotCommand {
         if(y != 0 && (transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP || transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP_EXPANSION))
         {
             transferSystem.setUsePID(false);
-            //transferSystem.setHeightByPos(transferSystem.currentPos());
+            transferSystem.setHeightByPos(transferSystem.currentPos());
         }
         else if((transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP || transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP_EXPANSION) && y == 0)
         {
@@ -129,7 +129,7 @@ public class ManualFixingCommand implements RobotCommand {
             if(y != 0)
             {
                 transferSystem.setUsePID(false);
-                //transferSystem.setHeightByPos(transferSystem.currentPos());
+                transferSystem.setHeightByPos(transferSystem.currentPos());
             }
             else
             {
