@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.Range;
 public class TransferSystem
 {
     // set transfer levels values
-    public static double PICK_UP = 65;
+    public static double PICK_UP = 80;
     public static double PICKUP_EXPANSION = 665;
     public static double HIGH = 200;
     public static double HIGH_EXPANSION = 470;
