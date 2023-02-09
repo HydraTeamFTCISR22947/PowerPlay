@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.util.Range;
 public class TransferSystem
 {
     // set transfer levels values
-    public static double PICK_UP = 80;
+    public static double PICK_UP = 73;
     public static double PICKUP_EXPANSION = 665;
     public static double HIGH = 200;
     public static double HIGH_EXPANSION = 470;
@@ -26,7 +26,7 @@ public class TransferSystem
     public static double TOTAL_DEGREES = 360;      // total engine spin degrees
     public static double GEAR_RATIO = 1;
     double power = 1;
-    double maxPower = .15;
+    double maxPower = .2;
     double target = 0;
     DcMotorEx motor_transfer;    // set motor
 

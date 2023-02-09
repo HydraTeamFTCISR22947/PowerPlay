@@ -19,8 +19,8 @@ public class ElevatorSystem {
     DcMotor mE;
 
     public static int BASE_HEIGHT = 0;
-    public static int LOW_HEIGHT = 300;
-    public static int MID_HEIGHT = 1280;
+    public static int LOW_HEIGHT = 630;
+    public static int MID_HEIGHT = 1380;
     public static int HIGH_HEIGHT = 1900;
 
     public static double power = 1;
