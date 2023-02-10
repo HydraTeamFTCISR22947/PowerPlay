@@ -26,7 +26,7 @@ public class TransferSystem
     public static double TOTAL_DEGREES = 360;      // total engine spin degrees
     public static double GEAR_RATIO = 1;
     double power = 1;
-    double maxPower = .2;
+    double maxPower = .25;
     double target = 0;
     DcMotorEx motor_transfer;    // set motor
 

@@ -73,12 +73,32 @@ public class AutoCommands implements AutoRobotCommand {
         };
     }
 
+    public MarkerCallback reset() {
+        return new MarkerCallback() {
+            @Override
+            public void onMarkerReached() {
+                elevatorSystem.baseLevel();
+                transferSystem.pickUp();
+            }
+        };
+    }
+
     public MarkerCallback elevatorIntake() {
         return new MarkerCallback()
         {
             @Override
             public void onMarkerReached(){
                 elevatorSystem.midRod();
+            }
+        };
+    }
+
+    public MarkerCallback goDownToReleaseCone() {
+        return new MarkerCallback()
+        {
+            @Override
+            public void onMarkerReached(){
+                elevatorSystem.almostMidRod();
             }
         };
     }

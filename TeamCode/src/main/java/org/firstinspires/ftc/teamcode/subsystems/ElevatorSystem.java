@@ -21,6 +21,7 @@ public class ElevatorSystem {
     public static int BASE_HEIGHT = 0;
     public static int LOW_HEIGHT = 630;
     public static int MID_HEIGHT = 1380;
+    public static int ALMOST_MID_HEIGHT = 1200;
     public static int HIGH_HEIGHT = 1900;
 
     public static double power = 1;
@@ -101,6 +102,12 @@ public class ElevatorSystem {
 
     public void midRod() {
         mE.setTargetPosition(MID_HEIGHT);
+        mE.setPower(power);
+        mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void almostMidRod() {
+        mE.setTargetPosition(ALMOST_MID_HEIGHT);
         mE.setPower(power);
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }

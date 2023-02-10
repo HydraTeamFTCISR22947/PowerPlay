@@ -20,7 +20,7 @@ public class GamepadController {
     DcMotor mFL, mBL, mFR, mBR;
     Telemetry telemetry;
     double power = mainPower;
-    public static double mainPower = .6, multiplier = .9, POWER_INCREMENT = 0.1, slowPower = .3;
+    public static double mainPower = .4, multiplier = .9, POWER_INCREMENT = 0.1, slowPower = .3, fastPower = .65;
     GamepadHelper cGamepad1, cGamepad2;
     SampleMecanumDrive drivetrain;
 
@@ -89,11 +89,13 @@ public class GamepadController {
         {
             slowPower += POWER_INCREMENT;
             mainPower += POWER_INCREMENT;
+            fastPower += POWER_INCREMENT;
         }
         else if(cGamepad1.dpadDownOnce())
         {
             slowPower -= POWER_INCREMENT;
             mainPower -= POWER_INCREMENT;
+            fastPower -= POWER_INCREMENT;
         }
 
         centricDrive();
@@ -108,9 +110,13 @@ public class GamepadController {
 
         double twist = gamepad1.right_stick_x * multiplier;
 
-        if(gamepad1.left_trigger != 0 || gamepad1.right_trigger != 0)
+        if(gamepad1.left_trigger != 0)
         {
             power = slowPower;
+        }
+        else if(gamepad1.right_trigger != 0)
+        {
+            power = fastPower;
         }
         else
         {

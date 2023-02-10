@@ -24,21 +24,24 @@ import java.util.Arrays;
 
 
 @Config
-@Autonomous(name = "Auto Right Red", group = "auto")
+@Autonomous(name = "Auto Right Red FIX", group = "auto")
 public class AutoRightRed extends LinearOpMode {
 
-    public static double startPosX = 36, startPosY = -66, startPosAngle = 180;
-    public static double startConeStrafe1 = 58.8, startConeStrafe2 = 19.5, startConeForward = 4.5;
-    public static double intakePose1X = 35, intakePose1Y = -20.3, intakePose1Angle = 180;
-    public static double intakePose2X = 62.5, intakePose2Y = -15, intakePose2Angle = 180;
-    public static double posCone1X = 43.5, posCone1Y = -18;
-    public static double posCone2X = 35.5, posCone2Y = -29.5, posCone2Angle = 180;
-    public static double cycleFixX = 35, CycleFixY = -19;
-    public static double posCone2HelpX = 2, posCone3HelpX = 3;
-    public static double DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33, INTAKE_WAIT_TIME = .8, ELEVATOR_WAIT_TIME = .25;
-    public static double PARK_ASSIST = 20, TARGET_ZONE = 24;
-    public static double OFFSET = 3;
-    public static double intakeOffset = 10;
+    public static double startPosX = 36, startPosY = -65.9, startPosAngle = 180;
+    public static double startConeStrafe1 = 54.8, startConeStrafe2 = 16.05, startConeForward = 5.15;
+    public static double intakePose1X = 35, intakePose1Y = -19.8, intakePose1Angle = 180;
+    public static double intakePose2X = 45, intakePose2Y = -15.6, intakePose2Angle = 180;
+    public static double backIntakeOffset  = 13;
+    public static double intakePoseCycleX = 38;
+    public static double intakeHelp1X = 1.7, intakeHelp2X = 5, intakeHelp3X = 6;
+    public static double posCone1X = 40, posCone1Y = -15;
+    public static double posCone2X = 30.85, posCone2Y = -18.2, posCone2Angle = 225;
+    public static double parkPoseX = 39.3, parkPoseY = -20, parkPoseAngle = 180;
+    public static double TARGET_ZONE = 20;
+
+    public static double BACK_WAIT_TIME = 0.1, DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33;
+    public static double ALMOST_RELEASE_TIME = 0.1, INTAKE_WAIT_TIME = .1, ELEVATOR_WAIT_TIME = .5;
+
 
     AutoCommands autoCommands;
     ClawServo clawServo;
@@ -68,8 +71,11 @@ public class AutoRightRed extends LinearOpMode {
         TrajectorySequence preload = drivetrain.trajectorySequenceBuilder(startPose)
                 //First cone
                 .strafeRight(startConeStrafe1, velConstraint, accelConstraint)
-                .strafeLeft(startConeStrafe2)
-                .forward(startConeForward)
+                .strafeLeft(startConeStrafe2, velConstraint, accelConstraint)
+                .forward(startConeForward, velConstraint, accelConstraint)
+                .waitSeconds(DELIVERY_WAIT_TIME)
+                .addTemporalMarker(autoCommands.goDownToReleaseCone())
+                .waitSeconds(ALMOST_RELEASE_TIME)
                 .addTemporalMarker(autoCommands.releaseCone())
                 .waitSeconds(RELEASE_WAIT_TIME)
                 .build();
@@ -77,91 +83,99 @@ public class AutoRightRed extends LinearOpMode {
         TrajectorySequence cycle1 = drivetrain.trajectorySequenceBuilder(preload.end())
                 .lineTo(new Vector2d(intakePose1X, intakePose1Y))
                 .addTemporalMarker(autoCommands.intakeFirstCone())
-                .splineToLinearHeading(new Pose2d(intakePose2X, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(intakePose2X + intakeHelp1X, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
+                .waitSeconds(BACK_WAIT_TIME)
+                .back(backIntakeOffset)
                 .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCommands.catchCone())
                 .waitSeconds(ELEVATOR_WAIT_TIME)
                 .addTemporalMarker(autoCommands.elevatorIntake())
-                .waitSeconds(DELIVERY_WAIT_TIME*2)
-                .forward(intakeOffset)
+                .waitSeconds(DELIVERY_WAIT_TIME*3)
                 .build();
 
         TrajectorySequence place1 = drivetrain.trajectorySequenceBuilder(cycle1.end())
-                .setReversed(true)
                 .lineTo(new Vector2d(posCone1X, posCone1Y))
                 .addTemporalMarker(autoCommands.readyToRelease())
-                //.splineToLinearHeading(new Pose2d(posConeX, posConeY, Math.toRadians(posConeAngle)), Math.toRadians(0))
-                .lineToLinearHeading(new Pose2d(posCone2X + posCone2HelpX, posCone2Y, Math.toRadians(posCone2Angle)))
-                .waitSeconds(DELIVERY_WAIT_TIME * 2)
-                .addTemporalMarker(autoCommands.releaseCone())
+                .splineTo(new Vector2d(posCone2X - 0.4, posCone2Y  + 0.15), Math.toRadians(posCone2Angle))
                 .waitSeconds(DELIVERY_WAIT_TIME)
+                .addTemporalMarker(autoCommands.goDownToReleaseCone())
+                .waitSeconds(ALMOST_RELEASE_TIME)
+                .addTemporalMarker(autoCommands.releaseCone())
+                .waitSeconds(RELEASE_WAIT_TIME)
                 .build();
 
 
         TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(place1.end())
-                .strafeTo(new Vector2d(cycleFixX,CycleFixY))
-                .waitSeconds(INTAKE_WAIT_TIME)
-                .lineTo(new Vector2d(intakePose1X, intakePose1Y))
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(intakePoseCycleX, intakePose2Y - 0.1, Math.toRadians(intakePose1Angle)), Math.toRadians(0))
                 .addTemporalMarker(autoCommands.intakeSecondCone())
-                .splineToLinearHeading(new Pose2d(intakePose2X + OFFSET, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
+                .lineTo(new Vector2d(intakePose2X + intakeHelp2X, intakePose2Y + 0.2))
+                .waitSeconds(BACK_WAIT_TIME)
+                .back(backIntakeOffset)
                 .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCommands.catchCone())
                 .waitSeconds(ELEVATOR_WAIT_TIME)
                 .addTemporalMarker(autoCommands.elevatorIntake())
                 .waitSeconds(DELIVERY_WAIT_TIME*2)
-                .forward(intakeOffset)
                 .build();
 
         TrajectorySequence place2 = drivetrain.trajectorySequenceBuilder(cycle2.end())
-                .setReversed(true)
                 .lineTo(new Vector2d(posCone1X, posCone1Y))
                 .addTemporalMarker(autoCommands.readyToRelease())
-                .lineToLinearHeading(new Pose2d(posCone2X + posCone3HelpX, posCone2Y, Math.toRadians(posCone2Angle)))
-                .waitSeconds(DELIVERY_WAIT_TIME * 2)
-                .addTemporalMarker(autoCommands.releaseCone())
+                .splineTo(new Vector2d(posCone2X - 0.25, posCone2Y + 0.8), Math.toRadians(posCone2Angle))
                 .waitSeconds(DELIVERY_WAIT_TIME)
+                .addTemporalMarker(autoCommands.goDownToReleaseCone())
+                .waitSeconds(ALMOST_RELEASE_TIME)
+                .addTemporalMarker(autoCommands.releaseCone())
+                .waitSeconds(RELEASE_WAIT_TIME)
                 .build();
 
-//        TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(preload.end())
-//                .lineTo(new Vector2d(intakePose1X, intakePose1Y))
-//                .addTemporalMarker(autoCommands.intakeThirdCone())
-//                .splineToLinearHeading(new Pose2d(intakePose2X, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
-//                .waitSeconds(INTAKE_WAIT_TIME)
-//                .addTemporalMarker(autoCommands.catchCone())
-//                .waitSeconds(ELEVATOR_WAIT_TIME)
-//                .addTemporalMarker(autoCommands.elevatorIntake())
-//                .waitSeconds(DELIVERY_WAIT_TIME * 3)
-//                .build();
-//
-//        TrajectorySequence place3 = drivetrain.trajectorySequenceBuilder(cycle2.end())
-//                .setReversed(true)
-//                .lineTo(new Vector2d(posCone1X, posCone1Y))
-//                .addTemporalMarker(autoCommands.readyToRelease())
-//                //.splineToLinearHeading(new Pose2d(posConeX, posConeY, Math.toRadians(posConeAngle)), Math.toRadians(0))
-//                .lineToLinearHeading(new Pose2d(posCone2X, posCone2Y, Math.toRadians(posCone2Angle)))
-//                .waitSeconds(DELIVERY_WAIT_TIME * 2)
-//                .addTemporalMarker(autoCommands.releaseCone())
-//                .waitSeconds(DELIVERY_WAIT_TIME)
-//                .build();
+        TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(place2.end())
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(intakePoseCycleX, intakePose2Y- 0.1, Math.toRadians(intakePose1Angle)), Math.toRadians(0))
+                .addTemporalMarker(autoCommands.intakeThirdCone())
+                .lineTo(new Vector2d(intakePose2X + intakeHelp3X, intakePose2Y + 0.6))
+                .waitSeconds(BACK_WAIT_TIME)
+                .back(backIntakeOffset)
+                .waitSeconds(INTAKE_WAIT_TIME)
+                .addTemporalMarker(autoCommands.catchCone())
+                .waitSeconds(ELEVATOR_WAIT_TIME)
+                .addTemporalMarker(autoCommands.elevatorIntake())
+                .waitSeconds(DELIVERY_WAIT_TIME*2)
+                .build();
 
-
-        TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place1.end())
-                .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
+        TrajectorySequence place3 = drivetrain.trajectorySequenceBuilder(cycle3.end())
+                .lineTo(new Vector2d(posCone1X, posCone1Y))
                 .addTemporalMarker(autoCommands.readyToRelease())
-                .strafeLeft(PARK_ASSIST)
+                .splineTo(new Vector2d(posCone2X + 1.35, posCone2Y + 1), Math.toRadians(posCone2Angle))
+                .waitSeconds(DELIVERY_WAIT_TIME)
+                .addTemporalMarker(autoCommands.goDownToReleaseCone())
+                .waitSeconds(ALMOST_RELEASE_TIME)
+                .addTemporalMarker(autoCommands.releaseCone())
+                .waitSeconds(RELEASE_WAIT_TIME)
+                .build();
+
+
+        TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place3.end())
+                .back(8,velConstraint,accelConstraint)
+                .addTemporalMarker(autoCommands.readyToRelease())
+                .addTemporalMarker(autoCommands.reset())
+                .lineToLinearHeading(new Pose2d(parkPoseX, parkPoseY, Math.toRadians(parkPoseAngle)),velConstraint,accelConstraint)
                 .back(TARGET_ZONE)
                 .build();
 
-        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place1.end())
-                .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
-                .strafeLeft(PARK_ASSIST)
+        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place3.end())
+                .back(8,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
+                .addTemporalMarker(autoCommands.reset())
+                .lineToLinearHeading(new Pose2d(parkPoseX, parkPoseY, Math.toRadians(parkPoseAngle)),velConstraint,accelConstraint)
                 .build();
 
-        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place1.end())
-                .lineToLinearHeading(new Pose2d(intakePose1X, intakePose1Y, Math.toRadians(intakePose1Angle)))
+        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place3.end())
+                .back(8,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
-                .strafeLeft(PARK_ASSIST)
+                .addTemporalMarker(autoCommands.reset())
+                .lineToLinearHeading(new Pose2d(parkPoseX, parkPoseY, Math.toRadians(parkPoseAngle)),velConstraint,accelConstraint)
                 .forward(TARGET_ZONE)
                 .build();
 
@@ -184,16 +198,10 @@ public class AutoRightRed extends LinearOpMode {
         drivetrain.followTrajectorySequence(cycle2);
         drivetrain.followTrajectorySequence(place2);
 
-
-//        drivetrain.followTrajectorySequence(cycle2);
-//        drivetrain.followTrajectorySequence(place2);
-//
-//        drivetrain.followTrajectorySequence(cycle3);
-//        drivetrain.followTrajectorySequence(place3);
+        drivetrain.followTrajectorySequence(cycle3);
+        drivetrain.followTrajectorySequence(place3);
 
         drivetrain.followTrajectorySequence(park2);
-        elevatorSystem.baseLevel();
-        transferSystem.pickUp();
 
         while (opModeIsActive());
     }
