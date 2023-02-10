@@ -8,21 +8,24 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 @TeleOp(name="Manual Claw Test", group="Tests")
 public class ManualClawTest extends LinearOpMode {
-    Servo _clawServo;
+    Servo _clawServoLeft, _clawServoRight;
 
-    public static double pos = 0;
+    public static double pos1 = 0;
+    public static double pos2 = 0;
 
     @Override
     public void runOpMode()
     {
-        _clawServo = hardwareMap.get(Servo.class,"claw_servo"); // initialize the claw
+        _clawServoLeft = hardwareMap.get(Servo.class,"claw_servo_left"); // initialize the claw
+        _clawServoRight = hardwareMap.get(Servo.class,"claw_servo_right"); // initialize the claw
         telemetry.addData("Status: ","Initialized!");
         telemetry.update();
 
         waitForStart();
         while (opModeIsActive())
         {
-            _clawServo.setPosition(pos);
+            _clawServoLeft.setPosition(pos1);
+            _clawServoRight.setPosition(pos2);
         }
     }
 }

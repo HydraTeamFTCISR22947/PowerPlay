@@ -7,29 +7,31 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 public class ClawServo {
 
-    public static double closePos = 0.2; // starting angle of claws
-    public static double openPos = 0.5; // closed angle of claws
+    public static double closePos = 0; // starting angle of claws
+    public static double openPos = 0.25; // closed angle of claws
 
-    private Servo _clawServo; // declaring claw servo
-    private HardwareMap _hardwareMap; // declaring hardware map
+    private Servo _clawServoLeft; // declaring claw servo
+    private Servo _clawServoRight; // declaring claw servo
 
     // constructor
     //lil mish
     public ClawServo(HardwareMap hardwareMap){
 
-        this._hardwareMap = hardwareMap;
-        _clawServo = hardwareMap.get(Servo.class,"claw_servo"); // initialize the claw
-        //openClaw();
+        _clawServoLeft = hardwareMap.get(Servo.class,"claw_servo_left"); // initialize the claw
+        _clawServoRight = hardwareMap.get(Servo.class,"claw_servo_right"); // initialize the claw
+        _clawServoRight.setDirection(Servo.Direction.REVERSE);
     }
     public void openClaw(){
         // if error occurred , change the order of commands
-        _clawServo.setPosition(openPos); // open the claw
+        _clawServoLeft.setPosition(openPos); // open the claw
+        _clawServoRight.setPosition(openPos); // open the claw
 
 
     }
     public void closeClaw(){
         // if error, change the order of commands
-        _clawServo.setPosition(closePos); // close the claw
+        _clawServoLeft.setPosition(closePos); // close the claw
+        _clawServoRight.setPosition(closePos); // close the claw
 
     }
 

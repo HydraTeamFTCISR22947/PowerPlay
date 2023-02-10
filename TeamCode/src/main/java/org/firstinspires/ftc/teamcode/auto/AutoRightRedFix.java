@@ -27,18 +27,18 @@ import java.util.Arrays;
 @Autonomous(name = "Auto Right Red FIX", group = "auto")
 public class AutoRightRedFix extends LinearOpMode {
 
-    public static double startPosX = 36, startPosY = -66, startPosAngle = 180;
-    public static double startConeStrafe1 = 58.8, startConeStrafe2 = 20, startConeForward = 4.4;
-    public static double intakePose1X = 35, intakePose1Y = -21, intakePose1Angle = 180;
-    public static double intakePose2X = 50.2, intakePose2Y = -15.8, intakePose2Angle = 180;
-    public static double backIntakeOffset  = 6;
+    public static double startPosX = 36, startPosY = -65.9, startPosAngle = 180;
+    public static double startConeStrafe1 = 52.8, startConeStrafe2 = 14.05, startConeForward = 5.2;
+    public static double intakePose1X = 35, intakePose1Y = -19.8, intakePose1Angle = 180;
+    public static double intakePose2X = 45, intakePose2Y = -15.6, intakePose2Angle = 180;
+    public static double backIntakeOffset  = 13;
     public static double intakePoseCycleX = 38;
-    public static double intakeHelp1X = 2.3, intakeHelp2X = 7, intakeHelp3X = 7.5;
+    public static double intakeHelp1X = 1.50, intakeHelp2X = 5, intakeHelp3X = 6;
     public static double posCone1X = 40, posCone1Y = -15;
-    public static double posCone2X = 33.4, posCone2Y = -18.2, posCone2Angle = 225;
-    public static double PARK_ASSIST = 20, TARGET_ZONE = 20;
+    public static double posCone2X = 31, posCone2Y = -18, posCone2Angle = 225;
+    public static double PARK_ASSIST = 17, TARGET_ZONE = 20;
 
-    public static double DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33, INTAKE_WAIT_TIME = .8, ELEVATOR_WAIT_TIME = .5;
+    public static double BACK_WAIT_TIME = 0.1, DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33, INTAKE_WAIT_TIME = .8, ELEVATOR_WAIT_TIME = .5;
 
     AutoCommands autoCommands;
     ClawServo clawServo;
@@ -70,6 +70,7 @@ public class AutoRightRedFix extends LinearOpMode {
                 .strafeRight(startConeStrafe1, velConstraint, accelConstraint)
                 .strafeLeft(startConeStrafe2)
                 .forward(startConeForward)
+                .waitSeconds(DELIVERY_WAIT_TIME * 2)
                 .addTemporalMarker(autoCommands.releaseCone())
                 .waitSeconds(RELEASE_WAIT_TIME)
                 .build();
@@ -78,19 +79,20 @@ public class AutoRightRedFix extends LinearOpMode {
                 .lineTo(new Vector2d(intakePose1X, intakePose1Y))
                 .addTemporalMarker(autoCommands.intakeFirstCone())
                 .splineToLinearHeading(new Pose2d(intakePose2X + intakeHelp1X, intakePose2Y, Math.toRadians(intakePose2Angle)), Math.toRadians(0))
+                .waitSeconds(BACK_WAIT_TIME)
                 .back(backIntakeOffset)
                 .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCommands.catchCone())
                 .waitSeconds(ELEVATOR_WAIT_TIME)
                 .addTemporalMarker(autoCommands.elevatorIntake())
-                .waitSeconds(DELIVERY_WAIT_TIME*2)
+                .waitSeconds(DELIVERY_WAIT_TIME*3)
                 .build();
 
         TrajectorySequence place1 = drivetrain.trajectorySequenceBuilder(cycle1.end())
                 .lineTo(new Vector2d(posCone1X, posCone1Y))
                 .addTemporalMarker(autoCommands.readyToRelease())
-                .splineTo(new Vector2d(posCone2X, posCone2Y), Math.toRadians(posCone2Angle))
-                .waitSeconds(DELIVERY_WAIT_TIME * 2)
+                .splineTo(new Vector2d(posCone2X - 0.1, posCone2Y  - 0.1), Math.toRadians(posCone2Angle))
+                .waitSeconds(DELIVERY_WAIT_TIME * 3)
                 .addTemporalMarker(autoCommands.releaseCone())
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .build();
@@ -99,9 +101,10 @@ public class AutoRightRedFix extends LinearOpMode {
         TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .setReversed(true)
                 .splineToSplineHeading(new Pose2d(intakePoseCycleX, intakePose2Y - 0.1, Math.toRadians(intakePose1Angle)), Math.toRadians(0))
-                .back(backIntakeOffset)
                 .addTemporalMarker(autoCommands.intakeSecondCone())
                 .lineTo(new Vector2d(intakePose2X + intakeHelp2X, intakePose2Y- 0.1))
+                .waitSeconds(BACK_WAIT_TIME)
+                .back(backIntakeOffset)
                 .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCommands.catchCone())
                 .waitSeconds(ELEVATOR_WAIT_TIME)
@@ -112,18 +115,19 @@ public class AutoRightRedFix extends LinearOpMode {
         TrajectorySequence place2 = drivetrain.trajectorySequenceBuilder(cycle2.end())
                 .lineTo(new Vector2d(posCone1X, posCone1Y))
                 .addTemporalMarker(autoCommands.readyToRelease())
-                .splineTo(new Vector2d(posCone2X + 0.5, posCone2Y - 0.4), Math.toRadians(posCone2Angle))
-                .waitSeconds(DELIVERY_WAIT_TIME * 2)
+                .splineTo(new Vector2d(posCone2X + 0.6, posCone2Y - 0.4), Math.toRadians(posCone2Angle))
+                .waitSeconds(DELIVERY_WAIT_TIME * 3)
                 .addTemporalMarker(autoCommands.releaseCone())
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .build();
 
         TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(place2.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(intakePoseCycleX, intakePose2Y- 0.3, Math.toRadians(intakePose1Angle)), Math.toRadians(0))
-                .back(backIntakeOffset)
+                .splineToSplineHeading(new Pose2d(intakePoseCycleX, intakePose2Y- 0.1, Math.toRadians(intakePose1Angle)), Math.toRadians(0))
                 .addTemporalMarker(autoCommands.intakeThirdCone())
-                .lineTo(new Vector2d(intakePose2X + intakeHelp3X, intakePose2Y- 0.3))
+                .lineTo(new Vector2d(intakePose2X + intakeHelp3X, intakePose2Y- 0.1))
+                .waitSeconds(BACK_WAIT_TIME)
+                .back(backIntakeOffset)
                 .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCommands.catchCone())
                 .waitSeconds(ELEVATOR_WAIT_TIME)
@@ -134,8 +138,8 @@ public class AutoRightRedFix extends LinearOpMode {
         TrajectorySequence place3 = drivetrain.trajectorySequenceBuilder(cycle3.end())
                 .lineTo(new Vector2d(posCone1X, posCone1Y))
                 .addTemporalMarker(autoCommands.readyToRelease())
-                .splineTo(new Vector2d(posCone2X + 1.3, posCone2Y - 0.7), Math.toRadians(posCone2Angle))
-                .waitSeconds(DELIVERY_WAIT_TIME * 2)
+                .splineTo(new Vector2d(posCone2X + 1.7, posCone2Y + 0.6), Math.toRadians(posCone2Angle))
+                .waitSeconds(DELIVERY_WAIT_TIME * 3)
                 .addTemporalMarker(autoCommands.releaseCone())
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .build();
