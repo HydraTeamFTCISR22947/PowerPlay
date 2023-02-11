@@ -110,11 +110,11 @@ public class GamepadController {
 
         double twist = gamepad1.right_stick_x * multiplier;
 
-        if(gamepad1.left_trigger != 0)
+        if(gamepad1.right_trigger != 0)
         {
             power = slowPower;
         }
-        else if(gamepad1.right_trigger != 0)
+        else if(gamepad1.left_trigger != 0)
         {
             power = fastPower;
         }

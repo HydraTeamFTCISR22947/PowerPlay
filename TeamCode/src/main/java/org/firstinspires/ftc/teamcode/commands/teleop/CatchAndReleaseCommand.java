@@ -95,6 +95,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
                 if(gamepadHelper1.rightBumperOnce())
                 {
+                    elevatorSystem.resetValues();
                     catchingState = CatchingState.CATCH;
                 }
                 break;

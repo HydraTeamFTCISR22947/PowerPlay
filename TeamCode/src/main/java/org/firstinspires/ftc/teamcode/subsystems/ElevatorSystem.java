@@ -22,7 +22,12 @@ public class ElevatorSystem {
     public static int LOW_HEIGHT = 630;
     public static int MID_HEIGHT = 1380;
     public static int ALMOST_MID_HEIGHT = 1200;
-    public static int HIGH_HEIGHT = 1900;
+    public static int HIGH_HEIGHT = 1970;
+
+    final int BASE = BASE_HEIGHT;
+    final int LOW = LOW_HEIGHT;
+    final int MID = MID_HEIGHT;
+    final int HIGH = HIGH_HEIGHT;
 
     public static double power = 1;
     public static double maxPower = 1;
@@ -180,5 +185,14 @@ public class ElevatorSystem {
                 setHighHeight(pos);
                 break;
         }
+    }
+
+
+    public void resetValues()
+    {
+        BASE_HEIGHT = BASE;
+        LOW_HEIGHT = LOW;
+        MID_HEIGHT = MID;
+        HIGH_HEIGHT = HIGH;
     }
 }

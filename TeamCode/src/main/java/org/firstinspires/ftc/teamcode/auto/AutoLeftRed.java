@@ -31,7 +31,7 @@ import java.util.Arrays;
 
 
 @Config
-@Autonomous(name = "Auto Right Blue", group = "auto")
+@Autonomous(name = "Auto Left Red", group = "auto")
 public class AutoLeftRed extends LinearOpMode {
     public static boolean useCamera = false;
 
