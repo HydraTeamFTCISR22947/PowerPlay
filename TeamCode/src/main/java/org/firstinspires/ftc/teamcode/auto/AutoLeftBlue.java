@@ -32,48 +32,10 @@ import java.util.Arrays;
 
 @Config
 @Autonomous(name = "Auto Right Blue", group = "auto")
-public class AutoRightBlue extends LinearOpMode {
+public class AutoLeftBlue extends LinearOpMode {
     public static boolean useCamera = false;
 
-    public static double startPosX = 36, startPosY = -65.9, startPosAngle = 180;
-    public static double startConeStrafe1 = 54.8, startConeStrafe2 = 16.05, startConeForward = 5.15;
-
-
-    public static double backIntakeOffset  = 13;
-
-
-    public static double intakePose1XFirstCone = 35, intakePose1YFirstCone = -19.8;
-    public static double intakePose2XFirstCone = 46.7, intakePose2YFirstCone = -15.6;
-
-
-    public static double intakePoseCycleXSecondCone = 38, intakePose1YSecondCone = -15.7;
-    public static double intakePose2XSecondCone = 50, intakePose2YSecondCone = -15.4;
-
-
-    public static double intakePoseCycleXThirdCone = 38, intakePose1YThirdCone = -15.7;
-    public static double intakePose2XThirdCone = 51, intakePose2YThirdCone = -15;
-
-
-    public static double intakeAngle = 180;
-
-
-    public static double posCone1X = 40, posCone1Y = -15, posConeAngle = 225;
-
-
-    public static double posCone2XFirstCone = 30.45, posCone2YFirstCone = -18.05;
-
-
-    public static double posCone2XSecondCone = 30.6, posCone2YSecondCone = -17.4;
-
-
-    public static double posCone2XThirdCone = 31.95, posCone2YThirdCone = -17.2;
-
-
-    public static double parkPoseX = 39.3, parkPoseY = -20, parkPoseAngle = 180;
-
-
-    public static double TARGET_ZONE = 20, GO_TO_PARK_HELPER = 8;
-
+    public static double startPosX = -36, startPosY = -65.9, startPosAngle = 0;
 
     public static double BACK_WAIT_TIME = 0.1, DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33;
     public static double ALMOST_RELEASE_TIME = 0.1, INTAKE_WAIT_TIME = .1, ELEVATOR_WAIT_TIME = .5;
@@ -123,9 +85,9 @@ public class AutoRightBlue extends LinearOpMode {
         TrajectoryAccelerationConstraint accelConstraint = new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL);
 
         TrajectorySequence preload = drivetrain.trajectorySequenceBuilder(startPose)
-                .strafeRight(startConeStrafe1, velConstraint, accelConstraint)
-                .strafeLeft(startConeStrafe2, velConstraint, accelConstraint)
-                .forward(startConeForward, velConstraint, accelConstraint)
+                .strafeLeft(AutoRightBlue.startConeStrafe1, velConstraint, accelConstraint)
+                .strafeRight(AutoRightBlue.startConeStrafe2, velConstraint, accelConstraint)
+                .forward(AutoRightBlue.startConeForward, velConstraint, accelConstraint)
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .addTemporalMarker(autoCommands.goDownToReleaseCone())
                 .waitSeconds(ALMOST_RELEASE_TIME)
@@ -134,11 +96,11 @@ public class AutoRightBlue extends LinearOpMode {
                 .build();
 
         TrajectorySequence cycle1 = drivetrain.trajectorySequenceBuilder(preload.end())
-                .lineTo(new Vector2d(intakePose1XFirstCone, intakePose1YFirstCone))
+                .lineTo(new Vector2d(-AutoRightBlue.intakePose1XFirstCone, AutoRightBlue.intakePose1YFirstCone))
                 .addTemporalMarker(autoCommands.intakeFirstCone())
-                .splineToLinearHeading(new Pose2d(intakePose2XFirstCone, intakePose2YFirstCone, Math.toRadians(intakeAngle)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(-AutoRightBlue.intakePose2XFirstCone, AutoRightBlue.intakePose2YFirstCone, Math.toRadians(AutoRightBlue.intakeAngle - 180)), Math.toRadians(0))
                 .waitSeconds(BACK_WAIT_TIME)
-                .back(backIntakeOffset)
+                .back(AutoRightBlue.backIntakeOffset)
                 .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCommands.catchCone())
                 .waitSeconds(ELEVATOR_WAIT_TIME)
@@ -147,9 +109,9 @@ public class AutoRightBlue extends LinearOpMode {
                 .build();
 
         TrajectorySequence place1 = drivetrain.trajectorySequenceBuilder(cycle1.end())
-                .lineTo(new Vector2d(posCone1X, posCone1Y))
+                .lineTo(new Vector2d(-AutoRightBlue.posCone1X, AutoRightBlue.posCone1Y))
                 .addTemporalMarker(autoCommands.readyToRelease())
-                .splineTo(new Vector2d(posCone2XFirstCone, posCone2YFirstCone), Math.toRadians(posConeAngle))
+                .splineTo(new Vector2d(-AutoRightBlue.posCone2XFirstCone, AutoRightBlue.posCone2YFirstCone), Math.toRadians(AutoRightBlue.posConeAngle - 270))
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .addTemporalMarker(autoCommands.goDownToReleaseCone())
                 .waitSeconds(ALMOST_RELEASE_TIME)
@@ -160,11 +122,11 @@ public class AutoRightBlue extends LinearOpMode {
 
         TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(intakePoseCycleXSecondCone, intakePose1YSecondCone, Math.toRadians(intakeAngle)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-AutoRightBlue.intakePoseCycleXSecondCone, AutoRightBlue.intakePose1YSecondCone, Math.toRadians(AutoRightBlue.intakeAngle - 180)), Math.toRadians(180))
                 .addTemporalMarker(autoCommands.intakeSecondCone())
-                .lineTo(new Vector2d(intakePose2XSecondCone, intakePose2YSecondCone))
+                .lineTo(new Vector2d(-AutoRightBlue.intakePose2XSecondCone, AutoRightBlue.intakePose2YSecondCone))
                 .waitSeconds(BACK_WAIT_TIME)
-                .back(backIntakeOffset)
+                .back(AutoRightBlue.backIntakeOffset)
                 .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCommands.catchCone())
                 .waitSeconds(ELEVATOR_WAIT_TIME)
@@ -173,9 +135,9 @@ public class AutoRightBlue extends LinearOpMode {
                 .build();
 
         TrajectorySequence place2 = drivetrain.trajectorySequenceBuilder(cycle2.end())
-                .lineTo(new Vector2d(posCone1X, posCone1Y))
+                .lineTo(new Vector2d(-AutoRightBlue.posCone1X, AutoRightBlue.posCone1Y))
                 .addTemporalMarker(autoCommands.readyToRelease())
-                .splineTo(new Vector2d(posCone2XSecondCone, posCone2YSecondCone), Math.toRadians(posConeAngle))
+                .splineTo(new Vector2d(-AutoRightBlue.posCone2XSecondCone, AutoRightBlue.posCone2YSecondCone), Math.toRadians(AutoRightBlue.posConeAngle - 270))
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .addTemporalMarker(autoCommands.goDownToReleaseCone())
                 .waitSeconds(ALMOST_RELEASE_TIME)
@@ -185,11 +147,11 @@ public class AutoRightBlue extends LinearOpMode {
 
         TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(place2.end())
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(intakePoseCycleXThirdCone, intakePose1YThirdCone, Math.toRadians(intakeAngle)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(-AutoRightBlue.intakePoseCycleXThirdCone, AutoRightBlue.intakePose1YThirdCone, Math.toRadians(AutoRightBlue.intakeAngle - 180)), Math.toRadians(180))
                 .addTemporalMarker(autoCommands.intakeThirdCone())
-                .lineTo(new Vector2d(intakePose2XThirdCone, intakePose2YThirdCone))
+                .lineTo(new Vector2d(-AutoRightBlue.intakePose2XThirdCone, AutoRightBlue.intakePose2YThirdCone))
                 .waitSeconds(BACK_WAIT_TIME)
-                .back(backIntakeOffset)
+                .back(AutoRightBlue.backIntakeOffset)
                 .waitSeconds(INTAKE_WAIT_TIME)
                 .addTemporalMarker(autoCommands.catchCone())
                 .waitSeconds(ELEVATOR_WAIT_TIME)
@@ -198,9 +160,9 @@ public class AutoRightBlue extends LinearOpMode {
                 .build();
 
         TrajectorySequence place3 = drivetrain.trajectorySequenceBuilder(cycle3.end())
-                .lineTo(new Vector2d(posCone1X, posCone1Y))
+                .lineTo(new Vector2d(-AutoRightBlue.posCone1X, AutoRightBlue.posCone1Y))
                 .addTemporalMarker(autoCommands.readyToRelease())
-                .splineTo(new Vector2d(posCone2XThirdCone, posCone2YThirdCone), Math.toRadians(posConeAngle))
+                .splineTo(new Vector2d(-AutoRightBlue.posCone2XThirdCone, AutoRightBlue.posCone2YThirdCone), Math.toRadians(AutoRightBlue.posConeAngle - 270))
                 .waitSeconds(DELIVERY_WAIT_TIME)
                 .addTemporalMarker(autoCommands.goDownToReleaseCone())
                 .waitSeconds(ALMOST_RELEASE_TIME)
@@ -210,26 +172,26 @@ public class AutoRightBlue extends LinearOpMode {
 
 
         TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place3.end())
-                .back(GO_TO_PARK_HELPER,velConstraint,accelConstraint)
+                .back(AutoRightBlue.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
-                .lineToLinearHeading(new Pose2d(parkPoseX, parkPoseY, Math.toRadians(parkPoseAngle)),velConstraint,accelConstraint)
-                .back(TARGET_ZONE)
+                .lineToLinearHeading(new Pose2d(-AutoRightBlue.parkPoseX, AutoRightBlue.parkPoseY, Math.toRadians(-AutoRightBlue.parkPoseAngle)),velConstraint,accelConstraint)
+                .back(AutoRightBlue.TARGET_ZONE)
                 .build();
 
         TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place3.end())
-                .back(GO_TO_PARK_HELPER,velConstraint,accelConstraint)
+                .back(AutoRightBlue.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
-                .lineToLinearHeading(new Pose2d(parkPoseX, parkPoseY, Math.toRadians(parkPoseAngle)),velConstraint,accelConstraint)
+                .lineToLinearHeading(new Pose2d(-AutoRightBlue.parkPoseX, AutoRightBlue.parkPoseY, Math.toRadians(-AutoRightBlue.parkPoseAngle)),velConstraint,accelConstraint)
                 .build();
 
         TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place3.end())
-                .back(GO_TO_PARK_HELPER,velConstraint,accelConstraint)
+                .back(AutoRightBlue.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
-                .lineToLinearHeading(new Pose2d(parkPoseX, parkPoseY, Math.toRadians(parkPoseAngle)),velConstraint,accelConstraint)
-                .forward(TARGET_ZONE)
+                .lineToLinearHeading(new Pose2d(-AutoRightBlue.parkPoseX, AutoRightBlue.parkPoseY, Math.toRadians(-AutoRightBlue.parkPoseAngle)),velConstraint,accelConstraint)
+                .forward(AutoRightBlue.TARGET_ZONE)
                 .build();
 
         if (isStopRequested()) {return;}
