@@ -31,13 +31,13 @@ public class ManualFixingCommand implements RobotCommand {
         gamepadHelper2.update();
 
         controlOpenedElevator();
-        controlOpenedTransfer();
+        //controlOpenedTransfer();
 
-        flipHighAndTerminal();
-        flipPickup();
+        //flipHighAndTerminal();
+        //flipPickup();
 
         userWantsBaseElevatorControl();
-        userWantsBaseTransferControl();
+        //userWantsBaseTransferControl();
     }
 
     @Override

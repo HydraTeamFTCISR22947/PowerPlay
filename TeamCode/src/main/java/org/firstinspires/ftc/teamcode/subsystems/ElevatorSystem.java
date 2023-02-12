@@ -21,7 +21,7 @@ public class ElevatorSystem {
     public static int BASE_HEIGHT = 0;
     public static int LOW_HEIGHT = 630;
     public static int MID_HEIGHT = 1380;
-    public static int ALMOST_MID_HEIGHT = 1200;
+    public static int ALMOST_MID_HEIGHT = 450;
     public static int HIGH_HEIGHT = 1970;
 
     final int BASE = BASE_HEIGHT;

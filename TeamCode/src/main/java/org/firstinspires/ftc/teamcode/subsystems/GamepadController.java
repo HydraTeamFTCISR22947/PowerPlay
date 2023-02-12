@@ -20,7 +20,7 @@ public class GamepadController {
     DcMotor mFL, mBL, mFR, mBR;
     Telemetry telemetry;
     double power = mainPower;
-    public static double mainPower = .4, multiplier = .9, POWER_INCREMENT = 0.1, slowPower = .3, fastPower = .65;
+    public static double mainPower = .5, multiplier = .9, POWER_INCREMENT = 0.1, slowPower = .3, fastPower = .65;
     GamepadHelper cGamepad1, cGamepad2;
     SampleMecanumDrive drivetrain;
 
@@ -58,11 +58,11 @@ public class GamepadController {
         // Velocity control per wheel is not necessary outside of motion profiled auto
         this.drivetrain.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-        if(redAlliance)
+        if(!redAlliance)
         {
             this.drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI + Math.PI/2)));
         }
-        else if(!redAlliance)
+        else if(redAlliance)
         {
             this.drivetrain.setPoseEstimate(new Pose2d(0,0,(Math.PI + Math.PI/2)));
         }
@@ -75,11 +75,11 @@ public class GamepadController {
 
         if(cGamepad1.XOnce())
         {
-            if(redAlliance)
+            if(!redAlliance)
             {
                 this.drivetrain.setPoseEstimate(new Pose2d(0,0,-(Math.PI + Math.PI/2)));
             }
-            else if(!redAlliance)
+            else if(redAlliance)
             {
                 this.drivetrain.setPoseEstimate(new Pose2d(0,0,(Math.PI + Math.PI/2)));
             }

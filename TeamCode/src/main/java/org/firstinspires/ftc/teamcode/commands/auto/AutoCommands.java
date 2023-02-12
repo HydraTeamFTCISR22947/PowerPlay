@@ -17,7 +17,7 @@ public class AutoCommands implements AutoRobotCommand {
     RotationServo rotationServo;
     ClawServo clawServo;
 
-    public static int STACK_ELEVATOR_HEIGHT = 780, OFFSET_BETWEEN_EACH_CONE = 45;
+    public static int STACK_ELEVATOR_HEIGHT = 660, OFFSET_BETWEEN_EACH_CONE = 43;
 
     public MarkerCallback catchCone() {
         return new MarkerCallback() {
@@ -39,6 +39,17 @@ public class AutoCommands implements AutoRobotCommand {
         };
     }
 
+    public MarkerCallback intakeFirstConeOpposite() {
+        return new MarkerCallback() {
+            @Override
+            public void onMarkerReached() {
+                elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT);
+                transferSystem.pickUp();
+                rotationServo.pickUpPos();
+            }
+        };
+    }
+
     public MarkerCallback intakeSecondCone() {
         return new MarkerCallback() {
             @Override
@@ -46,6 +57,17 @@ public class AutoCommands implements AutoRobotCommand {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 2);
                 transferSystem.pickUpExpansion();
                 rotationServo.pickUpPosExpansion();
+            }
+        };
+    }
+
+    public MarkerCallback intakeSecondConeOpposite() {
+        return new MarkerCallback() {
+            @Override
+            public void onMarkerReached() {
+                elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 2);
+                transferSystem.pickUp();
+                rotationServo.pickUpPos();
             }
         };
     }
@@ -61,6 +83,18 @@ public class AutoCommands implements AutoRobotCommand {
         };
     }
 
+    public MarkerCallback intakeThirdConeOpposite() {
+        return new MarkerCallback() {
+            @Override
+            public void onMarkerReached() {
+                elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 3);
+                transferSystem.pickUp();
+                rotationServo.pickUpPos();
+            }
+        };
+    }
+
+
 
     public MarkerCallback readyToRelease() {
         return new MarkerCallback() {
@@ -73,12 +107,33 @@ public class AutoCommands implements AutoRobotCommand {
         };
     }
 
+    public MarkerCallback readyToReleaseOpposite() {
+        return new MarkerCallback() {
+            @Override
+            public void onMarkerReached() {
+                transferSystem.highExpansionPos();
+                elevatorSystem.midRod();
+                rotationServo.releasePosExpansion();
+            }
+        };
+    }
+
     public MarkerCallback reset() {
         return new MarkerCallback() {
             @Override
             public void onMarkerReached() {
                 elevatorSystem.baseLevel();
                 transferSystem.pickUp();
+            }
+        };
+    }
+
+    public MarkerCallback resetOpposite() {
+        return new MarkerCallback() {
+            @Override
+            public void onMarkerReached() {
+                elevatorSystem.baseLevel();
+                transferSystem.pickUpExpansion();
             }
         };
     }

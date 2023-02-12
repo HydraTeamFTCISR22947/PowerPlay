@@ -17,7 +17,7 @@ public class MeepMeepBLUELEFT {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(550);
 
-        double startPosX = -36, startPosY = -65.9, startPosAngle = 0;
+        double startPosX = 36, startPosY = 65.9, startPosAngle = 180;
 
         double BACK_WAIT_TIME = 0.1, DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33;
         double ALMOST_RELEASE_TIME = 0.1, INTAKE_WAIT_TIME = .1, ELEVATOR_WAIT_TIME = .5;
@@ -25,7 +25,7 @@ public class MeepMeepBLUELEFT {
         double startConeStrafe1 = 54.8, startConeStrafe2 = 16.05, startConeForward = 5.15;
         double backIntakeOffset  = 13;
         double intakePose1XFirstCone = 35, intakePose1YFirstCone = -19.8;
-        double intakePose2XFirstCone = 46.7, intakePose2YFirstCone = -15.6;
+        double intakePose2XFirstCone = 48.7, intakePose2YFirstCone = -15.3;
         double intakePoseCycleXSecondCone = 38, intakePose1YSecondCone = -15.7;
         double intakePose2XSecondCone = 50, intakePose2YSecondCone = -15.4;
         double intakePoseCycleXThirdCone = 38, intakePose1YThirdCone = -15.7;
@@ -55,43 +55,52 @@ public class MeepMeepBLUELEFT {
                                 .waitSeconds(DELIVERY_WAIT_TIME)
                                 .waitSeconds(ALMOST_RELEASE_TIME)
                                 .waitSeconds(RELEASE_WAIT_TIME)
-                                .lineTo(new Vector2d(-intakePose1XFirstCone, intakePose1YFirstCone))
-                                .splineToLinearHeading(new Pose2d(-intakePose2XFirstCone, intakePose2YFirstCone, Math.toRadians(intakeAngle - 180)), Math.toRadians(0))
+
+                                .lineTo(new Vector2d(intakePose1XFirstCone, -intakePose1YFirstCone))
+                                .splineToLinearHeading(new Pose2d(intakePose2XFirstCone, -intakePose2YFirstCone, Math.toRadians(intakeAngle)), Math.toRadians(0))
                                 .waitSeconds(BACK_WAIT_TIME)
                                 .back(backIntakeOffset)
                                 .waitSeconds(INTAKE_WAIT_TIME)
                                 .waitSeconds(ELEVATOR_WAIT_TIME)
-                                .lineTo(new Vector2d(-posCone1X, posCone1Y))
-                                .splineTo(new Vector2d(-posCone2XFirstCone, posCone2YFirstCone), Math.toRadians(posConeAngle - 270))
+
+                                .lineTo(new Vector2d(posCone1X, -posCone1Y))
+                                .splineTo(new Vector2d(posCone2XFirstCone, -posCone2YFirstCone), Math.toRadians(posConeAngle - 90))
                                 .waitSeconds(DELIVERY_WAIT_TIME)
                                 .waitSeconds(ALMOST_RELEASE_TIME)
                                 .waitSeconds(RELEASE_WAIT_TIME)
+
                                 .setReversed(true)
-                                .splineToSplineHeading(new Pose2d(-intakePoseCycleXSecondCone, intakePose1YSecondCone, Math.toRadians(intakeAngle - 180)), Math.toRadians(180))
-                                .lineTo(new Vector2d(-intakePose2XSecondCone, intakePose2YSecondCone))
+                                .splineToLinearHeading(new Pose2d(intakePoseCycleXSecondCone, -intakePose1YSecondCone, Math.toRadians(180)), Math.toRadians(0))
+                                .lineTo(new Vector2d(intakePose2XSecondCone, -intakePose2YSecondCone))
                                 .waitSeconds(BACK_WAIT_TIME)
                                 .back(backIntakeOffset)
                                 .waitSeconds(INTAKE_WAIT_TIME)
                                 .waitSeconds(ELEVATOR_WAIT_TIME)
-                                .lineTo(new Vector2d(-posCone1X, posCone1Y))
-                                .splineTo(new Vector2d(-posCone2XSecondCone, posCone2YSecondCone), Math.toRadians(posConeAngle - 270))
+
+                                .lineTo(new Vector2d(posCone1X, -posCone1Y))
+                                .splineTo(new Vector2d(posCone2XSecondCone, -posCone2YSecondCone), Math.toRadians(posConeAngle - 90))
                                 .waitSeconds(DELIVERY_WAIT_TIME)
                                 .waitSeconds(ALMOST_RELEASE_TIME)
                                 .waitSeconds(RELEASE_WAIT_TIME)
+
                                 .setReversed(true)
-                                .splineToSplineHeading(new Pose2d(-intakePoseCycleXThirdCone, intakePose1YThirdCone, Math.toRadians(intakeAngle - 180)), Math.toRadians(180))
-                                .lineTo(new Vector2d(-intakePose2XThirdCone, intakePose2YThirdCone))
+                                .splineToLinearHeading(new Pose2d(intakePoseCycleXSecondCone, -intakePose1YSecondCone, Math.toRadians(180)), Math.toRadians(0))
+                                .lineTo(new Vector2d(intakePose2XThirdCone, -intakePose2YThirdCone))
                                 .waitSeconds(BACK_WAIT_TIME)
                                 .back(backIntakeOffset)
                                 .waitSeconds(INTAKE_WAIT_TIME)
                                 .waitSeconds(ELEVATOR_WAIT_TIME)
-                                .lineTo(new Vector2d(-posCone1X, posCone1Y))
-                                .splineTo(new Vector2d(-posCone2XThirdCone, posCone2YThirdCone), Math.toRadians(posConeAngle - 270))
+
+                                .lineTo(new Vector2d(posCone1X, -posCone1Y))
+                                .splineTo(new Vector2d(posCone2XThirdCone, -posCone2YThirdCone), Math.toRadians(posConeAngle - 90))
                                 .waitSeconds(DELIVERY_WAIT_TIME)
                                 .waitSeconds(ALMOST_RELEASE_TIME)
                                 .waitSeconds(RELEASE_WAIT_TIME)
+
                                 .back(GO_TO_PARK_HELPER,velConstraint,accelConstraint)
-                                .lineToLinearHeading(new Pose2d(-parkPoseX, parkPoseY, Math.toRadians(-parkPoseAngle)),velConstraint,accelConstraint)
+                                .lineToLinearHeading(new Pose2d(parkPoseX, -parkPoseY, Math.toRadians(-parkPoseAngle)),velConstraint,accelConstraint)
+                                //.forward(20)// ZONE 3
+                                //.back(20) //ZONE 1
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)
