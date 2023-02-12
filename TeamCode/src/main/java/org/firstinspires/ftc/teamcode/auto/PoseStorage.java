@@ -6,40 +6,39 @@ public class PoseStorage {
     public static double startPosX = -36;
     public static double startPosY = 65.9;
     public static double startPosAngle = 0;
-    public static double startConeStrafe1 = 58.8, startConeStrafe2 = 20.05, startConeForward = 5.15;
+    public static double startConeStrafe1 = 58.8, startConeStrafe2 = 20.16, startConeForward = 5.18;
 
 
     public static double backIntakeOffset  = 13;
 
 
-    public static double intakePose1XFirstCone = 33.1, intakePose1YFirstCone = -19.3;
-    public static double intakePose2XFirstCone = 48, intakePose2YFirstCone = -15.1;
+    public static double intakePose1XFirstCone = 33.1, intakePose1YFirstCone = -19.1;
+    public static double intakePose2XFirstCone = 47.25, intakePose2YFirstCone = -14.9;
 
 
-    public static double intakePoseCycleXSecondCone = 38, intakePose1YSecondCone = -14;
-    public static double intakePose2XSecondCone = 50, intakePose2YSecondCone = -14.2;
+    public static double intakePoseCycleXSecondCone = 38, intakePose1YSecondCone = -11.8;
+    public static double intakePose2XSecondCone = 47.9, intakePose2YSecondCone = -12;
 
 
-    public static double intakePoseCycleXThirdCone = 38, intakePose1YThirdCone = -12.6;
-    public static double intakePose2XThirdCone = 51, intakePose2YThirdCone = -12.41;
+    public static double intakePoseCycleXThirdCone = 38, intakePose1YThirdCone = -9.6;
+    public static double intakePose2XThirdCone = 49.5, intakePose2YThirdCone = -9.31;
 
 
     public static double intakeAngle = 180;
 
 
-    public static double posCone1X = 40.5, posCone1Y = -14.5, posConeAngle = 225;
+    public static double posCone1X = 41.1, posCone1Y = -14.9, posConeAngle = 225;
 
 
-    public static double posCone2XFirstCone = 30.45, posCone2YFirstCone = -17;
+    public static double posCone2XFirstCone = 32, posCone2YFirstCone = -20;
 
 
-    public static double posCone2XSecondCone = 30.6, posCone2YSecondCone = -16;
+    public static double posCone2XSecondCone = 33.75, posCone2YSecondCone = -20 ;
+
+    public static double posCone2XThirdCone = 34.75, posCone2YThirdCone = -20;
 
 
-    public static double posCone2XThirdCone = 31.95, posCone2YThirdCone = -15.7;
-
-
-    public static double parkPoseX = 39.3, parkPoseY = -18.5, parkPoseAngle = 180;
+    public static double parkPoseX = 40.2, parkPoseY = -11.5, parkPoseAngle = 180;
 
 
     public static double TARGET_ZONE = 20, GO_TO_PARK_HELPER = 8;
