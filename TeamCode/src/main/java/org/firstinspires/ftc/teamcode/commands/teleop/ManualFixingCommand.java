@@ -17,6 +17,7 @@ public class ManualFixingCommand implements RobotCommand {
     GamepadHelper gamepadHelper1, gamepadHelper2;
     TransferSystem transferSystem;
     ElevatorSystem elevatorSystem;
+    public static int TRANSFER_INCREMENT = 30;
 
 
     public ManualFixingCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, CatchAndReleaseCommand catchAndReleaseCommand)
@@ -35,6 +36,7 @@ public class ManualFixingCommand implements RobotCommand {
 
         //flipHighAndTerminal();
         //flipPickup();
+        tranferSetting();
 
         userWantsBaseElevatorControl();
         //userWantsBaseTransferControl();
@@ -77,20 +79,16 @@ public class ManualFixingCommand implements RobotCommand {
 
     }
 
-    void userWantsBaseTransferControl()
+    void tranferSetting()
     {
-        double y = -gamepad2.right_stick_y;
-
-        if(y != 0 && (transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP || transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP_EXPANSION))
+        if(gamepadHelper2.rightBumperOnce())
         {
-            transferSystem.setUsePID(false);
-            transferSystem.setHeightByPos(transferSystem.currentPos());
+            transferSystem.setHeightByPos(transferSystem.currentPos() + TRANSFER_INCREMENT);
         }
-        else if((transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP || transferSystem.getTransferLevel() == TransferSystem.TransferLevels.PICK_UP_EXPANSION) && y == 0)
+        else if(gamepadHelper2.leftBumperOnce())
         {
-            transferSystem.setUsePID(true);
+            transferSystem.setHeightByPos(transferSystem.currentPos() - TRANSFER_INCREMENT);
         }
-
     }
 
     void controlOpenedElevator()
