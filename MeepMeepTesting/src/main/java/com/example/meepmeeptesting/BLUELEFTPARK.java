@@ -11,9 +11,10 @@ import com.acmerobotics.roadrunner.trajectory.constraints.TranslationalVelocityC
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
+
 import java.util.Arrays;
 
-public class MeepMeepBLUELEFT {
+public class BLUELEFTPARK {
     public static void main(String[] args) {
         MeepMeep meepMeep = new MeepMeep(550);
 
@@ -52,59 +53,55 @@ public class MeepMeepBLUELEFT {
                                 .strafeLeft(startConeStrafe1, velConstraint, accelConstraint)
                                 .strafeRight(startConeStrafe2, velConstraint, accelConstraint)
                                 .forward(startConeForward, velConstraint, accelConstraint)
-                               /* .waitSeconds(DELIVERY_WAIT_TIME)
-                                .waitSeconds(ALMOST_RELEASE_TIME)
-                                .waitSeconds(RELEASE_WAIT_TIME)
-
-                                .lineTo(new Vector2d(intakePose1XFirstCone, -intakePose1YFirstCone))
-                                .splineToLinearHeading(new Pose2d(intakePose2XFirstCone, -intakePose2YFirstCone, Math.toRadians(intakeAngle)), Math.toRadians(0))
-                                .waitSeconds(BACK_WAIT_TIME)
-                                .back(backIntakeOffset)
-                                .waitSeconds(INTAKE_WAIT_TIME)
-                                .waitSeconds(ELEVATOR_WAIT_TIME)
-
-                                .lineTo(new Vector2d(posCone1X, -posCone1Y))
-                                .splineTo(new Vector2d(posCone2XFirstCone, -posCone2YFirstCone), Math.toRadians(posConeAngle - 90))
-                                .waitSeconds(DELIVERY_WAIT_TIME)
-                                .waitSeconds(ALMOST_RELEASE_TIME)
-                                .waitSeconds(RELEASE_WAIT_TIME)
-
-                                .setReversed(true)
-                                .splineToLinearHeading(new Pose2d(intakePoseCycleXSecondCone, -intakePose1YSecondCone, Math.toRadians(180)), Math.toRadians(0))
-                                .lineTo(new Vector2d(intakePose2XSecondCone, -intakePose2YSecondCone))
-                                .waitSeconds(BACK_WAIT_TIME)
-                                .back(backIntakeOffset)
-                                .waitSeconds(INTAKE_WAIT_TIME)
-                                .waitSeconds(ELEVATOR_WAIT_TIME)
-
-                                .lineTo(new Vector2d(posCone1X, -posCone1Y))
-                                .splineTo(new Vector2d(posCone2XSecondCone, -posCone2YSecondCone), Math.toRadians(posConeAngle - 90))
-                                .waitSeconds(DELIVERY_WAIT_TIME)
-                                .waitSeconds(ALMOST_RELEASE_TIME)
-                                .waitSeconds(RELEASE_WAIT_TIME)
-
-                                .setReversed(true)
-                                .splineToLinearHeading(new Pose2d(intakePoseCycleXSecondCone, -intakePose1YSecondCone, Math.toRadians(180)), Math.toRadians(0))
-                                .lineTo(new Vector2d(intakePose2XThirdCone, -intakePose2YThirdCone))
-                                .waitSeconds(BACK_WAIT_TIME)
-                                .back(backIntakeOffset)
-                                .waitSeconds(INTAKE_WAIT_TIME)
-                                .waitSeconds(ELEVATOR_WAIT_TIME)
-
-                                .lineTo(new Vector2d(posCone1X, -posCone1Y))
-                                .splineTo(new Vector2d(posCone2XThirdCone, -posCone2YThirdCone), Math.toRadians(posConeAngle - 90))
-                                .waitSeconds(DELIVERY_WAIT_TIME)
-                                .waitSeconds(ALMOST_RELEASE_TIME)
-                                .waitSeconds(RELEASE_WAIT_TIME)
-
-                                .back(GO_TO_PARK_HELPER,velConstraint,accelConstraint)
-
-                                */
-                               .lineToLinearHeading(new Pose2d(parkPoseX, -parkPoseY, Math.toRadians(-parkPoseAngle)),velConstraint,accelConstraint)
+//                                .waitSeconds(DELIVERY_WAIT_TIME)
+//                                .waitSeconds(ALMOST_RELEASE_TIME)
+//                                .waitSeconds(RELEASE_WAIT_TIME)
+//
+//                                .lineTo(new Vector2d(intakePose1XFirstCone, -intakePose1YFirstCone))
+//                                .splineToLinearHeading(new Pose2d(intakePose2XFirstCone, -intakePose2YFirstCone, Math.toRadians(intakeAngle)), Math.toRadians(0))
+//                                .waitSeconds(BACK_WAIT_TIME)
+//                                .back(backIntakeOffset)
+//                                .waitSeconds(INTAKE_WAIT_TIME)
+//                                .waitSeconds(ELEVATOR_WAIT_TIME)
+//
+//                                .lineTo(new Vector2d(posCone1X, -posCone1Y))
+//                                .splineTo(new Vector2d(posCone2XFirstCone, -posCone2YFirstCone), Math.toRadians(posConeAngle - 90))
+//                                .waitSeconds(DELIVERY_WAIT_TIME)
+//                                .waitSeconds(ALMOST_RELEASE_TIME)
+//                                .waitSeconds(RELEASE_WAIT_TIME)
+//
+//                                .setReversed(true)
+//                                .splineToLinearHeading(new Pose2d(intakePoseCycleXSecondCone, -intakePose1YSecondCone, Math.toRadians(180)), Math.toRadians(0))
+//                                .lineTo(new Vector2d(intakePose2XSecondCone, -intakePose2YSecondCone))
+//                                .waitSeconds(BACK_WAIT_TIME)
+//                                .back(backIntakeOffset)
+//                                .waitSeconds(INTAKE_WAIT_TIME)
+//                                .waitSeconds(ELEVATOR_WAIT_TIME)
+//
+//                                .lineTo(new Vector2d(posCone1X, -posCone1Y))
+//                                .splineTo(new Vector2d(posCone2XSecondCone, -posCone2YSecondCone), Math.toRadians(posConeAngle - 90))
+//                                .waitSeconds(DELIVERY_WAIT_TIME)
+//                                .waitSeconds(ALMOST_RELEASE_TIME)
+//                                .waitSeconds(RELEASE_WAIT_TIME)
+//
+//                                .setReversed(true)
+//                                .splineToLinearHeading(new Pose2d(intakePoseCycleXSecondCone, -intakePose1YSecondCone, Math.toRadians(180)), Math.toRadians(0))
+//                                .lineTo(new Vector2d(intakePose2XThirdCone, -intakePose2YThirdCone))
+//                                .waitSeconds(BACK_WAIT_TIME)
+//                                .back(backIntakeOffset)
+//                                .waitSeconds(INTAKE_WAIT_TIME)
+//                                .waitSeconds(ELEVATOR_WAIT_TIME)
+//
+//                                .lineTo(new Vector2d(posCone1X, -posCone1Y))
+//                                .splineTo(new Vector2d(posCone2XThirdCone, -posCone2YThirdCone), Math.toRadians(posConeAngle - 90))
+//                                .waitSeconds(DELIVERY_WAIT_TIME)
+//                                .waitSeconds(ALMOST_RELEASE_TIME)
+//                                .waitSeconds(RELEASE_WAIT_TIME)
+//
+//                                .back(GO_TO_PARK_HELPER,velConstraint,accelConstraint)
+                                .lineToLinearHeading(new Pose2d(parkPoseX, -parkPoseY, Math.toRadians(-parkPoseAngle)),velConstraint,accelConstraint)
                                 //.forward(20)// ZONE 3
                                 //.back(20) //ZONE 1
-
-
                                 .build());
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_OFFICIAL)

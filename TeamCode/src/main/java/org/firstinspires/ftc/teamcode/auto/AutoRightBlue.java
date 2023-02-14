@@ -89,6 +89,7 @@ public class AutoRightBlue extends LinearOpMode {
                 .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
                 .build();
 
+        /*
         TrajectorySequence cycle1 = drivetrain.trajectorySequenceBuilder(preload.end())
                 .lineTo(new Vector2d(-PoseStorage.intakePose1XFirstCone, -PoseStorage.intakePose1YFirstCone))
                 .addTemporalMarker(autoCommands.intakeFirstCone())
@@ -159,23 +160,25 @@ public class AutoRightBlue extends LinearOpMode {
                 .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
                 .build();
 
+         */
 
-        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place3.end())
+
+        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(/*place3*/preload.end())
                 .back(PoseStorage.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
                 .lineToLinearHeading(new Pose2d(-PoseStorage.parkPoseX, -PoseStorage.parkPoseY, Math.toRadians(0)),velConstraint,accelConstraint)
-                .back(PoseStorage.TARGET_ZONE)
+                .back(PoseStorage.TARGET_ZONE + 5)
                 .build();
 
-        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place3.end())
+        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(/*place3*/preload.end())
                 .back(PoseStorage.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
                 .lineToLinearHeading(new Pose2d(-PoseStorage.parkPoseX, -PoseStorage.parkPoseY, Math.toRadians(0)),velConstraint,accelConstraint)
                 .build();
 
-        TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place3.end())
+        TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(/*place3*/preload.end())
                 .back(PoseStorage.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
@@ -200,7 +203,7 @@ public class AutoRightBlue extends LinearOpMode {
         transferSystem.highPos();
 
         drivetrain.followTrajectorySequence(preload);
-
+/*
         drivetrain.followTrajectorySequence(cycle1);
         drivetrain.followTrajectorySequence(place1);
 
@@ -209,6 +212,8 @@ public class AutoRightBlue extends LinearOpMode {
 
         drivetrain.followTrajectorySequence(cycle3);
         drivetrain.followTrajectorySequence(place3);
+
+     */
 
         if(PoseStorage.useCamera)
         {

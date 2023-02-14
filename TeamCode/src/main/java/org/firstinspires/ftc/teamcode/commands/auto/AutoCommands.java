@@ -18,7 +18,7 @@ public class AutoCommands implements AutoRobotCommand {
     ClawServo clawServo;
 
     // TODO: STACK
-    public static int STACK_ELEVATOR_HEIGHT = 530, OFFSET_BETWEEN_EACH_CONE = 45;
+    public static int STACK_ELEVATOR_HEIGHT = 440, OFFSET_BETWEEN_EACH_CONE = 55;
 
     public MarkerCallback catchCone() {
         return new MarkerCallback() {

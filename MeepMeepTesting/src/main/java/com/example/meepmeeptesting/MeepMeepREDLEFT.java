@@ -74,6 +74,7 @@ public class MeepMeepREDLEFT {
                                 .strafeRight(startConeStrafe1, velConstraint, accelConstraint)
                                 .strafeLeft(startConeStrafe2, velConstraint, accelConstraint)
                                 .back(startConeForward, velConstraint, accelConstraint)
+                               /*
                                 .waitSeconds(DELIVERY_WAIT_TIME)
                                 .waitSeconds(ALMOST_RELEASE_TIME)
                                 .waitSeconds(RELEASE_WAIT_TIME)
@@ -118,6 +119,8 @@ public class MeepMeepREDLEFT {
                                 .waitSeconds(RELEASE_WAIT_TIME)
 
                                 .forward(GO_TO_PARK_HELPER,velConstraint,accelConstraint)
+
+                                */
                                 .lineToLinearHeading(new Pose2d(-parkPoseX, parkPoseY, Math.toRadians(180)),velConstraint,accelConstraint)
                                 //.forward(20) //ZONE 1
                                 //.back(20) //ZONE 3

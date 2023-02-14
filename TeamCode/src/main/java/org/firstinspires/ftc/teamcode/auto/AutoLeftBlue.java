@@ -79,6 +79,17 @@ public class AutoLeftBlue extends LinearOpMode {
         TrajectoryAccelerationConstraint accelConstraint = new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL);
 
         TrajectorySequence preload = drivetrain.trajectorySequenceBuilder(startPose)
+                .strafeRight(PoseStorage.startConeStrafe1, velConstraint, accelConstraint)
+                .strafeLeft(PoseStorage.startConeStrafe2, velConstraint, accelConstraint)
+                .back(PoseStorage.startConeForward, velConstraint, accelConstraint)
+                .waitSeconds(PoseStorage.DELIVERY_WAIT_TIME)
+                .addTemporalMarker(autoCommands.goDownToReleaseCone())
+                .waitSeconds(PoseStorage.ALMOST_RELEASE_TIME)
+                .addTemporalMarker(autoCommands.releaseCone())
+                .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
+                .build();
+
+      /*  TrajectorySequence preload = drivetrain.trajectorySequenceBuilder(startPose)
                 .strafeLeft(PoseStorage.startConeStrafe1, velConstraint, accelConstraint)
                 .strafeRight(PoseStorage.startConeStrafe2, velConstraint, accelConstraint)
                 .forward(PoseStorage.startConeForward, velConstraint, accelConstraint)
@@ -89,95 +100,97 @@ public class AutoLeftBlue extends LinearOpMode {
                 .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
                 .build();
 
-        TrajectorySequence cycle1 = drivetrain.trajectorySequenceBuilder(preload.end())
-                .lineTo(new Vector2d(PoseStorage.intakePose1XFirstCone, -PoseStorage.intakePose1YFirstCone))
-                .addTemporalMarker(autoCommands.intakeFirstCone())
-                .splineToLinearHeading(new Pose2d(PoseStorage.intakePose2XFirstCone, -PoseStorage.intakePose2YFirstCone, Math.toRadians(PoseStorage.intakeAngle)), Math.toRadians(0))
-                .waitSeconds(PoseStorage.BACK_WAIT_TIME)
-                .back(PoseStorage.backIntakeOffset)
-                .waitSeconds(PoseStorage.INTAKE_WAIT_TIME)
-                .addTemporalMarker(autoCommands.catchCone())
-                .waitSeconds(PoseStorage.ELEVATOR_WAIT_TIME)
-                .addTemporalMarker(autoCommands.elevatorIntake())
-                .build();
+       */
+//
+//        TrajectorySequence cycle1 = drivetrain.trajectorySequenceBuilder(preload.end())
+//                .lineTo(new Vector2d(PoseStorage.intakePose1XFirstCone, -PoseStorage.intakePose1YFirstCone))
+//                .addTemporalMarker(autoCommands.intakeFirstCone())
+//                .splineToLinearHeading(new Pose2d(PoseStorage.intakePose2XFirstCone, -PoseStorage.intakePose2YFirstCone, Math.toRadians(PoseStorage.intakeAngle)), Math.toRadians(0))
+//                .waitSeconds(PoseStorage.BACK_WAIT_TIME)
+//                .back(PoseStorage.backIntakeOffset)
+//                .waitSeconds(PoseStorage.INTAKE_WAIT_TIME)
+//                .addTemporalMarker(autoCommands.catchCone())
+//                .waitSeconds(PoseStorage.ELEVATOR_WAIT_TIME)
+//                .addTemporalMarker(autoCommands.elevatorIntake())
+//                .build();
+//
+//        TrajectorySequence place1 = drivetrain.trajectorySequenceBuilder(cycle1.end())
+//                .lineTo(new Vector2d(PoseStorage.posCone1X, -PoseStorage.posCone1Y))
+//                .addTemporalMarker(autoCommands.readyToRelease())
+//                .splineTo(new Vector2d(PoseStorage.posCone2XFirstCone, -PoseStorage.posCone2YFirstCone), Math.toRadians(PoseStorage.posConeAngle - 90))
+//                .waitSeconds(PoseStorage.DELIVERY_WAIT_TIME)
+//                .addTemporalMarker(autoCommands.goDownToReleaseCone())
+//                .waitSeconds(PoseStorage.ALMOST_RELEASE_TIME)
+//                .addTemporalMarker(autoCommands.releaseCone())
+//                .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
+//                .build();
+//
+//
+//        TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(place1.end())
+//                .setReversed(true)
+//                .splineToLinearHeading(new Pose2d(PoseStorage.intakePoseCycleXSecondCone, -PoseStorage.intakePose1YSecondCone, Math.toRadians(180)), Math.toRadians(0))
+//                .addTemporalMarker(autoCommands.intakeSecondCone())
+//                .lineTo(new Vector2d(PoseStorage.intakePose2XSecondCone, -PoseStorage.intakePose2YSecondCone))
+//                .waitSeconds(PoseStorage.BACK_WAIT_TIME)
+//                .back(PoseStorage.backIntakeOffset)
+//                .waitSeconds(PoseStorage.INTAKE_WAIT_TIME)
+//                .addTemporalMarker(autoCommands.catchCone())
+//                .waitSeconds(PoseStorage.ELEVATOR_WAIT_TIME)
+//                .addTemporalMarker(autoCommands.elevatorIntake())
+//                .build();
+//
+//        TrajectorySequence place2 = drivetrain.trajectorySequenceBuilder(cycle2.end())
+//                .lineTo(new Vector2d(PoseStorage.posCone1X, -PoseStorage.posCone1Y))
+//                .addTemporalMarker(autoCommands.readyToRelease())
+//                .splineTo(new Vector2d(PoseStorage.posCone2XSecondCone, -PoseStorage.posCone2YSecondCone), Math.toRadians(PoseStorage.posConeAngle - 90))
+//                .waitSeconds(PoseStorage.DELIVERY_WAIT_TIME)
+//                .addTemporalMarker(autoCommands.goDownToReleaseCone())
+//                .waitSeconds(PoseStorage.ALMOST_RELEASE_TIME)
+//                .addTemporalMarker(autoCommands.releaseCone())
+//                .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
+//                .build();
+//
+//        TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(place2.end())
+//                .setReversed(true)
+//                .splineToLinearHeading(new Pose2d(PoseStorage.intakePoseCycleXSecondCone, -PoseStorage.intakePose1YSecondCone, Math.toRadians(180)), Math.toRadians(0))
+//                .addTemporalMarker(autoCommands.intakeThirdCone())
+//                .lineTo(new Vector2d(PoseStorage.intakePose2XThirdCone, -PoseStorage.intakePose2YThirdCone))
+//                .waitSeconds(PoseStorage.BACK_WAIT_TIME)
+//                .back(PoseStorage.backIntakeOffset)
+//                .waitSeconds(PoseStorage.INTAKE_WAIT_TIME)
+//                .addTemporalMarker(autoCommands.catchCone())
+//                .waitSeconds(PoseStorage.ELEVATOR_WAIT_TIME)
+//                .addTemporalMarker(autoCommands.elevatorIntake())
+//                .build();
+//
+//        TrajectorySequence place3 = drivetrain.trajectorySequenceBuilder(cycle3.end())
+//                .lineTo(new Vector2d(PoseStorage.posCone1X, -PoseStorage.posCone1Y))
+//                .addTemporalMarker(autoCommands.readyToRelease())
+//                .splineTo(new Vector2d(PoseStorage.posCone2XThirdCone, -PoseStorage.posCone2YThirdCone), Math.toRadians(PoseStorage.posConeAngle - 90))
+//                .waitSeconds(PoseStorage.DELIVERY_WAIT_TIME)
+//                .addTemporalMarker(autoCommands.goDownToReleaseCone())
+//                .waitSeconds(PoseStorage.ALMOST_RELEASE_TIME)
+//                .addTemporalMarker(autoCommands.releaseCone())
+//                .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
+//                .build();
 
-        TrajectorySequence place1 = drivetrain.trajectorySequenceBuilder(cycle1.end())
-                .lineTo(new Vector2d(PoseStorage.posCone1X, -PoseStorage.posCone1Y))
-                .addTemporalMarker(autoCommands.readyToRelease())
-                .splineTo(new Vector2d(PoseStorage.posCone2XFirstCone, -PoseStorage.posCone2YFirstCone), Math.toRadians(PoseStorage.posConeAngle - 90))
-                .waitSeconds(PoseStorage.DELIVERY_WAIT_TIME)
-                .addTemporalMarker(autoCommands.goDownToReleaseCone())
-                .waitSeconds(PoseStorage.ALMOST_RELEASE_TIME)
-                .addTemporalMarker(autoCommands.releaseCone())
-                .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
-                .build();
 
-
-        TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(place1.end())
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(PoseStorage.intakePoseCycleXSecondCone, -PoseStorage.intakePose1YSecondCone, Math.toRadians(180)), Math.toRadians(0))
-                .addTemporalMarker(autoCommands.intakeSecondCone())
-                .lineTo(new Vector2d(PoseStorage.intakePose2XSecondCone, -PoseStorage.intakePose2YSecondCone))
-                .waitSeconds(PoseStorage.BACK_WAIT_TIME)
-                .back(PoseStorage.backIntakeOffset)
-                .waitSeconds(PoseStorage.INTAKE_WAIT_TIME)
-                .addTemporalMarker(autoCommands.catchCone())
-                .waitSeconds(PoseStorage.ELEVATOR_WAIT_TIME)
-                .addTemporalMarker(autoCommands.elevatorIntake())
-                .build();
-
-        TrajectorySequence place2 = drivetrain.trajectorySequenceBuilder(cycle2.end())
-                .lineTo(new Vector2d(PoseStorage.posCone1X, -PoseStorage.posCone1Y))
-                .addTemporalMarker(autoCommands.readyToRelease())
-                .splineTo(new Vector2d(PoseStorage.posCone2XSecondCone, -PoseStorage.posCone2YSecondCone), Math.toRadians(PoseStorage.posConeAngle - 90))
-                .waitSeconds(PoseStorage.DELIVERY_WAIT_TIME)
-                .addTemporalMarker(autoCommands.goDownToReleaseCone())
-                .waitSeconds(PoseStorage.ALMOST_RELEASE_TIME)
-                .addTemporalMarker(autoCommands.releaseCone())
-                .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
-                .build();
-
-        TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(place2.end())
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(PoseStorage.intakePoseCycleXSecondCone, -PoseStorage.intakePose1YSecondCone, Math.toRadians(180)), Math.toRadians(0))
-                .addTemporalMarker(autoCommands.intakeThirdCone())
-                .lineTo(new Vector2d(PoseStorage.intakePose2XThirdCone, -PoseStorage.intakePose2YThirdCone))
-                .waitSeconds(PoseStorage.BACK_WAIT_TIME)
-                .back(PoseStorage.backIntakeOffset)
-                .waitSeconds(PoseStorage.INTAKE_WAIT_TIME)
-                .addTemporalMarker(autoCommands.catchCone())
-                .waitSeconds(PoseStorage.ELEVATOR_WAIT_TIME)
-                .addTemporalMarker(autoCommands.elevatorIntake())
-                .build();
-
-        TrajectorySequence place3 = drivetrain.trajectorySequenceBuilder(cycle3.end())
-                .lineTo(new Vector2d(PoseStorage.posCone1X, -PoseStorage.posCone1Y))
-                .addTemporalMarker(autoCommands.readyToRelease())
-                .splineTo(new Vector2d(PoseStorage.posCone2XThirdCone, -PoseStorage.posCone2YThirdCone), Math.toRadians(PoseStorage.posConeAngle - 90))
-                .waitSeconds(PoseStorage.DELIVERY_WAIT_TIME)
-                .addTemporalMarker(autoCommands.goDownToReleaseCone())
-                .waitSeconds(PoseStorage.ALMOST_RELEASE_TIME)
-                .addTemporalMarker(autoCommands.releaseCone())
-                .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
-                .build();
-
-
-        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place3.end())
+        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(/*place3*/preload.end())
                 .back(PoseStorage.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
                 .lineToLinearHeading(new Pose2d(PoseStorage.parkPoseX, -PoseStorage.parkPoseY, Math.toRadians(-PoseStorage.parkPoseAngle)),velConstraint,accelConstraint)
-                .forward(PoseStorage.TARGET_ZONE)
+                .forward(PoseStorage.TARGET_ZONE + 5 )
                 .build();
 
-        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place3.end())
+        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(/*place3*/preload.end())
                 .back(PoseStorage.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
                 .lineToLinearHeading(new Pose2d(PoseStorage.parkPoseX, -PoseStorage.parkPoseY, Math.toRadians(-PoseStorage.parkPoseAngle)),velConstraint,accelConstraint)
                 .build();
 
-        TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place3.end())
+        TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(/*place3*/preload.end())
                 .back(PoseStorage.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
@@ -203,14 +216,14 @@ public class AutoLeftBlue extends LinearOpMode {
 
         drivetrain.followTrajectorySequence(preload);
 
-        drivetrain.followTrajectorySequence(cycle1);
-        drivetrain.followTrajectorySequence(place1);
-
-        drivetrain.followTrajectorySequence(cycle2);
-        drivetrain.followTrajectorySequence(place2);
-
-        drivetrain.followTrajectorySequence(cycle3);
-        drivetrain.followTrajectorySequence(place3);
+//        drivetrain.followTrajectorySequence(cycle1);
+//        drivetrain.followTrajectorySequence(place1);
+//
+//        drivetrain.followTrajectorySequence(cycle2);
+//        drivetrain.followTrajectorySequence(place2);
+//
+//        drivetrain.followTrajectorySequence(cycle3);
+//        drivetrain.followTrajectorySequence(place3);
 
         if(PoseStorage.useCamera)
         {

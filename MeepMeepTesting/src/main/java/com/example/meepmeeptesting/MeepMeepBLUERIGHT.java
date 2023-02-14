@@ -74,7 +74,8 @@ public class MeepMeepBLUERIGHT {
                                 .strafeRight(startConeStrafe1, velConstraint, accelConstraint)
                                 .strafeLeft(startConeStrafe2, velConstraint, accelConstraint)
                                 .forward(startConeForward, velConstraint, accelConstraint)
-                                .waitSeconds(DELIVERY_WAIT_TIME)
+
+                                /*.waitSeconds(DELIVERY_WAIT_TIME)
                                 .waitSeconds(ALMOST_RELEASE_TIME)
                                 .waitSeconds(RELEASE_WAIT_TIME)
 
@@ -119,8 +120,12 @@ public class MeepMeepBLUERIGHT {
                                 .waitSeconds(RELEASE_WAIT_TIME)
 
                                 .back(GO_TO_PARK_HELPER,velConstraint,accelConstraint)
+
+                                 */
                                 .lineToLinearHeading(new Pose2d(-parkPoseX, -parkPoseY, Math.toRadians(0)),velConstraint,accelConstraint)
-                                .forward(20)// ZONE 1
+
+
+                                //.forward(20)// ZONE 1
                                 //.back(20) //ZONE 3
 
                                 .build());
