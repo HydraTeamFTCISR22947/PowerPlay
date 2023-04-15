@@ -14,16 +14,16 @@ import com.qualcomm.robotcore.util.Range;
 @Config
 public class TransferSystem
 {
-    // set transfer levels values
+    // set transfer levels values, expansion means the transfer is at the side of the expansion hub, otherwise control hub
     public static double PICK_UP = 73;
-    public static double PICKUP_EXPANSION = 560; // TODO
+    public static double PICKUP_EXPANSION = 560;
     public static double HIGH = 200;
     public static double HIGH_EXPANSION = 400;
     public static double TERMINAL = 85;
     public static double TERMINAL_EXPANSION = 670;
 
     public static double TICKS_PER_REV = 751.8;
-    public static double TOTAL_DEGREES = 360;      // total engine spin degrees
+    public static double TOTAL_DEGREES = 360; // max spin
     public static double GEAR_RATIO = 1;
     double power = 1;
     double maxPower = .25;
@@ -48,14 +48,15 @@ public class TransferSystem
     public TransferSystem(HardwareMap hardwareMap)
     {
         this.motor_transfer = hardwareMap.get(DcMotorEx.class, "motor_transfer");
-        this.motor_transfer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        this.motor_transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        this.motor_transfer.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        this.motor_transfer.setDirection(DcMotorSimple.Direction.REVERSE);
+        this.motor_transfer.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER); // reset encoder
+        this.motor_transfer.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE); // brake
+        this.motor_transfer.setMode(DcMotor.RunMode.RUN_USING_ENCODER); // use first pid
+        this.motor_transfer.setDirection(DcMotorSimple.Direction.REVERSE); // reverse motor
     }
 
-    //
+    // runs in a loop
     public void update(Gamepad gamepad2)  {
+        // like the elevator - please read the comments there is the same thing here!
         if(usePID) {
 
             switch (transferLevel)
@@ -100,7 +101,7 @@ public class TransferSystem
         }
     }
 
-    // function to convert degrees to encoder ticks
+    // function to convert degrees to encoder ticks(doesnt work the best)
     public static int degreesToEncoderTicks(double degrees)
     {
         return (int)Math.round((TICKS_PER_REV * GEAR_RATIO) / (TOTAL_DEGREES / degrees));
@@ -110,6 +111,8 @@ public class TransferSystem
     {
         return (TOTAL_DEGREES * ticks) / (TICKS_PER_REV * GEAR_RATIO);
     }
+
+    // getters and setters
 
     public static TransferLevels getTransferLevel() {
         return transferLevel;
@@ -127,6 +130,10 @@ public class TransferSystem
     public double getTarget() {
         return target;
     }
+
+    /**
+     * these functions below are autonmous functions for the transfer to just go to those positions in one function call
+     */
 
     public void pickUpExpansion() {
         motor_transfer.setTargetPosition(degreesToEncoderTicks(PICKUP_EXPANSION));
@@ -153,6 +160,7 @@ public class TransferSystem
         motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+    // setter and getter
     public void setUsePID(boolean usePID) {
         this.usePID = usePID;
     }
@@ -162,6 +170,8 @@ public class TransferSystem
         return motor_transfer.getCurrentPosition();
     }
 
+    // this function updates the current transfer pos (if transfer is in high height so it will change the value of the high height
+    // to the pos it got as a parameter)
     public void setHeightByPos(int pos)
     {
         switch (transferLevel)

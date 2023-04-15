@@ -18,23 +18,26 @@ import java.util.function.DoubleSupplier;
 public class ElevatorSystem {
     DcMotor mE;
 
+    // encoder values for elevator heights
     public static int BASE_HEIGHT = 0;
     public static int LOW_HEIGHT = 630;
-    public static int MID_HEIGHT = 1380;
+    public static int MID_HEIGHT = 1400;
     public static int ALMOST_MID_HEIGHT = 460;
     public static int HIGH_HEIGHT = 1970;
 
-    final int BASE = BASE_HEIGHT;
-    final int LOW = LOW_HEIGHT;
-    final int MID = MID_HEIGHT;
-    final int HIGH = HIGH_HEIGHT;
-
+    // power values
     public static double power = 1;
     public static double maxPower = 1;
+
+    // move elevator up/down by this much
     public static int INCREMENT = 50;
+
+    // current target
     int target = 0;
+    // should use pid? - https://www.ctrlaltftc.com/the-pid-controller this is pid
     boolean usePID = true;
 
+    // possible states for the elevator to be in
     public enum elevatorState {
         BASE_LEVEL,
         LOW_ROD,
@@ -42,19 +45,29 @@ public class ElevatorSystem {
         HIGH_ROD,
     }
 
+    // the current state
     elevatorState liftState = elevatorState.BASE_LEVEL;
 
-
     public ElevatorSystem(HardwareMap hardwareMap) {
+        // search for elevator and get the motor
         this.mE = hardwareMap.get(DcMotor.class, "mE");
+
+        // reset encoder
         this.mE.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        // if power zero so brake
         this.mE.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // use first PID
         this.mE.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
+    // update function that is called in a loop
     public void update(Gamepad gamepad) {
+        // check if pid should be used
         if(usePID)
         {
+            // if so , switch between the state that the elevator should be in and set target int value
             switch (liftState) {
                 case BASE_LEVEL:
                     target = BASE_HEIGHT;
@@ -70,16 +83,20 @@ public class ElevatorSystem {
                     break;
             }
 
+            // set target position , set the power and run to that position using first run to position
             mE.setTargetPosition(target);
             mE.setPower(power);
             mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         }
         else
         {
+            // dont use first encoder
             mE.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
+            // get manual control on elevator and move by the left stick y value of the gamepad
             if(gamepad.left_stick_y != 0 && !gamepad.left_stick_button)
             {
+                // range clip makes sure the first parameter value stays between -maxPower and maxPower
                 mE.setPower(Range.clip(-gamepad.left_stick_y, -maxPower, maxPower));
             }
             else if(gamepad.left_stick_y != 0 && gamepad.left_stick_button)
@@ -93,25 +110,32 @@ public class ElevatorSystem {
         }
     }
 
-    public void baseLevel() {
+    /**
+     * This function below are autonmous function for the elevator to just go to those positions in one function call
+     */
+    public void baseLevel()
+    {
         mE.setTargetPosition(BASE_HEIGHT);
         mE.setPower(power);
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void lowRod() {
+    public void lowRod()
+    {
         mE.setTargetPosition(LOW_HEIGHT);
         mE.setPower(power);
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void midRod() {
+    public void midRod()
+    {
         mE.setTargetPosition(MID_HEIGHT);
         mE.setPower(power);
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void almostMidRod() {
+    public void almostMidRod()
+    {
         mE.setTargetPosition(ALMOST_MID_HEIGHT);
         mE.setPower(power);
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -130,6 +154,10 @@ public class ElevatorSystem {
         mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+
+    /**
+     * getters and setters
+     */
     public static void setBaseHeight(int baseHeight) {
         BASE_HEIGHT = baseHeight;
     }
@@ -169,6 +197,8 @@ public class ElevatorSystem {
         return mE.getCurrentPosition();
     }
 
+    // this function updates the current height pos (if elevator is in mid height so it will change the value of the mid height
+    // to the pos it got as a parameter)
     public void setHeightByPos(int pos)
     {
         switch (liftState)
@@ -187,12 +217,4 @@ public class ElevatorSystem {
         }
     }
 
-
-    public void resetValues()
-    {
-        BASE_HEIGHT = BASE;
-        LOW_HEIGHT = LOW;
-        MID_HEIGHT = MID;
-        HIGH_HEIGHT = HIGH;
-    }
 }
