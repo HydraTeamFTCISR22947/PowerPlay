@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "TeleOp Red", group = "Main")
-public class teleopRed extends LinearOpMode {
+public class teleopRed extends LinearOpMode{
     TeleopCommand teleop;
 
     @Override
@@ -12,12 +12,11 @@ public class teleopRed extends LinearOpMode {
         teleop = new TeleopCommand(hardwareMap, gamepad1, gamepad2, telemetry, true);
 
         waitForStart();
-
         while (opModeIsActive())
         {
             try {
                 teleop.runCommand();
-            } catch (Exception e) {
+            }catch (Exception e) {
                 e.printStackTrace();
             }
         }

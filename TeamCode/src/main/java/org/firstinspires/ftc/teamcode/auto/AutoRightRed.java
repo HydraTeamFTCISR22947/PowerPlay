@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.auto;
+ package org.firstinspires.ftc.teamcode.auto;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
@@ -21,7 +21,6 @@ import org.firstinspires.ftc.teamcode.subsystems.RotationServo;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 
 import java.util.Arrays;
-
 
 @Config
 @Autonomous(name = "Auto Right Red", group = "auto")
