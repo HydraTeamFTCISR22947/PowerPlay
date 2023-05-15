@@ -18,18 +18,18 @@ public class gripper
         _right = hardwaremap.get(Servo.class, "gripper_servo_right");
         _left.setDirection(Servo.Direction.REVERSE);
         openGripper();
-    //in this part I make fuction that change left servo direction,call other fuction and etc
+        //in this part I make fuction that change left servo direction,call other fuction and etc
     }
     public void openGripper()
     {
         _left.setPosition(_openServoPos);
         _right.setPosition(_openServoPos);
-    //in this part I make fuction that open servos
+        //in this part I make fuction that open servos
     }
     public void closeGripper()
     {
         _left.setPosition(_closeServoPos);
         _right.setPosition(_closeServoPos);
-    // in this part I make fuction that close servos
+        // in this part I make fuction that close servos
     }
 }
