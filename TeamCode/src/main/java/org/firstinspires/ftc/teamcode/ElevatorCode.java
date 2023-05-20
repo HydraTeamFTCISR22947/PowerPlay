@@ -30,7 +30,7 @@ public class ElevatorCode
     public ElevatorCode(HardwareMap hardwareMap)
     {
 
-        mE = hardwareMap.get(DcMotor.class, "mE");
+        this.mE = hardwareMap.get(DcMotor.class, "mE");
 
         mE.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         mE.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
