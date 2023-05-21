@@ -55,7 +55,7 @@ public class ManualFixingCommand implements RobotCommand {
     void userWantsBaseElevatorControl()
     {
         double y = -gamepad2.left_stick_y;
-
+/*
         if(y != 0 && elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL)
         {
             elevatorSystem.setUsePID(false);
@@ -74,7 +74,7 @@ public class ManualFixingCommand implements RobotCommand {
         {
             elevatorSystem.setHeightByPos(elevatorSystem.currentPos() - elevatorSystem.INCREMENT);
         }
-
+*/
     }
 
     void userWantsBaseTransferControl()
@@ -95,7 +95,7 @@ public class ManualFixingCommand implements RobotCommand {
 
     void controlOpenedElevator()
     {
-        if(catchAndReleaseCommand.isOpen)
+        /*if(catchAndReleaseCommand.isOpen)
         {
             double y = -gamepad2.left_stick_y;
 
@@ -117,7 +117,7 @@ public class ManualFixingCommand implements RobotCommand {
             {
                 elevatorSystem.setUsePID(true);
             }
-        }
+        }*/
     }
 
     void controlOpenedTransfer()

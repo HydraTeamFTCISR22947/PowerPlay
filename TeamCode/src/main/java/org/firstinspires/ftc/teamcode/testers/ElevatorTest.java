@@ -35,7 +35,7 @@ public class ElevatorTest extends LinearOpMode {
                 elevatorSystem.baseLevel();
             }
 
-            telemetry.addData("pos", elevatorSystem.currentPos());
+            telemetry.addData("pos", elevatorSystem.getCurrentPosition());
             telemetry.update();
         }
     }

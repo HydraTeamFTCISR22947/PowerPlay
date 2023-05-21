@@ -74,7 +74,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 aboutToOpen = false;
                 transferPickUp();
 
-                elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
+               // elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
 
                 switch (pickUpTarget)
                 {
@@ -163,7 +163,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
             catchingState = CatchingState.RESET_CATCH;
         }
 
-        elevatorSystem.update(gamepad2);
+      //  elevatorSystem.update(gamepad2);
         transferSystem.update(gamepad2);
         gamepadHelper1.update();
         gamepadHelper2.update();
@@ -194,19 +194,19 @@ public class CatchAndReleaseCommand implements RobotCommand {
         switch (liftTarget)
         {
             case TERMINAL:
-                elevatorSystem.setLiftState(ElevatorSystem.elevatorState.LOW_ROD);
+           //     elevatorSystem.setLiftState(ElevatorSystem.elevatorState.LOW_ROD);
                 terminalTransfer();
                 break;
             case LOW:
-                elevatorSystem.setLiftState(ElevatorSystem.elevatorState.LOW_ROD);
+              //  elevatorSystem.setLiftState(ElevatorSystem.elevatorState.LOW_ROD);
                 highTransfer();
                 break;
             case MID:
-                elevatorSystem.setLiftState(ElevatorSystem.elevatorState.MID_ROD);
+            //    elevatorSystem.setLiftState(ElevatorSystem.elevatorState.MID_ROD);
                 highTransfer();
                 break;
             case HIGH:
-                elevatorSystem.setLiftState(ElevatorSystem.elevatorState.HIGH_ROD);
+             //   elevatorSystem.setLiftState(ElevatorSystem.elevatorState.HIGH_ROD);
                 highTransfer();
                 break;
             case BASE:
@@ -223,7 +223,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 break;
         }
 
-        elevatorSystem.update(gamepad2);
+     //   elevatorSystem.update(gamepad2);
     }
 
     void highTransfer()
@@ -292,13 +292,13 @@ public class CatchAndReleaseCommand implements RobotCommand {
         {
             case TERMINAL:
             case LOW:
-                elevatorSystem.setLowHeight(elevatorSystem.getPosition());
+               // elevatorSystem.setLowHeight(elevatorSystem.getPosition());
                 break;
             case MID:
-                elevatorSystem.setMidHeight(elevatorSystem.getPosition());
+               // elevatorSystem.setMidHeight(elevatorSystem.getPosition());
                 break;
             case HIGH:
-                elevatorSystem.setHighHeight(elevatorSystem.getPosition());
+               // elevatorSystem.setHighHeight(elevatorSystem.getPosition());
                 break;
         }
     }

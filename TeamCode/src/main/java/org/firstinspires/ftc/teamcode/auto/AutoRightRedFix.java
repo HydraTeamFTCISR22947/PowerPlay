@@ -170,7 +170,7 @@ public class AutoRightRedFix extends LinearOpMode {
 
         waitForStart();
 
-        elevatorSystem.goToPos(elevatorSystem.BASE_HEIGHT);
+        elevatorSystem.goToPos(elevatorSystem.LOW_POS);
         elevatorSystem.midRod();
         rotationServo.pickUpPos();
         transferSystem.highPos();

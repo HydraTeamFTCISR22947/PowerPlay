@@ -80,10 +80,25 @@ public class ElevatorSystem
         this._mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
+    public void highRod()
+    {
+        this.goToPos(HIGH_POS);
+    }
+
     public void midRod()
     {
         this.goToPos(MID_POS);
     }
+
+    public void baseLevel()
+    {
+        this.goToPos(LOW_POS);
+    }
+    public int getCurrentPosition()
+    {
+        return this._mE.getCurrentPosition();
+    }
+
 
 
 }
