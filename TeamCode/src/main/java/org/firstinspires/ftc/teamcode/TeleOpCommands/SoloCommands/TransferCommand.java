@@ -11,18 +11,16 @@ public class TransferCommand extends CommandBase {
 
     HardwareMap hW;
 
-    public TransferCommand ( Transfer transfer , HardwareMap hW)
+    int pose;
+
+    public TransferCommand (HardwareMap hW , Transfer transfer, int pose)
     {
 
         this.transfer = transfer;
         this.hW = hW;
+        this.pose = pose;
 
         addRequirements(transfer);
-
-
-
-
-
 
 
     }
@@ -31,7 +29,7 @@ public class TransferCommand extends CommandBase {
     public void initialize ()
     {
 
-
+        transfer.toPickupPos();
 
 
     }
@@ -40,7 +38,7 @@ public class TransferCommand extends CommandBase {
     public void execute (){
 
 
-
+        transfer.goToPos(pose);
 
 
 
@@ -51,6 +49,14 @@ public class TransferCommand extends CommandBase {
 
     }
 
+
+    @Override
+    public boolean isFinished ()
+    {
+
+        return true;
+
+    }
 
 
 

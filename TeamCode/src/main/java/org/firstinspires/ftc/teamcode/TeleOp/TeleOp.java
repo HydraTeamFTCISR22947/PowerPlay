@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.arcrobotics.ftclib.command.Command;
+import com.arcrobotics.ftclib.command.SequentialCommandGroup;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -7,8 +9,15 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+import org.firstinspires.ftc.teamcode.SubSystems.Claw;
 import org.firstinspires.ftc.teamcode.SubSystems.ElevatorSystem;
+import org.firstinspires.ftc.teamcode.SubSystems.RotationServo;
+import org.firstinspires.ftc.teamcode.SubSystems.Transfer;
+import org.firstinspires.ftc.teamcode.TeleOpCommands.GroupCommands.CatchAndReleaseCommand;
+import org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands.ClawCommand;
 import org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands.ElevatorExtendOrLowerCommand;
+import org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands.TransferCommand;
+import org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands.rotationServoCommand;
 
 public class TeleOp extends LinearOpMode {
 
@@ -16,6 +25,15 @@ public class TeleOp extends LinearOpMode {
 
     ElevatorSystem elevatorSystem;
     ElevatorExtendOrLowerCommand elevatorExtendOrLowerCommand;
+
+    CatchAndReleaseCommand catchAndReleaseCommand;
+
+    ClawCommand clawCommand;
+    TransferCommand transferCommand;
+    RotationServo rotationServo;
+
+    Claw claw;
+    Transfer transfer;
 
     GamepadEx GamepadEX1 = new GamepadEx(gamepad1);
     GamepadEx GamepadEX2 = new GamepadEx(gamepad2);
@@ -45,13 +63,20 @@ public class TeleOp extends LinearOpMode {
 
     public void runOpMode() throws InterruptedException {
 
-        buttonY1.whenPressed( new ElevatorExtendOrLowerCommand(elevatorSystem, hardwareMap,elevatorSystem.HIGH_POS));
-        buttonB1.whenPressed( new ElevatorExtendOrLowerCommand(elevatorSystem, hardwareMap,elevatorSystem.MID_POS));
-        buttonA1.whenPressed( new ElevatorExtendOrLowerCommand(elevatorSystem, hardwareMap,elevatorSystem.LOW_POS));
+        buttonY1.whenPressed(catchAndReleaseCommand);
+
+
+
 
 
     }
-}
+
+
+    }
+
+
+
+
 
 
 
