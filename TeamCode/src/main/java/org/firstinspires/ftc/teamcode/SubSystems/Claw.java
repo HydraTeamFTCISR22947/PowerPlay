@@ -1,11 +1,12 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 //Package
 
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 //Imports
 
-public class Claw
+public class Claw extends SubsystemBase
 {
     private Servo _ClawServo;
     private HardwareMap _hardwaremap;
@@ -34,3 +35,4 @@ public class Claw
     }
     //Function that close the Claw
 }
+

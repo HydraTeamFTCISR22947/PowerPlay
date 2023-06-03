@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.SubSystems;
 
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -11,7 +12,7 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  * Hardware class for our transfer system using FIRST'S set target position.
  */
 @Config
-public class Transfer
+public class Transfer extends SubsystemBase
 {
     // set transfer levels values
     public static double PICK_UP = 73;
@@ -138,6 +139,12 @@ public class Transfer
     }
 
 
+    public void goToPos(int pose)
+    {
+        this.motor_transfer.setTargetPosition(pose);
+        this.motor_transfer.setPower(power);
+        this.motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
 
 
     public void toPickupExpansionPos() {
@@ -173,17 +180,13 @@ public class Transfer
         motor_transfer.setPower(power);
         motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-=======
->>>>>>> parent of d127fda (k)
 
-    @Override
+
+
     public void periodic() {
 
         update();
 
     }
->>>>>>> parent of d127fda (k)
+
 }

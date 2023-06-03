@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.SubSystems;
 
 
 import com.acmerobotics.dashboard.config.Config;
+import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -13,7 +14,7 @@ import com.qualcomm.robotcore.util.Range;
 import java.util.function.DoubleSupplier;
 
 @Config
-public class ElevatorSystem
+public class ElevatorSystem extends SubsystemBase
 {
     public enum ElevatorStates
     {

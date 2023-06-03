@@ -11,16 +11,14 @@ public class TransferCommand extends CommandBase {
 
     HardwareMap hW;
 
-    public TransferCommand ( Transfer transfer , HardwareMap hW)
+    double pose;
+
+    public TransferCommand ( Transfer transfer , HardwareMap hW, double pose)
     {
 
         this.transfer = transfer;
         this.hW = hW;
-
-        addRequirements(transfer);
-
-
-
+        this.pose = pose;
 
 
 
@@ -40,11 +38,7 @@ public class TransferCommand extends CommandBase {
     public void execute (){
 
 
-
-
-
-
-
+        transfer.goToPos((int) pose);
 
 
 
