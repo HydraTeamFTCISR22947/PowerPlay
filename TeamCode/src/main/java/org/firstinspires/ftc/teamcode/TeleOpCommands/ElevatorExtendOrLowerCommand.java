@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.SubSystems.ElevatorSystem;
 
 public class ElevatorExtendOrLowerCommand extends CommandBase {
 
-    public elevator elevatorSystem;
+    public ElevatorSystem elevatorSystem;
 
     HardwareMap hW;
 
