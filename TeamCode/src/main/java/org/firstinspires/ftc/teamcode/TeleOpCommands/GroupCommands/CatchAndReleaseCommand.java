@@ -5,41 +5,45 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.SubSystems.Claw;
 import org.firstinspires.ftc.teamcode.SubSystems.ElevatorSystem;
-import org.firstinspires.ftc.teamcode.SubSystems.RotationServo;
 import org.firstinspires.ftc.teamcode.SubSystems.Transfer;
 import org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands.ClawCommand;
 import org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands.ElevatorExtendOrLowerCommand;
 import org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands.TransferCommand;
-import org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands.rotationServoCommand;
+import org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands.gripCommand;
 
 public class CatchAndReleaseCommand extends SequentialCommandGroup {
 
-
+    gripCommand gripCommand;
     ElevatorExtendOrLowerCommand elevatorExtendOrLowerCommand;
     ClawCommand clawCommand;
     TransferCommand transferCommand;
-    RotationServo rotationServo;
 
     ElevatorSystem elevatorSystem;
+    Gripper gripper;
     Claw claw;
     Transfer transfer;
 
     HardwareMap hW;
 
-    public CatchAndReleaseCommand (  HardwareMap hW, Claw claw ,ElevatorSystem elevatorSystem ,  Transfer transfer, RotationServo rotation){
+    public CatchAndReleaseCommand ( gripCommand gripCommand , ElevatorExtendOrLowerCommand elevatorExtendOrLowerCommand , ClawCommand clawCommand,
+                                    TransferCommand transferCommand ,HardwareMap hW, Claw claw ,ElevatorSystem elevatorSystem ,  Claw claw, Transfer transfer){
 
+        this.gripCommand = gripCommand;
+        this.elevatorExtendOrLowerCommand = elevatorExtendOrLowerCommand;
+        this.clawCommand = clawCommand;
+        this.transferCommand = transferCommand;
+
+        this.gripper = gripper;
         this.elevatorSystem = elevatorSystem;
         this.transfer = transfer;
         this.claw = claw;
-        this.rotationServo = rotation;
 
         this.hW = hW;
 
-        new SequentialCommandGroup(new ClawCommand(hW , claw) ,
-                new rotationServoCommand(hW, rotationServo , true , false) ,
-                new TransferCommand(hW, transfer , (int) transfer.HIGH),
-                new ElevatorExtendOrLowerCommand(elevatorSystem, hW, elevatorSystem.HIGH_POS),
-                new rotationServoCommand(hW , rotationServo , false , false ));
+        addCommands(new gripCommand(hW, gripper, true, new TransferCommand(transfer , hW , ))
+
+
+        );
 
     }
 

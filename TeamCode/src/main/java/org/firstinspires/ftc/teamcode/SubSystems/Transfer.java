@@ -175,13 +175,6 @@ public class Transfer extends SubsystemBase
         motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
 
-    public void goToPos(int pose)
-    {
-        motor_transfer.setTargetPosition(pose);
-        motor_transfer.setPower(power);
-        motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-    }
-
     @Override
     public void periodic() {
 
