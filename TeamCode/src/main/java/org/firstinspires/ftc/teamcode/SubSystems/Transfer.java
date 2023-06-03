@@ -173,4 +173,14 @@ public class Transfer
         motor_transfer.setPower(power);
         motor_transfer.setMode(DcMotor.RunMode.RUN_TO_POSITION);
     }
+<<<<<<< HEAD
+=======
+
+    @Override
+    public void periodic() {
+
+        update();
+
+    }
+>>>>>>> parent of d127fda (k)
 }
