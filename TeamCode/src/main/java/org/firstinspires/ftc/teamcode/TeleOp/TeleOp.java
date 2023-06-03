@@ -1,9 +1,12 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 public class TeleOp {
 }
 =======
+=======
+>>>>>>> parent of d127fda (k)
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -56,9 +59,12 @@ public class TeleOp extends LinearOpMode {
 
     }
 }
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> parent of d127fda (k)
 
 >>>>>>> parent of d127fda (k)
