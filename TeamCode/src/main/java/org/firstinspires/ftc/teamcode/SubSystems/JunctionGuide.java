@@ -1,13 +1,12 @@
 package org.firstinspires.ftc.teamcode.SubSystems;
 
-import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.sun.tools.javac.tree.DCTree;
 
-public class JunctionGuide extends SubsystemBase {
+public class JunctionGuide {
     Servo servo = null;
 
     // position constants
@@ -30,13 +29,6 @@ public class JunctionGuide extends SubsystemBase {
     public void moveDown()
     {
         this.servo.setPosition(DOWN);
-    }
-
-    @Override
-    public void periodic() {
-
-
-
     }
 
 

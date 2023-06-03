@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.SubSystems;
 import android.graphics.drawable.GradientDrawable;
 
 
-import com.arcrobotics.ftclib.command.SubsystemBase;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -14,7 +13,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import org.checkerframework.checker.units.qual.Acceleration;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
-public class DriveTrain extends SubsystemBase
+public class DriveTrain
 {
     IMU imu;
     double offset = Math.PI + Math.PI /2; //offset to know if it's red or blue (the angle of robot), when we with red
@@ -94,13 +93,6 @@ public class DriveTrain extends SubsystemBase
         back_left.setPower(backLeftPower);
         front_right.setPower(frontRightPower);
         back_right.setPower(backRightPower);
-    }
-
-    @Override
-    public void periodic() {
-
-
-
     }
 
 
