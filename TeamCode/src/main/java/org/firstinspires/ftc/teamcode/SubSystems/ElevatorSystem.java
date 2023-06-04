@@ -30,6 +30,10 @@ public class ElevatorSystem extends SubsystemBase
     public static final int MID_POS = 300;
     public static final int LOW_POS = 0;
 
+    ElevatorStates state;
+
+     Gamepad gamepad2;
+
     private DcMotor _mE;
     private boolean _usePid;
     public ElevatorSystem(HardwareMap hardwareMap)
@@ -42,7 +46,7 @@ public class ElevatorSystem extends SubsystemBase
         this._mE.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
-    public void update(ElevatorStates state, Gamepad gamepad2)
+    public void update()
     {
         switch (state)
         {
@@ -97,6 +101,13 @@ public class ElevatorSystem extends SubsystemBase
         return this._mE.getCurrentPosition();
     }
 
+    @Override
+    public void periodic() {
 
-
+        update();
+        // This method will be called once per scheduler run
+    }
 }
+
+
+

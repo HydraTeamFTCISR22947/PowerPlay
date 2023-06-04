@@ -11,15 +11,47 @@ public class ClawCommand extends CommandBase {
 
     Claw claw;
 
+    boolean close;
+
     boolean gripperClose = false;
 
-    public ClawCommand(HardwareMap hardwareMap, Claw claw) {
+    public ClawCommand(HardwareMap hardwareMap, Claw claw, boolean close) {
 
         this.claw = claw;
         this.hW = hardwareMap;
-
+        this.close = close;
 
         addRequirements(claw);
 
+    }
+
+
+    public void initialize()
+    {
+
+        claw.closeClawClaw();
+
+
+
+    }
+
+
+    public void execute()
+    {
+        if(close == true)
+        {
+            claw.closeClawClaw();
+
+        }else if(close == false){
+
+            claw.openClaw();
+        }
+
+    }
+
+    public boolean isFinished()
+    {
+
+        return true;
     }
 }

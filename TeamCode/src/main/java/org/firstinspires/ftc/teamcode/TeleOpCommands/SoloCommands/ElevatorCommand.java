@@ -25,7 +25,7 @@ public class ElevatorCommand extends CommandBase {
         this.hW = hardwareMap;
         this.pose = pose;
 
-        addRequirements((Subsystem) elevatorSystem);
+        addRequirements(elevatorSystem);
     }
 
 

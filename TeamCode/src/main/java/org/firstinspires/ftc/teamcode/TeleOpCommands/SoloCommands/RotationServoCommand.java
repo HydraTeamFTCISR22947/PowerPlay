@@ -13,16 +13,17 @@ public class RotationServoCommand extends CommandBase {
 
     HardwareMap hW ;
 
-    boolean expansionOrNormal, pickupOrNot;
+    boolean expansionOrControl,  release, releaseExpansion;
 
-    public RotationServoCommand (HardwareMap hW, RotationServo rotationServo , boolean expansionOrNormal, boolean pickupOrNot)
+    public RotationServoCommand (HardwareMap hW, RotationServo rotationServo , boolean expansionOrControl,  boolean release , boolean releaseExpansion)
     {
 
         this.hW = hW;
         this.rotationServo = rotationServo;
 
-        this.expansionOrNormal = expansionOrNormal;
-        this.pickupOrNot = pickupOrNot;
+        this.expansionOrControl = expansionOrControl;
+        this.release = release;
+        this.releaseExpansion = releaseExpansion;
 
         addRequirements(rotationServo);
 
@@ -43,33 +44,30 @@ public class RotationServoCommand extends CommandBase {
     public void execute ()
     {
 
-        if (expansionOrNormal == true) {
+        if (expansionOrControl == true) {
 
             rotationServo.pickUpPosExpansion();
 
 
-        } else if (expansionOrNormal == false) {
+        } else if (expansionOrControl == false) {
+
             rotationServo.pickUpPos();
 
 
         }
 
-        if (pickupOrNot == true) {
-
-            rotationServo.releasePosExpansion();
-
-        } else if (pickupOrNot == false ) {
-
-
-
-
-
-        }else if (pickupOrNot == false && expansionOrNormal == false)
+         if (release == true)
         {
 
             rotationServo.releasePos();
-        }
 
+        }else if (releaseExpansion == true)
+        {
+            rotationServo.releasePosExpansion();
+        }else {
+
+
+         }
 
     }
 

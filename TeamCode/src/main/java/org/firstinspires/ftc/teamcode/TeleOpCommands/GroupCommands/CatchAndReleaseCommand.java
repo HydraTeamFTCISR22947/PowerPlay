@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands.TransferComman
 
 public class CatchAndReleaseCommand extends SequentialCommandGroup {
 
-    ElevatorCommand elevatorCommand;
+    ElevatorCommand elevatorCommand1;
     ClawCommand clawCommand;
     TransferCommand transferCommand;
     RotationServoCommand rotationServoCommand;
@@ -33,7 +33,7 @@ public class CatchAndReleaseCommand extends SequentialCommandGroup {
                                    RotationServo rotationServo, RotationServoCommand rotationServoCommand,
                                    ElevatorSystem elevatorSystem , Transfer transfer){
 
-        this.elevatorCommand = elevatorCommand;
+        this.elevatorCommand1 = elevatorCommand;
         this.clawCommand = clawCommand;
         this.transferCommand = transferCommand;
         this.rotationServoCommand = rotationServoCommand;
@@ -44,7 +44,12 @@ public class CatchAndReleaseCommand extends SequentialCommandGroup {
 
         this.hW = hW;
 
-        addCommands( new TransferCommand(transfer , hW , transfer.HIGH));
+        addCommands( new RotationServoCommand(hW, rotationServo , false , false, false),
+                     new ClawCommand(hW, claw , true),
+                     new TransferCommand(transfer , hW , transfer.HIGH) ,
+                     new ElevatorCommand(elevatorSystem, hW, elevatorSystem.HIGH_POS),
+                     new RotationServoCommand(hW, rotationServo , false , true, false));
+
 
 
 
