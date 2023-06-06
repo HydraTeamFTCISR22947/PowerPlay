@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.command.button.Button;
 import com.arcrobotics.ftclib.command.button.GamepadButton;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -11,9 +12,9 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.SubSystems.Buttons;
 import org.firstinspires.ftc.teamcode.TeleOpCommands.GroupCommands.CatchAndReleaseCommand;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "NewTeleOp", group = "Teleop")
 
-name("NewTeleOp")
+@Config
 public class TeleOp extends LinearOpMode {
 
     HardwareMap hW;
