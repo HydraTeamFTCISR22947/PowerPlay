@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands;
 import com.arcrobotics.ftclib.command.CommandBase;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
-import org.firstinspires.ftc.teamcode.SubSystems.RotationServo;
+import org.firstinspires.ftc.teamcode.drive.SubSystems.RotationServo;
 
 
 

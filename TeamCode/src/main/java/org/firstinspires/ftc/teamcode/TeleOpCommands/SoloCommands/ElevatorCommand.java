@@ -2,28 +2,22 @@
 package org.firstinspires.ftc.teamcode.TeleOpCommands.SoloCommands;
 
 import com.arcrobotics.ftclib.command.CommandBase;
-import com.arcrobotics.ftclib.command.Subsystem;
-import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
-import com.qualcomm.robotcore.robocol.Command;
 
-import org.firstinspires.ftc.teamcode.ElevatorCode;
-import org.firstinspires.ftc.teamcode.SubSystems.ElevatorSystem;
+import org.firstinspires.ftc.teamcode.drive.SubSystems.ElevatorSystem;
 
 public class ElevatorCommand extends CommandBase {
 
     public ElevatorSystem elevatorSystem;
-
     HardwareMap hW;
+    ElevatorSystem.ElevatorStates elevatorStates;
 
-    int pose;
 
-
-    public ElevatorCommand(ElevatorSystem elevatorSystem, HardwareMap hardwareMap, int pose) {
+    public ElevatorCommand(ElevatorSystem elevatorSystem, HardwareMap hardwareMap, ElevatorSystem.ElevatorStates elevatorStates ) {
 
         this.elevatorSystem = elevatorSystem;
         this.hW = hardwareMap;
-        this.pose = pose;
+        this.elevatorStates = elevatorStates;
 
         addRequirements(elevatorSystem);
     }
@@ -38,7 +32,7 @@ public class ElevatorCommand extends CommandBase {
 
     public void execute() {
 
-        elevatorSystem.goToPos(pose);
+        elevatorSystem.update();
 
 
     }
