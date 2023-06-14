@@ -18,7 +18,7 @@ public class TransferSystem
     public static double PICK_UP = 73;
     public static double PICKUP_EXPANSION = 560;
     public static double HIGH = 200;
-    public static double HIGH_EXPANSION = 400;
+    public static double HIGH_EXPANSION = 480;
     public static double TERMINAL = 85;
     public static double TERMINAL_EXPANSION = 670;
 

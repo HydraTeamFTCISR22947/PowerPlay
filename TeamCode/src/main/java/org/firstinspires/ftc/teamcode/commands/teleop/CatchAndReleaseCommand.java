@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.util.RobotCommand;
 
 public class CatchAndReleaseCommand implements RobotCommand {
     static TransferSystem transferSystem;
-    DriveCommand driveCommand;
     RotationServo rotationServo;
     ClawServo clawServo;
     ElevatorSystem elevatorSystem;
@@ -59,10 +58,8 @@ public class CatchAndReleaseCommand implements RobotCommand {
     HighTarget highTarget = HighTarget.EXPANSION;
     ElapsedTime timer;
 
-    public CatchAndReleaseCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry, DriveCommand driveCommand)
+    public CatchAndReleaseCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry)
     {
-        this.driveCommand = driveCommand;
-
         initCommand(hardwareMap, gamepad1, gamepad2, telemetry);
     }
 
