@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.commands.teleop;
 
+import static org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem.RELEASE_OFFSET;
+
 import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -136,6 +138,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 if(gamepadHelper1.leftBumperOnce())
                 {
                     clawServo.openClaw();
+                    elevatorSystem.goToPos(elevatorSystem.currentPos() - RELEASE_OFFSET);
                     pressed = true;
                     offset = timer.time();
                 }

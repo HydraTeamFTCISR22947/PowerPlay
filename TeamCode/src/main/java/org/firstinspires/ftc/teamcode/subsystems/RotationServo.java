@@ -34,7 +34,8 @@ public class RotationServo {
     }
 
     public void releasePosExpansion(){
-        _rotationServo.setPosition(releasePosExpansion); // rotate for putting cone on platform
+        //_rotationServo.setPosition(releasePosExpansion); // rotate for putting cone on platform
+        _rotationServo.setPosition(pickupPos); // rotate to face next cone
 
     }
     public void pickUpPosExpansion(){

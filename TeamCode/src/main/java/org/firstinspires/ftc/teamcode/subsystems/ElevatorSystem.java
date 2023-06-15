@@ -24,7 +24,7 @@ public class ElevatorSystem {
     public static int MID_HEIGHT = 1400;
     public static int ALMOST_MID_HEIGHT = 460;
     public static int HIGH_HEIGHT = 1970;
-
+    public static int RELEASE_OFFSET = 100;
     // power values
     public static double power = 1;
     public static double maxPower = 1;
