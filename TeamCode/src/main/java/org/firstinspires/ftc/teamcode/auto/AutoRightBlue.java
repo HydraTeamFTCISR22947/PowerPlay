@@ -36,7 +36,7 @@ public class AutoRightBlue extends LinearOpMode {
     public static boolean useCamera = false;
 
     public static double startPosX = 36, startPosY = -65.9, startPosAngle = 180;
-    public static double startConeStrafe1 = 54.8, startConeStrafe2 = 15.9, startConeForward = 5.15;
+    public static double startConeStrafe1 = 48.8, startConeStrafe2 = 12, startConeForward = 3.2;
 
 
     public static double backIntakeOffset  = 13;
@@ -72,7 +72,7 @@ public class AutoRightBlue extends LinearOpMode {
     public static double parkPoseX = 39.3, parkPoseY = -20, parkPoseAngle = 180;
 
 
-    public static double TARGET_ZONE = 20, GO_TO_PARK_HELPER = 8;
+    public static double TARGET_ZONE = 20, GO_TO_PARK_HELPER = 3;
 
 
     public static double BACK_WAIT_TIME = 0.1, DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33;
@@ -134,6 +134,8 @@ public class AutoRightBlue extends LinearOpMode {
                 .addTemporalMarker(autoCommands.releaseCone())
                 .waitSeconds(RELEASE_WAIT_TIME)
                 .build();
+        //TrajectorySequence firstIntake = drivetrain.trajectorySequenceBuilder(placePreload.end())
+           //     .
      /*   TrajectorySequence preload = drivetrain.trajectorySequenceBuilder(startPose)
                 .strafeRight(startConeStrafe1, velConstraint, accelConstraint)
                 .strafeLeft(startConeStrafe2, velConstraint, accelConstraint)
