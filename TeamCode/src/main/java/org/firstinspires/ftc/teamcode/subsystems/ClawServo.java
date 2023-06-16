@@ -7,8 +7,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 public class ClawServo {
 
-    public static double closePos = 0.06; // catching angle of claws
-    public static double openPos = 0.25; // releasing angle of claws
+    public static double closePos = 0; // catching angle of claws
+    public static double openPos = 0.15; // releasing angle of claws
 
     private Servo _clawServoLeft; // declaring claw servo
     private Servo _clawServoRight; // declaring claw servo
