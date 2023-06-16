@@ -33,7 +33,7 @@ public class DriveConstants {
      */
     public static final boolean RUN_USING_ENCODER = false;
     public static PIDFCoefficients MOTOR_VELO_PID = new PIDFCoefficients(0, 0, 0,
-            16.26087274111499);
+            17.88023644424386);
 
     /*
      * These are physical constants that can be determined from your robot (including the track
@@ -44,8 +44,9 @@ public class DriveConstants {
      * convenience. Make sure to exclude any gear ratio included in MOTOR_CONFIG from GEAR_RATIO.
      */
     public static double WHEEL_RADIUS = 1.88976; // in
-    public static double GEAR_RATIO = 0.4941145369; // output (wheel) speed / input (motor) speed
-    public static double TRACK_WIDTH = 13.23; // in
+    public static double GEAR_RATIO = 0.5 * (62.2 / 62.499); // output (wheel) speed / input (motor) speed
+    public static double TRACK_WIDTH = 16.16; // in
+    public static double WHEEL_BASE = 16.16; // in
 
     /*
      * These are the feedforward parameters used to model the drive motor behavior. If you are using
@@ -53,9 +54,9 @@ public class DriveConstants {
      * motor encoders or have elected not to use them for velocity control, these values should be
      * empirically tuned.
      */
-    public static double kV = 0.0084;
-    public static double kA = 0.002;
-    public static double kStatic = 0.10040;
+    public static double kV = 0.007;
+    public static double kA = 0.0022;
+    public static double kStatic = 0.1055;
 
     /*
      * These values are used to generate the trajectories for you robot. To ensure proper operation,
@@ -65,10 +66,9 @@ public class DriveConstants {
      * inches.
      */
     public static double MAX_VEL = 60;
-    public static double MAX_ACCEL = 60;
+    public static double MAX_ACCEL = 30;
     public static double MAX_ANG_VEL = Math.toRadians(120);
     public static double MAX_ANG_ACCEL = Math.toRadians(120);
-
 
     public static double encoderTicksToInches(double ticks) {
         return WHEEL_RADIUS * 2 * Math.PI * GEAR_RATIO * ticks / TICKS_PER_REV;

@@ -122,7 +122,19 @@ public class AutoRightBlue extends LinearOpMode {
 
         TrajectoryAccelerationConstraint accelConstraint = new ProfileAccelerationConstraint(DriveConstants.MAX_ACCEL);
 
-        TrajectorySequence preload = drivetrain.trajectorySequenceBuilder(startPose)
+        TrajectorySequence placePreload = drivetrain.trajectorySequenceBuilder(startPose)
+                //Getting to position
+                .strafeRight(startConeStrafe1, velConstraint, accelConstraint)
+                .strafeLeft(startConeStrafe2, velConstraint, accelConstraint)
+                .forward(startConeForward)
+                //placing
+                .waitSeconds(DELIVERY_WAIT_TIME)
+                .addTemporalMarker(autoCommands.goDownToReleaseCone())
+                .waitSeconds(ALMOST_RELEASE_TIME)
+                .addTemporalMarker(autoCommands.releaseCone())
+                .waitSeconds(RELEASE_WAIT_TIME)
+                .build();
+     /*   TrajectorySequence preload = drivetrain.trajectorySequenceBuilder(startPose)
                 .strafeRight(startConeStrafe1, velConstraint, accelConstraint)
                 .strafeLeft(startConeStrafe2, velConstraint, accelConstraint)
                 .forward(startConeForward, velConstraint, accelConstraint)
@@ -207,9 +219,9 @@ public class AutoRightBlue extends LinearOpMode {
                 .addTemporalMarker(autoCommands.releaseCone())
                 .waitSeconds(RELEASE_WAIT_TIME)
                 .build();
+*/
 
-
-        TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place3.end())
+        TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(placePreload.end())
                 .back(GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
@@ -217,14 +229,14 @@ public class AutoRightBlue extends LinearOpMode {
                 .back(TARGET_ZONE)
                 .build();
 
-        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place3.end())
+        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(placePreload.end())
                 .back(GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
                 .lineToLinearHeading(new Pose2d(parkPoseX, parkPoseY, Math.toRadians(parkPoseAngle)),velConstraint,accelConstraint)
                 .build();
 
-        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place3.end())
+        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(placePreload.end())
                 .back(GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
@@ -248,8 +260,8 @@ public class AutoRightBlue extends LinearOpMode {
         rotationServo.pickUpPos();
         transferSystem.highPos();
 
-        drivetrain.followTrajectorySequence(preload);
-
+        drivetrain.followTrajectorySequence(placePreload);
+/*
         drivetrain.followTrajectorySequence(cycle1);
         drivetrain.followTrajectorySequence(place1);
 
@@ -258,7 +270,7 @@ public class AutoRightBlue extends LinearOpMode {
 
         drivetrain.followTrajectorySequence(cycle3);
         drivetrain.followTrajectorySequence(place3);
-
+*/
         if(useCamera)
         {
             switch (parkIn)
