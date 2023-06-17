@@ -3,3 +3,4 @@ include ':TeamCode'
 include ':MeepMeepTesting'
 project(':MeepMeepTesting').projectDir = new File(rootDir, 'MeepMeepTesting/')
 include ':MeepMeepTesting'
+include ':MeepMeep'
