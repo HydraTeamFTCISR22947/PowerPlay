@@ -61,6 +61,7 @@ public class MeepMeepBLUERIGHT {
         double ALMOST_RELEASE_TIME = 0.1, INTAKE_WAIT_TIME = .1, ELEVATOR_WAIT_TIME = .5;
 
         Pose2d highRodPose = new Pose2d(placeConeX,placeConeY,Math.toRadians(placeConeAngle));
+        Vector2d highRodVector = new Vector2d(placeConeX,placeConeY);
         Pose2d intakePose = new Pose2d(firstIntakeX, firstIntakeY,Math.toRadians(intakeAngle));
 
 
@@ -74,14 +75,23 @@ public class MeepMeepBLUERIGHT {
                 .setConstraints(60, 30, Math.toRadians(120), Math.toRadians(120), 16.16)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(startPosX, startPosY, Math.toRadians(startPosAngle)))
+
                                 .strafeRight(startConeStrafe1)
-                                .lineToLinearHeading(highRodPose, velConstraint, accelConstraint)
+                               // .lineToLinearHeading(highRodPose, velConstraint, accelConstraint)
+                                .splineToLinearHeading(highRodPose, Math.toRadians(0))
+
                                 .waitSeconds(DELIVERY_WAIT_TIME)
                                 .waitSeconds(ALMOST_RELEASE_TIME)
                                 .waitSeconds(RELEASE_WAIT_TIME)
                                 //Intake
                                 .lineToLinearHeading(intakePose, velConstraint, accelConstraint)
                                 .waitSeconds(INTAKE_WAIT_TIME)
+
+                                //.lineToLinearHeading(highRodPose, velConstraint, accelConstraint)
+                                .splineToLinearHeading(highRodPose, Math.toRadians(0))
+                                .waitSeconds(DELIVERY_WAIT_TIME)
+                                .waitSeconds(ALMOST_RELEASE_TIME)
+                                .waitSeconds(RELEASE_WAIT_TIME)
 
                                 /*
                                                                .lineTo(new Vector2d(-intakePose1XFirstCone, -intakePose1YFirstCone))
