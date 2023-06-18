@@ -111,7 +111,7 @@ public class AutoLeftRedPreloadPlusONE extends LinearOpMode {
                 .build();
 
 
-        /*
+
         TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .splineToSplineHeading(new Pose2d(-PoseStorage.intakePoseCycleXSecondCone, PoseStorage.intakePose1YSecondCone, Math.toRadians(PoseStorage.intakeAngle)), Math.toRadians(180))
                 .addTemporalMarker(autoCommands.intakeSecondConeOpposite())
@@ -135,6 +135,7 @@ public class AutoLeftRedPreloadPlusONE extends LinearOpMode {
                 .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
                 .build();
 
+        /*
         TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(place2.end())
                 .splineToSplineHeading(new Pose2d(-PoseStorage.intakePoseCycleXThirdCone, PoseStorage.intakePose1YThirdCone, Math.toRadians(PoseStorage.intakeAngle)), Math.toRadians(180))
                 .addTemporalMarker(autoCommands.intakeThirdConeOpposite())
@@ -161,7 +162,7 @@ public class AutoLeftRedPreloadPlusONE extends LinearOpMode {
 
          */
 
-        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place1.end())
+        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place2.end())
                 .forward(PoseStorage.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToReleaseOpposite())
                 .addTemporalMarker(autoCommands.resetOpposite())
@@ -169,14 +170,14 @@ public class AutoLeftRedPreloadPlusONE extends LinearOpMode {
                 .back(PoseStorage.TARGET_ZONE)
                 .build();
 
-        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place1.end())
+        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place2.end())
                 .forward(PoseStorage.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToReleaseOpposite())
                 .addTemporalMarker(autoCommands.resetOpposite())
                 .lineToLinearHeading(new Pose2d(-PoseStorage.parkPoseX, PoseStorage.parkPoseY, Math.toRadians(0)),velConstraint,accelConstraint)
                 .build();
 
-        TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place1.end())
+        TrajectorySequence park1 = drivetrain.trajectorySequenceBuilder(place2.end())
                 .forward(PoseStorage.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToReleaseOpposite())
                 .addTemporalMarker(autoCommands.resetOpposite())
@@ -205,10 +206,10 @@ public class AutoLeftRedPreloadPlusONE extends LinearOpMode {
         drivetrain.followTrajectorySequence(cycle1);
         drivetrain.followTrajectorySequence(place1);
 
-        /*
+
         drivetrain.followTrajectorySequence(cycle2);
         drivetrain.followTrajectorySequence(place2);
-
+    /*
         drivetrain.followTrajectorySequence(cycle3);
         drivetrain.followTrajectorySequence(place3);
 

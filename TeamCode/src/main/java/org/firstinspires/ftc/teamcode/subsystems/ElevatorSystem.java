@@ -21,7 +21,7 @@ public class ElevatorSystem {
     // encoder values for elevator heights
     public static int BASE_HEIGHT = 0;
     public static int LOW_HEIGHT = 630;
-    public static int MID_HEIGHT = 1400;
+    public static int MID_HEIGHT = 1450;
     public static int ALMOST_MID_HEIGHT = 460;
     public static int HIGH_HEIGHT = 1970;
     // power values

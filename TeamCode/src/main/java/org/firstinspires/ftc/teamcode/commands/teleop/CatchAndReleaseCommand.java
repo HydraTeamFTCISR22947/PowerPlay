@@ -14,7 +14,6 @@ import org.firstinspires.ftc.teamcode.util.RobotCommand;
 
 public class CatchAndReleaseCommand implements RobotCommand {
     static TransferSystem transferSystem;
-    RotationServo rotationServo;
     ClawServo clawServo;
     ElevatorSystem elevatorSystem;
     Gamepad gamepad1, gamepad2;
@@ -73,15 +72,6 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
 
-                switch (pickUpTarget)
-                {
-                    case EXPANSION:
-                        rotationServo.pickUpPosExpansion();
-                        break;
-                    case CONTROL:
-                        rotationServo.pickUpPos();
-                        break;
-                }
 
                 isOpen = false;
 
@@ -100,30 +90,10 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 aboutToOpen = true;
                 clawServo.closeClaw();
 
-                switch (pickUpTarget)
-                {
-                    case EXPANSION:
-                        rotationServo.pickUpPosExpansion();
-                        break;
-                    case CONTROL:
-                        rotationServo.pickUpPos();
-                        break;
-                }
-
                 transferPickUp();
 
                 if(gamepadHelper1.rightBumperOnce())
                 {
-                    switch (highTarget)
-                    {
-                        case CONTROL:
-                            rotationServo.releasePos();
-                            break;
-                        case EXPANSION:
-                            rotationServo.releasePosExpansion();
-                            break;
-                    }
-
                     catchingState = CatchingState.UP;
                 }
 
@@ -211,15 +181,6 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 break;
         }
 
-        switch (highTarget)
-        {
-            case CONTROL:
-                rotationServo.releasePos();
-                break;
-            case EXPANSION:
-                rotationServo.releasePosExpansion();
-                break;
-        }
 
         elevatorSystem.update(gamepad2);
     }
@@ -266,7 +227,6 @@ public class CatchAndReleaseCommand implements RobotCommand {
     @Override
     public void initCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         transferSystem = new TransferSystem(hardwareMap);
-        rotationServo = new RotationServo(hardwareMap);
         clawServo = new ClawServo(hardwareMap);
         elevatorSystem = new ElevatorSystem(hardwareMap);
         timer =  new ElapsedTime();
