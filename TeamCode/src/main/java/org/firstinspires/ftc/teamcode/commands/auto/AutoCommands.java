@@ -160,15 +160,6 @@ public class AutoCommands implements AutoRobotCommand {
     }
 
 
-    public MarkerCallback goUpAfterRelease() {
-        return new MarkerCallback()
-        {
-            @Override
-            public void onMarkerReached(){
-                elevatorSystem.highRod();
-            }
-        };
-    }
     public MarkerCallback releaseCone() {
         return new MarkerCallback()
         {
