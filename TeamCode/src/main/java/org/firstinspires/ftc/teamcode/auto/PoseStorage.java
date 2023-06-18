@@ -7,18 +7,18 @@ public class PoseStorage {
     public static boolean useCamera = false;
 
     public static double startPosX = -36, startPosY = 65.9, startPosAngle = 0;
-    public static double startConeStrafe1 = 54.8, startConeStrafe2 = 15, startConeForward = 4.45;
+    public static double startConeStrafe1 = 54.8, startConeStrafe2 = 15, startConeForward = 3.45;
     public static double goToPark  = 52;
 
     public static double backIntakeOffset  = 12;
 
 
-    public static double intakePose1XFirstCone = 38, intakePose1YFirstCone = -15;
-    public static double intakePose2XFirstCone = 45, intakePose2YFirstCone = -15.6;
+    public static double intakePose1XFirstCone = 40, intakePose1YFirstCone = -15;
+    public static double intakePose2XFirstCone = 50, intakePose2YFirstCone = -15.6;
 
 
     public static double intakePoseCycleXSecondCone = 38, intakePose1YSecondCone = -14;
-    public static double intakePose2XSecondCone = 48, intakePose2YSecondCone = -14.5;
+    public static double intakePose2XSecondCone = 50, intakePose2YSecondCone = -14.5;
 
 
     public static double intakePoseCycleXThirdCone = 38, intakePose1YThirdCone = -14.5;
@@ -34,7 +34,7 @@ public class PoseStorage {
     public static double posCone2XFirstCone = 30, posCone2YFirstCone = -18.05;
 
 
-    public static double posCone2XSecondCone = 33.8, posCone2YSecondCone = -17.25;
+    public static double posCone2XSecondCone = 34, posCone2YSecondCone = -17.25;
 
 
     public static double posCone2XThirdCone = 33.8, posCone2YThirdCone = -17.5;
@@ -46,7 +46,7 @@ public class PoseStorage {
     public static double TARGET_ZONE = 18, GO_TO_PARK_HELPER = 8;
 
 
-    public static double BACK_WAIT_TIME = 0.1, DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .33;
+    public static double BACK_WAIT_TIME = 0.1, DELIVERY_WAIT_TIME = .25, RELEASE_WAIT_TIME = .4;
     public static double ALMOST_RELEASE_TIME = 0.1, INTAKE_WAIT_TIME = .1, ELEVATOR_WAIT_TIME = .5;
 
 //    public static double startPosX = -36;

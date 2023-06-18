@@ -111,7 +111,7 @@ public class AutoRightRedPreloadPlusONE extends LinearOpMode {
                 .build();
 
 
-        /*
+
         TrajectorySequence cycle2 = drivetrain.trajectorySequenceBuilder(place1.end())
                 .splineToLinearHeading(new Pose2d(-PoseStorage.intakePoseCycleXSecondCone, -PoseStorage.intakePose1YSecondCone, Math.toRadians(0)), Math.toRadians(180))
                 .addTemporalMarker(autoCommands.intakeSecondCone())
@@ -135,6 +135,7 @@ public class AutoRightRedPreloadPlusONE extends LinearOpMode {
                 .waitSeconds(PoseStorage.RELEASE_WAIT_TIME)
                 .build();
 
+        /*
         TrajectorySequence cycle3 = drivetrain.trajectorySequenceBuilder(place2.end())
                 .splineToLinearHeading(new Pose2d(-PoseStorage.intakePoseCycleXThirdCone, -PoseStorage.intakePose1YThirdCone, Math.toRadians(0)), Math.toRadians(180))
                 .addTemporalMarker(autoCommands.intakeThirdCone())
@@ -161,7 +162,7 @@ public class AutoRightRedPreloadPlusONE extends LinearOpMode {
 
 
          */
-        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place1.end())
+        TrajectorySequence park3 = drivetrain.trajectorySequenceBuilder(place2.end())
                 .back(PoseStorage.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
@@ -169,7 +170,7 @@ public class AutoRightRedPreloadPlusONE extends LinearOpMode {
                 .back(PoseStorage.TARGET_ZONE)
                 .build();
 
-        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place1.end())
+        TrajectorySequence park2 = drivetrain.trajectorySequenceBuilder(place2.end())
                 .back(PoseStorage.GO_TO_PARK_HELPER,velConstraint,accelConstraint)
                 .addTemporalMarker(autoCommands.readyToRelease())
                 .addTemporalMarker(autoCommands.reset())
@@ -205,10 +206,11 @@ public class AutoRightRedPreloadPlusONE extends LinearOpMode {
         drivetrain.followTrajectorySequence(cycle1);
         drivetrain.followTrajectorySequence(place1);
 
-        /*
+
         drivetrain.followTrajectorySequence(cycle2);
         drivetrain.followTrajectorySequence(place2);
 
+        /*
         drivetrain.followTrajectorySequence(cycle3);
         drivetrain.followTrajectorySequence(place3);
 
