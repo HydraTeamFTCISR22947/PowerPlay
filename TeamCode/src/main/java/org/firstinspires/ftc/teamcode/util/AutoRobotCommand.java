@@ -7,5 +7,5 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 public interface AutoRobotCommand {
-    public void initCommand(HardwareMap hardwareMap);
+    void initCommand(HardwareMap hardwareMap);
 }

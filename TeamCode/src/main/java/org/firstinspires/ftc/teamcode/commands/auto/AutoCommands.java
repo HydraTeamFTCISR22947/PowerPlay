@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
 
 import org.firstinspires.ftc.teamcode.subsystems.ClawServo;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
-import org.firstinspires.ftc.teamcode.subsystems.RotationServo;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 import org.firstinspires.ftc.teamcode.util.AutoRobotCommand;
 
@@ -14,7 +13,6 @@ import org.firstinspires.ftc.teamcode.util.AutoRobotCommand;
 public class AutoCommands implements AutoRobotCommand {
     ElevatorSystem elevatorSystem;
     TransferSystem transferSystem;
-    RotationServo rotationServo;
     ClawServo clawServo;
 
     // TODO: STACK
@@ -35,7 +33,7 @@ public class AutoCommands implements AutoRobotCommand {
             public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT);
                 transferSystem.pickUpExpansion();
-                rotationServo.pickUpPosExpansion();
+
             }
         };
     }
@@ -46,7 +44,7 @@ public class AutoCommands implements AutoRobotCommand {
             public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT);
                 transferSystem.pickUp();
-                rotationServo.pickUpPos();
+
             }
         };
     }
@@ -57,7 +55,7 @@ public class AutoCommands implements AutoRobotCommand {
             public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 2);
                 transferSystem.pickUpExpansion();
-                rotationServo.pickUpPosExpansion();
+
             }
         };
     }
@@ -68,7 +66,7 @@ public class AutoCommands implements AutoRobotCommand {
             public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 2);
                 transferSystem.pickUp();
-                rotationServo.pickUpPos();
+
             }
         };
     }
@@ -79,7 +77,6 @@ public class AutoCommands implements AutoRobotCommand {
             public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 3);
                 transferSystem.pickUpExpansion();
-                rotationServo.pickUpPosExpansion();
             }
         };
     }
@@ -90,7 +87,6 @@ public class AutoCommands implements AutoRobotCommand {
             public void onMarkerReached() {
                 elevatorSystem.goToPos(STACK_ELEVATOR_HEIGHT - OFFSET_BETWEEN_EACH_CONE * 3);
                 transferSystem.pickUp();
-                rotationServo.pickUpPos();
             }
         };
     }
@@ -103,7 +99,6 @@ public class AutoCommands implements AutoRobotCommand {
             public void onMarkerReached() {
                 transferSystem.highPos();
                 elevatorSystem.midRod();
-                rotationServo.releasePos();
             }
         };
     }
@@ -114,7 +109,6 @@ public class AutoCommands implements AutoRobotCommand {
             public void onMarkerReached() {
                 transferSystem.highExpansionPos();
                 elevatorSystem.midRod();
-                rotationServo.releasePosExpansion();
             }
         };
     }
@@ -179,7 +173,6 @@ public class AutoCommands implements AutoRobotCommand {
     public void initCommand(HardwareMap hardwareMap) {
         elevatorSystem = new ElevatorSystem(hardwareMap);
         transferSystem = new TransferSystem(hardwareMap);
-        rotationServo = new RotationServo(hardwareMap);
         clawServo = new ClawServo(hardwareMap);
         elevatorSystem = new ElevatorSystem(hardwareMap);
     }

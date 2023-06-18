@@ -26,14 +26,14 @@ public class TransferTest extends LinearOpMode {
             gamepadHelper1.update();
             if(gamepadHelper1.YOnce())
             {
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
+                TransferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
             }
             else if (gamepadHelper1.AOnce()) {
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
+                TransferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
             }
              telemetry.addData("pos", transferSystem.getMotor().getCurrentPosition());
              telemetry.addData("target", transferSystem.getTarget());
-             telemetry.addData("target in ticks", transferSystem.degreesToEncoderTicks(transferSystem.getTarget()));
+             telemetry.addData("target in ticks", TransferSystem.degreesToEncoderTicks(transferSystem.getTarget()));
              telemetry.update();
         }
     }

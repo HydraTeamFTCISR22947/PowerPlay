@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.util;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class GamepadHelper {
-    private Gamepad gamepad;
+    private final Gamepad gamepad;
 
     private int dpad_up, dpad_down, dpad_left, dpad_right;
     private int x, y, a, b;

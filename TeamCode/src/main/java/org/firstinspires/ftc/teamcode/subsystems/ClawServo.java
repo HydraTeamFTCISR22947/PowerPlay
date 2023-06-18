@@ -7,11 +7,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Config
 public class ClawServo {
 
-    public static double closePos = 0; // catching angle of claws
-    public static double openPos = 0.15; // releasing angle of claws
+    public static double closePos = 0.695; // catching angle of claws
+    public static double openPos = 0.8; // releasing angle of claws
 
-    private Servo _clawServoLeft; // declaring claw servo
-    private Servo _clawServoRight; // declaring claw servo
+    private final Servo _clawServoLeft; // declaring claw servo
+    private final Servo _clawServoRight; // declaring claw servo
 
     // constructor with the hardwaremap(the way the driver station knows to tell the code where each motor/servo is plugged.
     public ClawServo(HardwareMap hardwareMap)

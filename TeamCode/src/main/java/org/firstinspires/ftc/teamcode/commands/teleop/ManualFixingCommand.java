@@ -50,7 +50,7 @@ public class ManualFixingCommand implements RobotCommand {
         this.gamepadHelper1 = new GamepadHelper(gamepad1);
         this.gamepadHelper2 = new GamepadHelper(gamepad2);
 
-        this.transferSystem = catchAndReleaseCommand.getTransferSystem();
+        this.transferSystem = CatchAndReleaseCommand.getTransferSystem();
         this.elevatorSystem = catchAndReleaseCommand.getElevatorSystem();
     }
 
@@ -70,11 +70,11 @@ public class ManualFixingCommand implements RobotCommand {
 
         if(gamepadHelper2.dpadUpOnce() && elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL)
         {
-            elevatorSystem.setHeightByPos(elevatorSystem.currentPos() + elevatorSystem.INCREMENT);
+            elevatorSystem.setHeightByPos(elevatorSystem.currentPos() + ElevatorSystem.INCREMENT);
         }
         else if(gamepadHelper2.dpadDownOnce() && elevatorSystem.getLiftState() == ElevatorSystem.elevatorState.BASE_LEVEL)
         {
-            elevatorSystem.setHeightByPos(elevatorSystem.currentPos() - elevatorSystem.INCREMENT);
+            elevatorSystem.setHeightByPos(elevatorSystem.currentPos() - ElevatorSystem.INCREMENT);
         }
 
     }
@@ -99,11 +99,11 @@ public class ManualFixingCommand implements RobotCommand {
 
             if(gamepadHelper2.dpadUpOnce())
             {
-                elevatorSystem.setHeightByPos(elevatorSystem.currentPos() + elevatorSystem.INCREMENT);
+                elevatorSystem.setHeightByPos(elevatorSystem.currentPos() + ElevatorSystem.INCREMENT);
             }
             else if(gamepadHelper2.dpadDownOnce())
             {
-                elevatorSystem.setHeightByPos(elevatorSystem.currentPos() - elevatorSystem.INCREMENT);
+                elevatorSystem.setHeightByPos(elevatorSystem.currentPos() - ElevatorSystem.INCREMENT);
             }
 
             if(y != 0)

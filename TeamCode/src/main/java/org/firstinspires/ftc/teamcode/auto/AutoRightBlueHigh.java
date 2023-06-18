@@ -18,7 +18,6 @@ import org.firstinspires.ftc.teamcode.roadrunner.trajectorysequence.TrajectorySe
 import org.firstinspires.ftc.teamcode.subsystems.AprilTagDetectionPipeline;
 import org.firstinspires.ftc.teamcode.subsystems.ClawServo;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
-import org.firstinspires.ftc.teamcode.subsystems.RotationServo;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -94,7 +93,6 @@ public class AutoRightBlueHigh extends LinearOpMode {
     ClawServo clawServo;
     ElevatorSystem elevatorSystem;
     TransferSystem transferSystem;
-    RotationServo rotationServo;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -113,7 +111,6 @@ public class AutoRightBlueHigh extends LinearOpMode {
         clawServo = new ClawServo(hardwareMap);
         elevatorSystem = new ElevatorSystem(hardwareMap);
         transferSystem = new TransferSystem(hardwareMap);
-        rotationServo = new RotationServo(hardwareMap);
 
 
         drivetrain.setPoseEstimate(startPose);
@@ -258,9 +255,8 @@ public class AutoRightBlueHigh extends LinearOpMode {
 
         waitForStart();
 
-        elevatorSystem.goToPos(elevatorSystem.BASE_HEIGHT);
+        elevatorSystem.goToPos(ElevatorSystem.BASE_HEIGHT);
         elevatorSystem.midRod();
-        rotationServo.pickUpPos();
         transferSystem.highPos();
 
         drivetrain.followTrajectorySequence(placePreload);

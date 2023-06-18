@@ -7,14 +7,12 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.subsystems.ClawServo;
 import org.firstinspires.ftc.teamcode.subsystems.ElevatorSystem;
-import org.firstinspires.ftc.teamcode.subsystems.RotationServo;
 import org.firstinspires.ftc.teamcode.subsystems.TransferSystem;
 import org.firstinspires.ftc.teamcode.util.GamepadHelper;
 import org.firstinspires.ftc.teamcode.util.RobotCommand;
 
 public class CatchAndReleaseCommand implements RobotCommand {
     static TransferSystem transferSystem;
-    RotationServo rotationServo;
     ClawServo clawServo;
     ElevatorSystem elevatorSystem;
     Gamepad gamepad1, gamepad2;
@@ -73,15 +71,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
 
                 elevatorSystem.setLiftState(ElevatorSystem.elevatorState.BASE_LEVEL);
 
-                switch (pickUpTarget)
-                {
-                    case EXPANSION:
-                        rotationServo.pickUpPosExpansion();
-                        break;
-                    case CONTROL:
-                        rotationServo.pickUpPos();
-                        break;
-                }
+
 
                 isOpen = false;
 
@@ -100,29 +90,12 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 aboutToOpen = true;
                 clawServo.closeClaw();
 
-                switch (pickUpTarget)
-                {
-                    case EXPANSION:
-                        rotationServo.pickUpPosExpansion();
-                        break;
-                    case CONTROL:
-                        rotationServo.pickUpPos();
-                        break;
-                }
 
                 transferPickUp();
 
                 if(gamepadHelper1.rightBumperOnce())
                 {
-                    switch (highTarget)
-                    {
-                        case CONTROL:
-                            rotationServo.releasePos();
-                            break;
-                        case EXPANSION:
-                            rotationServo.releasePosExpansion();
-                            break;
-                    }
+
 
                     catchingState = CatchingState.UP;
                 }
@@ -211,15 +184,7 @@ public class CatchAndReleaseCommand implements RobotCommand {
                 break;
         }
 
-        switch (highTarget)
-        {
-            case CONTROL:
-                rotationServo.releasePos();
-                break;
-            case EXPANSION:
-                rotationServo.releasePosExpansion();
-                break;
-        }
+
 
         elevatorSystem.update(gamepad2);
     }
@@ -229,10 +194,10 @@ public class CatchAndReleaseCommand implements RobotCommand {
         switch (highTarget)
         {
             case CONTROL:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
+                TransferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH);
                 break;
             case EXPANSION:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH_EXPANSION);
+                TransferSystem.setTransferLevel(TransferSystem.TransferLevels.HIGH_EXPANSION);
                 break;
         }
     }
@@ -242,10 +207,10 @@ public class CatchAndReleaseCommand implements RobotCommand {
         switch (highTarget)
         {
             case CONTROL:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
+                TransferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
                 break;
             case EXPANSION:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP_EXPANSION);
+                TransferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP_EXPANSION);
                 break;
         }
     }
@@ -255,10 +220,10 @@ public class CatchAndReleaseCommand implements RobotCommand {
         switch (pickUpTarget)
         {
             case CONTROL:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
+                TransferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP);
                 break;
             case EXPANSION:
-                transferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP_EXPANSION);
+                TransferSystem.setTransferLevel(TransferSystem.TransferLevels.PICK_UP_EXPANSION);
                 break;
         }
     }
@@ -266,7 +231,6 @@ public class CatchAndReleaseCommand implements RobotCommand {
     @Override
     public void initCommand(HardwareMap hardwareMap, Gamepad gamepad1, Gamepad gamepad2, Telemetry telemetry) {
         transferSystem = new TransferSystem(hardwareMap);
-        rotationServo = new RotationServo(hardwareMap);
         clawServo = new ClawServo(hardwareMap);
         elevatorSystem = new ElevatorSystem(hardwareMap);
         timer =  new ElapsedTime();
@@ -290,13 +254,13 @@ public class CatchAndReleaseCommand implements RobotCommand {
         {
             case TERMINAL:
             case LOW:
-                elevatorSystem.setLowHeight(elevatorSystem.getPosition());
+                ElevatorSystem.setLowHeight(elevatorSystem.getPosition());
                 break;
             case MID:
-                elevatorSystem.setMidHeight(elevatorSystem.getPosition());
+                ElevatorSystem.setMidHeight(elevatorSystem.getPosition());
                 break;
             case HIGH:
-                elevatorSystem.setHighHeight(elevatorSystem.getPosition());
+                ElevatorSystem.setHighHeight(elevatorSystem.getPosition());
                 break;
         }
     }
