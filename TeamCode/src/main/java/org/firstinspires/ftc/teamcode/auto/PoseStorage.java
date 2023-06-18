@@ -4,21 +4,21 @@ import com.acmerobotics.dashboard.config.Config;
 
 @Config
 public class PoseStorage {
-    public static boolean useCamera = true;
+    public static boolean useCamera = false;
 
     public static double startPosX = -36, startPosY = 65.9, startPosAngle = 0;
-    public static double startConeStrafe1 = 54.8, startConeStrafe2 = 15, startConeForward = 5.05;
+    public static double startConeStrafe1 = 54.8, startConeStrafe2 = 15, startConeForward = 4.45;
     public static double goToPark  = 52;
 
-    public static double backIntakeOffset  = 13;
+    public static double backIntakeOffset  = 12;
 
 
     public static double intakePose1XFirstCone = 38, intakePose1YFirstCone = -15;
-    public static double intakePose2XFirstCone = 46, intakePose2YFirstCone = -15.6;
+    public static double intakePose2XFirstCone = 45, intakePose2YFirstCone = -15.6;
 
 
     public static double intakePoseCycleXSecondCone = 38, intakePose1YSecondCone = -14;
-    public static double intakePose2XSecondCone = 47, intakePose2YSecondCone = -14.5;
+    public static double intakePose2XSecondCone = 48, intakePose2YSecondCone = -14.5;
 
 
     public static double intakePoseCycleXThirdCone = 38, intakePose1YThirdCone = -14.5;
@@ -31,7 +31,7 @@ public class PoseStorage {
     public static double posCone1X = 40, posCone1Y = -15, posConeAngle = 225;
 
 
-    public static double posCone2XFirstCone = 32.45, posCone2YFirstCone = -18.05;
+    public static double posCone2XFirstCone = 30, posCone2YFirstCone = -18.05;
 
 
     public static double posCone2XSecondCone = 33.8, posCone2YSecondCone = -17.25;
