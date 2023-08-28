@@ -15,6 +15,8 @@ public class ElevatorClass {
     public static int MID;
     public static int LOW;
     public static int RETRACT;
+
+    public static int power = 1;
     public enum pos {
 
         HIGH_ROD,
@@ -32,18 +34,28 @@ public class ElevatorClass {
 
     this.mE = hW.get(DcMotor.class, "mE");
     this.mE.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    this.mE.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     
 
    }
 
-   public void update9()
+   public void update()
    {
        switch (PoseElevator)
        {
            case HIGH_ROD:
-               m
+
+               goToPOS();
+
 
        }
    }
 
+   public void goToPOS(int pose)
+   {
+       mE.setTargetPosition(pose);
+       mE.setPower(power);
+       mE.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+   }
 }
